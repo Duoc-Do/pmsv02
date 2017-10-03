@@ -1,0 +1,76 @@
+﻿<!-- Split button -->
+@{
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var datefrombg = (DateTime)reportparams["DateFromBG"];
+    var datetobg = (DateTime)reportparams["DateToBG"];
+}
+
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label for="DateFromBG" class="control-label">Từ ngày</label>
+        <input class="form-control text-date" id="DateFromBG" name="DateFromBG" type="text" value="@(datefrombg.ToShortDateString())" />
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="form-group">
+        <label for="DateToBG" class="control-label">Đến ngày</label>
+        <input class="form-control text-date" id="DateToBG" name="DateToBG" type="text" value="@(datetobg.ToShortDateString())" />
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label for="DateRangeTypeBG" class="control-label">Thời gian</label>
+        <select id="DateRangeTypeBG" name="DateRangeTypeBG" class="form-control">
+            <option value="day" @{if (@ViewBag.DateRangeType == "day")
+                                  {@Html.Raw("selected='selected'")}} >Ngày</option>
+            <option value="week"  @{if (@ViewBag.DateRangeType == "week")
+                                    {@Html.Raw("selected='selected'")}}>Tuần</option>
+            <option value="month" @{if (@ViewBag.DateRangeType == "month")
+                                    {@Html.Raw("selected='selected'")}}>Tháng</option>
+            <option value="year" @{if (@ViewBag.DateRangeType == "year")
+                                   {@Html.Raw("selected='selected'")}} >Năm</option>
+        </select>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $.datepicker.setDefaults($.datepicker.regional["vi"]);
+        $("#DateFromBG").datepicker($.datepicker.regional["vi"]);
+        $("#DateToBG").datepicker($.datepicker.regional["vi"]);
+
+        //$("#DateFromBG").change(function () {
+        //    $(this).closest('form').submit();
+        //});
+        //$("#DateToBG").change(function () {
+        //    $(this).closest('form').submit();
+        //});
+
+        $("#DateRangeTypeBG").change(function () {
+
+            var daterangebg = $("#DateRangeTypeBG").val();
+            var datefrombg = new Date();
+            var datetobg = new Date();
+            switch (daterangebg.toLowerCase()) {
+                case "week":
+                    datefrombg.setDate(datefrombg.getDate() - 7);
+                    break;
+                case "month":
+                    datefrombg.setDate(datefrombg.getDate() - 30);
+                    break;
+                case "year":
+                    datefrombg.setDate(datefrombg.getDate() - 365);
+                    break;
+                default:
+            }
+            $("#DateFromBG").datepicker("setDate", datefrombg);
+            $("#DateToBG").datepicker("setDate", datetobg);
+            //$(this).closest('form').submit();
+        });
+    });
+
+</script>

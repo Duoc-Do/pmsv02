@@ -1,0 +1,118 @@
+﻿@using WebApp.Models;
+@using WebApp.Services.Media
+@{
+    ViewBag.Title = "Quản lí nhà hàng";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";
+
+    SenContext db = new SenContext();
+    string UserName = User.Identity.Name;
+    //var senservice = db.SenServices.Where(p => p.UserProfile.UserName == UserName).OrderBy(m => m.SenCompany.IsApproved).ThenBy(m => m.SenCompany.Name).ToList();
+
+    var senserviceview = db.SenServiceViews.Where(p => p.UserName == UserName && p.ApplicationId == 5).OrderByDescending(m => m.IsApproved).ThenBy(m => m.CompanyName).ToList();
+
+    var linkcompany = Url.Action("Register", "Company", new { id = 5, area = "" });
+    
+    
+}
+
+<div class="row">
+    <section class="featured">
+        <div class="text-center">
+
+            <h2>@ViewBag.Title</h2>
+            <a class="btn btn-primary" href="@(linkcompany)">đăng ký doanh nghiệp</a>
+            <h4>Hoặc</h4>
+            <h3>Đăng nhập doanh nghiệp</h3>
+
+        </div>
+    </section>
+</div>
+<div class="col-md-8 col-md-offset-2">
+
+
+    @foreach (var item in senserviceview)
+    {
+        string isapproved = "";
+        string islockedout = "";
+        if (item.IsApproved != true)
+        {
+            isapproved = "( chờ duyệt )";
+        }
+
+        if (item.IsLockedOut.Value)
+        {
+            islockedout = "( bị khóa )";
+        }
+        var loginurl = Url.RouteUrl("AppPosLogin", new { serviceid = item.ServiceId });
+        var loginurl2 = Url.RouteUrl("AppPosLogin", new { serviceid = item.ServiceId, isdefault = 1 });
+        var linkcompanyupdate = Url.Action("Update", "Company", new { area = "", id = item.ServiceId });        
+        
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">@item.CompanyName &nbsp @isapproved &nbsp @islockedout &nbsp( sở hữu bởi: @item.UserNameCreated )
+                                                        @if (item.UserName == item.UserNameCreated)
+                                                        {
+                                                            <a href="@(linkcompanyupdate)" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                                        }
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="panel panel-default">
+
+
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="row-fluid">
+                                    @{
+                                                        string imgurl = PictureService.GetPictureUrl(item.SenCompany.Logo, 125);
+                                                        if (!string.IsNullOrEmpty(imgurl))
+                                                        {
+                                        <div id="ImagePathimage" style="margin-bottom: 8px;">
+                                            <a href="@(loginurl2)" class="thumbnail">
+                                                <img style="max-height:125px;max-width:100%;"  src="@(imgurl)"/>
+                                            </a>
+                                        </div>
+                                                        }
+                                    
+                                    }
+                                </div>
+                                <div class="row-fluid">
+
+                                    <a href="@loginurl" class="btn btn-primary btn-block">Đăng nhập</a>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <p><span>Gói ứng dụng: </span>@item.SenCompany.SenPackage.Name </p>
+
+                                <p>
+                                    <span>Hạn sử dụng: (@(item.SenCompany.ExpireDate == null ? " không giới hạn " : string.Format(" đến ngày {0} ", item.SenCompany.ExpireDate.Value.ToString("dd/MM/yyyy")))) </span>
+                                </p>
+
+                                <p>@Html.Raw(item.SenCompany.SenPackage.Description) </p>
+                            </div>
+                        </div>
+
+
+                        <hr />
+
+                        @Html.Raw(item.SenCompany.Comment)
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script>
+    $("body").removeClass("sidebar-mini").addClass("sidebar-collapse");
+    //$(document).ready(function () {
+    //    $(".right-side").addClass("strech");
+    //});
+</script>

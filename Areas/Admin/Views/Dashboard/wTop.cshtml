@@ -1,0 +1,111 @@
+﻿@using WebApp.Areas.Admin.Services;
+@using WebApp.Areas.Admin.Models;
+
+@{
+    var db = new AdminContext();
+    int year = DateTime.Today.Year;
+    int month = DateTime.Today.Month;
+
+    var today = DateTime.Today;
+    var firstdaymonth = new DateTime(today.Year, today.Month, 1);
+
+    string UrlSenUser = Url.Action("Index", "MembershipUsers", new { area = "Admin" });
+
+    string UrlSenCompany = Url.Action("Index", "SenCompany", new { area = "Admin" });
+
+    var topcompany = db.SenCompanys.OrderByDescending(m => m.LastLoginDate).Take(5).ToList();
+    var topuser = db.vw_aspnet_MembershipUsers.OrderByDescending(m => m.LastLoginDate).Take(5).ToList();
+
+
+}
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Doanh nghiệp hoạt động gần đây</h3>
+                <div class="box-tools pull-right">
+                    <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="products-list product-list-in-box">
+
+                    @foreach (var item in topcompany)
+                    {
+                        string UrlSenCompanyEdit = Url.Action("Edit", "SenCompany", new { area = "Admin", CompanyId = item.CompanyId, action_return = "noaction" });
+                        string imgurl = WebApp.Services.Media.PictureService.GetPictureUrl(item.Logo, 50);
+    
+                        <li class="item">
+                            <div class="product-img">
+                                <a href="javascript:;" data-url="@(UrlSenCompanyEdit)" onclick="appcommon.popup(this);">
+                                    <img style="max-height:50px;max-width:100%;"  src="@(imgurl)"/>
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <a class="product-title" href="javascript:;" data-url="@(UrlSenCompanyEdit)" onclick="appcommon.popup(this);">@item.Name</a>
+                                <span class="product-description">@(item.LastLoginDate.HasValue ? item.LastLoginDate.Value.RelativeFormat() : "")</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <a href="@(UrlSenCompany)" @GlobalVariant.AjaxInfo >Xem tất cả</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-6 col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Người dùng hoạt động gần đây</h3>
+                <div class="box-tools pull-right">
+                    <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="products-list product-list-in-box">
+
+                    @foreach (var item in topuser)
+                    {
+                        string UrlSenUserEdit = Url.Action("Edit", "MembershipUsers", new { area = "Admin", UserId = item.UserId, action_return = "noaction" });
+                        string imgurl = WebApp.Services.Media.PictureService.GetPictureUrl(item.SenUserView.Avatar, 50);
+
+
+                        
+                        <li class="item">
+                            <div class="product-img">
+                                <a href="javascript:;" data-url="@(UrlSenUserEdit)" onclick="appcommon.popup(this);">
+                                    <img style="max-height:50px;max-width:100%;"  src="@(imgurl)"/>
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <a class="product-title"  href="javascript:;" data-url="@(UrlSenUserEdit)" onclick="appcommon.popup(this);">
+                                    @item.SenUserView.FullName</a>
+                                <span class="product-description">@item.LastLoginDate.ToLocalTime().RelativeFormat()</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <a href="@(UrlSenUser)" @GlobalVariant.AjaxInfo >Xem tất cả</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </div>
+    <!-- /.col -->
+
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+

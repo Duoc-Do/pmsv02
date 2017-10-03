@@ -1,0 +1,1937 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="SolutionsConnectionString1">
+      <rd:DataSourceID>17e38484-d259-4934-b1a1-7e498218af34</rd:DataSourceID>
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=.\SQLEXPRESS;Initial Catalog=Solutions;Integrated Security=True</ConnectString>
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <ReportParameters>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportTitle</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>CompanyName</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyAddress">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>CompanyAddress</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatSumTotal">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>FormatSumTotal</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="QDBTC">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>QDBTC</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderQuantity0">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_5</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatQuantity0">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_6</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderWarehouseLineCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_7</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderItemCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_8</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderItemName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_9</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUOMCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_10</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUnitPrice">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_11</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_12</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_13</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatUnitPrice">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_14</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderSumAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_15</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatSumAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_16</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ChiefAccountantName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_17</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DirectorName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_18</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportCreatorName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_19</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportFontSize">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_20</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderExNumeric02">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_21</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderExNumeric01">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_22</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatExNumeric02">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_23</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <BottomMargin>1in</BottomMargin>
+  <rd:ReportID>9ebe6716-454f-4bc8-9cb0-58e8e8806ba0</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DSPrint">
+      <Fields>
+        <Field Name="ExNumeric02">
+          <DataField>ExNumeric02</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DocumentID">
+          <DataField>DocumentID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="DocumentLineID">
+          <DataField>DocumentLineID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="ParentLineID">
+          <DataField>ParentLineID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="ParentLineDate">
+          <DataField>ParentLineDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ParentLineNumber">
+          <DataField>ParentLineNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DocumentLineType">
+          <DataField>DocumentLineType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DocumentLineTypeName">
+          <DataField>DocumentLineTypeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DescriptionLine">
+          <DataField>DescriptionLine</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WarehouseLineID">
+          <DataField>WarehouseLineID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="WarehouseLineCode">
+          <DataField>WarehouseLineCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WarehouseLineName">
+          <DataField>WarehouseLineName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemID">
+          <DataField>ItemID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ItemCode">
+          <DataField>ItemCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemName">
+          <DataField>ItemName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="UOMID">
+          <DataField>UOMID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="UOMCode">
+          <DataField>UOMCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Quantity0">
+          <DataField>Quantity0</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="MeasureRate">
+          <DataField>MeasureRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UnitPrice">
+          <DataField>UnitPrice</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UnitPriceFC">
+          <DataField>UnitPriceFC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Amount">
+          <DataField>Amount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="AmountFC">
+          <DataField>AmountFC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="AccountDebitLineID">
+          <DataField>AccountDebitLineID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DisplayNumberLineDebit">
+          <DataField>DisplayNumberLineDebit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountCreditLineID">
+          <DataField>AccountCreditLineID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DisplayNumberLineCredit">
+          <DataField>DisplayNumberLineCredit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProductID">
+          <DataField>ProductID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ProductCode">
+          <DataField>ProductCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProductName">
+          <DataField>ProductName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject01ID">
+          <DataField>ExObject01ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject01Code">
+          <DataField>ExObject01Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject01Name">
+          <DataField>ExObject01Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject02ID">
+          <DataField>ExObject02ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject02Code">
+          <DataField>ExObject02Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject02Name">
+          <DataField>ExObject02Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject03ID">
+          <DataField>ExObject03ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject03Code">
+          <DataField>ExObject03Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject03Name">
+          <DataField>ExObject03Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject04ID">
+          <DataField>ExObject04ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject04Code">
+          <DataField>ExObject04Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject04Name">
+          <DataField>ExObject04Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject05ID">
+          <DataField>ExObject05ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject05Code">
+          <DataField>ExObject05Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject05Name">
+          <DataField>ExObject05Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject06ID">
+          <DataField>ExObject06ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject06Code">
+          <DataField>ExObject06Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject06Name">
+          <DataField>ExObject06Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject07ID">
+          <DataField>ExObject07ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject07Code">
+          <DataField>ExObject07Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject07Name">
+          <DataField>ExObject07Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject08ID">
+          <DataField>ExObject08ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject08Code">
+          <DataField>ExObject08Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject08Name">
+          <DataField>ExObject08Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject09ID">
+          <DataField>ExObject09ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject09Code">
+          <DataField>ExObject09Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject09Name">
+          <DataField>ExObject09Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject10ID">
+          <DataField>ExObject10ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject10Code">
+          <DataField>ExObject10Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject10Name">
+          <DataField>ExObject10Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject11ID">
+          <DataField>ExObject11ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject11Code">
+          <DataField>ExObject11Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject11Name">
+          <DataField>ExObject11Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject12ID">
+          <DataField>ExObject12ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject12Code">
+          <DataField>ExObject12Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject12Name">
+          <DataField>ExObject12Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject13ID">
+          <DataField>ExObject13ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject13Code">
+          <DataField>ExObject13Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject13Name">
+          <DataField>ExObject13Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject14ID">
+          <DataField>ExObject14ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject14Code">
+          <DataField>ExObject14Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject14Name">
+          <DataField>ExObject14Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject15ID">
+          <DataField>ExObject15ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject15Code">
+          <DataField>ExObject15Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject15Name">
+          <DataField>ExObject15Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject16ID">
+          <DataField>ExObject16ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject16Code">
+          <DataField>ExObject16Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject16Name">
+          <DataField>ExObject16Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject17ID">
+          <DataField>ExObject17ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject17Code">
+          <DataField>ExObject17Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject17Name">
+          <DataField>ExObject17Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject18ID">
+          <DataField>ExObject18ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject18Code">
+          <DataField>ExObject18Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject18Name">
+          <DataField>ExObject18Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject19ID">
+          <DataField>ExObject19ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject19Code">
+          <DataField>ExObject19Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject19Name">
+          <DataField>ExObject19Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject20ID">
+          <DataField>ExObject20ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExObject20Code">
+          <DataField>ExObject20Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExObject20Name">
+          <DataField>ExObject20Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExDate01">
+          <DataField>ExDate01</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExDate02">
+          <DataField>ExDate02</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExDate03">
+          <DataField>ExDate03</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExDate04">
+          <DataField>ExDate04</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExDate05">
+          <DataField>ExDate05</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExDate06">
+          <DataField>ExDate06</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ExString01">
+          <DataField>ExString01</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExString02">
+          <DataField>ExString02</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExString03">
+          <DataField>ExString03</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExString04">
+          <DataField>ExString04</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExString05">
+          <DataField>ExString05</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExString06">
+          <DataField>ExString06</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric01">
+          <DataField>ExNumeric01</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric03">
+          <DataField>ExNumeric03</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric04">
+          <DataField>ExNumeric04</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric05">
+          <DataField>ExNumeric05</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric06">
+          <DataField>ExNumeric06</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric07">
+          <DataField>ExNumeric07</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric08">
+          <DataField>ExNumeric08</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric09">
+          <DataField>ExNumeric09</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ExNumeric10">
+          <DataField>ExNumeric10</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ParentID">
+          <DataField>ParentID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="VoucherID">
+          <DataField>VoucherID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="VoucherCode">
+          <DataField>VoucherCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VoucherName">
+          <DataField>VoucherName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyID">
+          <DataField>CurrencyID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="IsoCode">
+          <DataField>IsoCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyName">
+          <DataField>CurrencyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyCompanyName">
+          <DataField>CurrencyCompanyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExchangeRate">
+          <DataField>ExchangeRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="VoucherDate">
+          <DataField>VoucherDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="VoucherNumber">
+          <DataField>VoucherNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PostType">
+          <DataField>PostType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CustomerID">
+          <DataField>CustomerID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CustomerCode">
+          <DataField>CustomerCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CustomerName">
+          <DataField>CustomerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Address">
+          <DataField>Address</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Contact">
+          <DataField>Contact</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountCreditID">
+          <DataField>AccountCreditID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DisplayNumberCredit">
+          <DataField>DisplayNumberCredit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountDebitID">
+          <DataField>AccountDebitID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DisplayNumberDebit">
+          <DataField>DisplayNumberDebit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SumAmountFC">
+          <DataField>SumAmountFC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SumAmount">
+          <DataField>SumAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SumTotalFC">
+          <DataField>SumTotalFC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SumTotal">
+          <DataField>SumTotal</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="NumberToWordsFC">
+          <DataField>NumberToWordsFC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NumberToWords">
+          <DataField>NumberToWords</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CreatedBy">
+          <DataField>CreatedBy</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CreatedDateTime">
+          <DataField>CreatedDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedBy">
+          <DataField>ModifiedBy</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedDateTime">
+          <DataField>ModifiedDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>SolutionsConnectionString1</DataSourceName>
+        <CommandText>SELECT        ExNumeric02, DocumentID, DocumentLineID, ParentLineID, ParentLineDate, ParentLineNumber, DocumentLineType, DocumentLineTypeName, DescriptionLine, 
+                         WarehouseLineID, WarehouseLineCode, WarehouseLineName, ItemID, ItemCode, ItemName, UOMID, UOMCode, Quantity0, MeasureRate, Quantity, UnitPrice, 
+                         UnitPriceFC, Amount, AmountFC, AccountDebitLineID, DisplayNumberLineDebit, AccountCreditLineID, DisplayNumberLineCredit, ProductID, ProductCode, 
+                         ProductName, ExObject01ID, ExObject01Code, ExObject01Name, ExObject02ID, ExObject02Code, ExObject02Name, ExObject03ID, ExObject03Code, 
+                         ExObject03Name, ExObject04ID, ExObject04Code, ExObject04Name, ExObject05ID, ExObject05Code, ExObject05Name, ExObject06ID, ExObject06Code, 
+                         ExObject06Name, ExObject07ID, ExObject07Code, ExObject07Name, ExObject08ID, ExObject08Code, ExObject08Name, ExObject09ID, ExObject09Code, 
+                         ExObject09Name, ExObject10ID, ExObject10Code, ExObject10Name, ExObject11ID, ExObject11Code, ExObject11Name, ExObject12ID, ExObject12Code, 
+                         ExObject12Name, ExObject13ID, ExObject13Code, ExObject13Name, ExObject14ID, ExObject14Code, ExObject14Name, ExObject15ID, ExObject15Code, 
+                         ExObject15Name, ExObject16ID, ExObject16Code, ExObject16Name, ExObject17ID, ExObject17Code, ExObject17Name, ExObject18ID, ExObject18Code, 
+                         ExObject18Name, ExObject19ID, ExObject19Code, ExObject19Name, ExObject20ID, ExObject20Code, ExObject20Name, ExDate01, ExDate02, ExDate03, ExDate04, 
+                         ExDate05, ExDate06, ExString01, ExString02, ExString03, ExString04, ExString05, ExString06, ExNumeric01, ExNumeric03, ExNumeric04, ExNumeric05, 
+                         ExNumeric06, ExNumeric07, ExNumeric08, ExNumeric09, ExNumeric10, ParentID, VoucherID, VoucherCode, VoucherName, CurrencyID, IsoCode, CurrencyName, 
+                         CurrencyCompanyName, ExchangeRate, VoucherDate, VoucherNumber, Description, PostType, CustomerID, CustomerCode, CustomerName, Address, Contact, 
+                         AccountCreditID, DisplayNumberCredit, AccountDebitID, DisplayNumberDebit, SumAmountFC, SumAmount, SumTotalFC, SumTotal, NumberToWordsFC, 
+                         NumberToWords, CreatedBy, CreatedDateTime, ModifiedBy, ModifiedDateTime
+FROM            AppVIN04PrintView</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <rd:DataSetInfo>
+        <rd:DataSetName>SolutionsDataSet</rd:DataSetName>
+        <rd:TableName>PrintTable</rd:TableName>
+        <rd:TableAdapterName>PrintTableTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <Code />
+  <Width>8.5in</Width>
+  <Body>
+    <ReportItems>
+      <List Name="list1">
+        <Left>0.5in</Left>
+        <ReportItems>
+          <Textbox Name="textbox14">
+            <Width>4.5in</Width>
+            <Style>
+              <FontFamily>Times New Roman</FontFamily>
+              <FontSize>=(12+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <FontWeight>700</FontWeight>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>16</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Height>0.295in</Height>
+            <Value>=Parameters!CompanyName.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox3">
+            <Top>0.25333in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Center</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>15</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>4.5in</Left>
+            <Height>0.5in</Height>
+            <Value>=Parameters!QDBTC.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox2">
+            <Top>0.00333in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Center</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>14</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>4.5in</Left>
+            <Height>0.25in</Height>
+            <Value>Mẫu số: 02 - VT</Value>
+          </Textbox>
+          <Table Name="table1">
+            <ZIndex>13</ZIndex>
+            <DataSetName>DSPrint</DataSetName>
+            <Top>2.12833in</Top>
+            <Details>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox29">
+                          <rd:DefaultName>textbox29</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>8</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=RowNumber("list1_Details_Group")</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="WarehouseLineCode">
+                          <rd:DefaultName>WarehouseLineCode</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>7</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!WarehouseLineCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="ItemCode">
+                          <rd:DefaultName>ItemCode</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>6</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!ItemCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="ItemName">
+                          <rd:DefaultName>ItemName</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>5</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!ItemName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UOMCode">
+                          <rd:DefaultName>UOMCode</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>4</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UOMCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox45">
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatExNumeric02.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>3</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!ExNumeric02.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Quantity">
+                          <rd:DefaultName>Quantity</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatQuantity0.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>2</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!Quantity0.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UnitPrice">
+                          <rd:DefaultName>UnitPrice</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatUnitPrice.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>1</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UnitPrice.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Amount">
+                          <rd:DefaultName>Amount</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatAmount.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!Amount.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Details>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+            </Style>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox8">
+                          <rd:DefaultName>textbox8</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>26</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>Stt</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox27">
+                          <rd:DefaultName>textbox27</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>25</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderWarehouseLineCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox28">
+                          <rd:DefaultName>textbox28</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>24</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderItemCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox30">
+                          <rd:DefaultName>textbox30</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>23</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderItemName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox36">
+                          <rd:DefaultName>textbox36</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>22</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUOMCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox43">
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>21</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>Định mức</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox31">
+                          <rd:DefaultName>textbox31</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>20</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderQuantity0.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox41">
+                          <rd:DefaultName>textbox41</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>19</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUnitPrice.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox40">
+                          <rd:DefaultName>textbox40</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>18</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderAmount.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
+            </Header>
+            <TableColumns>
+              <TableColumn>
+                <Width>0.375in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.625in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>1in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>1.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.625in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.875in</Width>
+              </TableColumn>
+            </TableColumns>
+            <Height>0.75in</Height>
+            <Footer>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox32">
+                          <rd:DefaultName>textbox32</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>17</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox33">
+                          <rd:DefaultName>textbox33</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>16</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox34">
+                          <rd:DefaultName>textbox34</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>15</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox35">
+                          <rd:DefaultName>textbox35</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>14</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox38">
+                          <rd:DefaultName>textbox38</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>13</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox46">
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>12</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox39">
+                          <rd:DefaultName>textbox39</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>11</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox44">
+                          <rd:DefaultName>textbox44</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>10</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderSumAmount.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Amount_1">
+                          <rd:DefaultName>Amount_1</rd:DefaultName>
+                          <Style>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatSumAmount.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>9</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!SumAmount.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Footer>
+          </Table>
+          <Textbox Name="textbox15">
+            <Top>0.295in</Top>
+            <Width>4.5in</Width>
+            <Style>
+              <FontFamily>Times New Roman</FontFamily>
+              <FontSize>=(12+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <FontWeight>700</FontWeight>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>12</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Height>0.295in</Height>
+            <Value>=Parameters!CompanyAddress.Value</Value>
+          </Textbox>
+          <Rectangle Name="rectangle1">
+            <ZIndex>11</ZIndex>
+            <ReportItems>
+              <Textbox Name="textbox12">
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>14</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>="- Tổng số tiền (Viết bằng chữ): " + First(Fields!NumberToWords.Value, "list1_Details_Group") + " " +  First(Fields!CurrencyCompanyName.Value, "list1_Details_Group")</Value>
+              </Textbox>
+              <Textbox Name="textbox16">
+                <Top>1.5in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>13</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>4.25in</Left>
+                <Value>=Parameters!ChiefAccountantName.Value</Value>
+              </Textbox>
+              <Textbox Name="textbox42">
+                <Top>1.5in</Top>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>12</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>6.125in</Left>
+                <Value>=Parameters!DirectorName.Value</Value>
+              </Textbox>
+              <Textbox Name="textbox37">
+                <Top>0.25in</Top>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>11</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>5.5in</Left>
+                <Height>0.25in</Height>
+                <Value>Ngày …. tháng ….. năm …..</Value>
+              </Textbox>
+              <Textbox Name="textbox5">
+                <Top>1.5in</Top>
+                <Width>1.5in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>10</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Value>=Parameters!ReportCreatorName.Value</Value>
+              </Textbox>
+              <Textbox Name="textbox18">
+                <Top>0.75in</Top>
+                <Width>1.5in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>9</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value> (Ký, họ tên)</Value>
+              </Textbox>
+              <Textbox Name="textbox17">
+                <Top>0.5in</Top>
+                <Width>1.5in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>8</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>Người lập phiếu</Value>
+              </Textbox>
+              <Textbox Name="textbox19">
+                <Top>0.5in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>7</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>1.5in</Left>
+                <Height>0.25in</Height>
+                <Value>Người nhận hàng</Value>
+              </Textbox>
+              <Textbox Name="textbox20">
+                <Top>0.75in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>6</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>1.5in</Left>
+                <Height>0.25in</Height>
+                <Value> (Ký, họ tên)</Value>
+              </Textbox>
+              <Textbox Name="textbox21">
+                <Top>0.5in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>5</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>2.875in</Left>
+                <Height>0.25in</Height>
+                <Value>Thủ kho</Value>
+              </Textbox>
+              <Textbox Name="textbox22">
+                <Top>0.75in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>4</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>2.875in</Left>
+                <Height>0.25in</Height>
+                <Value> (Ký, họ tên)</Value>
+              </Textbox>
+              <Textbox Name="textbox23">
+                <Top>0.5in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>3</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>4.25in</Left>
+                <Height>0.25in</Height>
+                <Value>Kế toán trưởng</Value>
+              </Textbox>
+              <Textbox Name="textbox24">
+                <Top>0.75in</Top>
+                <Width>1.375in</Width>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>2</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>4.25in</Left>
+                <Height>0.25in</Height>
+                <Value> (Ký, họ tên)</Value>
+              </Textbox>
+              <Textbox Name="textbox25">
+                <Top>0.5in</Top>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>1</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>6.125in</Left>
+                <Height>0.25in</Height>
+                <Value>Giám đốc </Value>
+              </Textbox>
+              <Textbox Name="textbox26">
+                <Top>0.75in</Top>
+                <Style>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <CanGrow>true</CanGrow>
+                <Left>6.125in</Left>
+                <Height>0.25in</Height>
+                <Value> (Ký, họ tên)</Value>
+              </Textbox>
+            </ReportItems>
+            <Top>3.00333in</Top>
+          </Rectangle>
+          <Textbox Name="textbox1">
+            <rd:DefaultName>textbox1</rd:DefaultName>
+            <Top>0.75333in</Top>
+            <Width>4.21875in</Width>
+            <Style>
+              <FontFamily>Times New Roman</FontFamily>
+              <FontSize>=(20+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Center</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>10</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>1.64063in</Left>
+            <Height>0.375in</Height>
+            <Value>=UCase(Parameters!ReportTitle.Value)</Value>
+          </Textbox>
+          <Textbox Name="textbox13">
+            <Top>0.875in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>9</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>6.375in</Left>
+            <Height>0.25in</Height>
+            <Value>="Số: " + Fields!VoucherNumber.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox4">
+            <Top>1.12833in</Top>
+            <Width>4.21875in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Center</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>8</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>1.64063in</Left>
+            <Height>0.25in</Height>
+            <Value>= "Ngày " + Format(Day(Fields!VoucherDate.Value),"00") + " tháng " + Format(Month(Fields!VoucherDate.Value),"00") + " năm " + Format(Year(Fields!VoucherDate.Value),"0000")</Value>
+          </Textbox>
+          <Textbox Name="textbox6">
+            <Top>1.125in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>7</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>6.375in</Left>
+            <Height>0.25in</Height>
+            <Value>="Nợ: " + Fields!DisplayNumberDebit.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox7">
+            <Top>1.375in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>6</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>6.375in</Left>
+            <Height>0.25in</Height>
+            <Value>="Có: " + Fields!DisplayNumberCredit.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox9">
+            <Top>1.37833in</Top>
+            <Width>6.375in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>5</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Height>0.25in</Height>
+            <Value>="Họ và tên người nhận hàng: " + IIf(Fields!Contact.Value&lt;&gt;"",Fields!Contact.Value,Fields!CustomerName.Value)</Value>
+          </Textbox>
+          <Textbox Name="textbox10">
+            <Top>1.62833in</Top>
+            <Width>6.375in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>4</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Height>0.25in</Height>
+            <Value>= "Địa chỉ: "+ Fields!Address.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox11">
+            <Top>1.87833in</Top>
+            <Width>3.75in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>3</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Height>0.25in</Height>
+            <Value>="Lý do xuất kho: "+ Fields!Description.Value</Value>
+          </Textbox>
+          <Textbox Name="textbox47">
+            <Top>1.875in</Top>
+            <Width>2in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>2</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>3.75in</Left>
+            <Height>0.25in</Height>
+            <Value>="Mã hàng: " + First(Fields!ProductCode.Value, "DSPrint")</Value>
+          </Textbox>
+          <Textbox Name="textbox48">
+            <Top>1.875in</Top>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <Format>=Parameters!FormatQuantity0.Value</Format>
+              <TextAlign>Right</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>1</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>6.625in</Left>
+            <Height>0.25in</Height>
+            <Value>=First(Fields!ExNumeric01.Value, "DSPrint")</Value>
+          </Textbox>
+          <Textbox Name="textbox49">
+            <Top>1.875in</Top>
+            <Width>0.875in</Width>
+            <Style>
+              <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+              <TextAlign>Right</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Left>5.75in</Left>
+            <Height>0.25in</Height>
+            <Value>="Số lượng: "</Value>
+          </Textbox>
+        </ReportItems>
+        <Width>7.5in</Width>
+        <Grouping Name="list1_Details_Group">
+          <GroupExpressions>
+            <GroupExpression>=Fields!DocumentID.Value</GroupExpression>
+          </GroupExpressions>
+          <PageBreakAtEnd>true</PageBreakAtEnd>
+        </Grouping>
+        <Height>4.75333in</Height>
+      </List>
+    </ReportItems>
+    <Height>5.5in</Height>
+  </Body>
+  <Language>vi-VN</Language>
+  <TopMargin>0.25in</TopMargin>
+</Report>

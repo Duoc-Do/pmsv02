@@ -1,0 +1,578 @@
+﻿@using WebApp.Services.Media
+@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+
+@{
+    ViewBag.Title = "Pos online";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";
+
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    var itemgroups = db.AppItemGroupTables.OrderBy(m => m.ItemGroupCode).ToList();
+
+    List<WebApp.Areas.Accounting.Models.AppWarehouseTable> warehouses = (from value in db.AppWarehouseTables
+                                                                         where value.IsActive
+                                                                         orderby value.Name
+                                                                         select value).ToList();
+
+
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "resorderview_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    //string action_return = "Index";
+    string action_create = Url.Action("Create", "ResOrder");
+    string action_edit = Url.Action("Edit");
+    string action_delete = Url.Action("Delete");
+
+
+
+}
+
+
+
+
+<style>
+    .inner img {
+        max-width: 100%;
+    }
+
+    .product-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<!-- Right side column. Contains the navbar and content of the page -->
+@*<aside class="right-side">*@
+
+<!-- Main content -->
+@*<section class="content">*@
+<section>
+    @foreach (var item in warehouses)
+    {
+
+        if (item.ResTables.Count() > 0)
+        {
+            var item2s = item.ResTables.Where(m => m.IsActive == true).ToList().OrderBy(m => m.Name);
+
+
+            <div class="nav-tabs-custom" id="dashboardtabcontainer">
+                <ul class="nav nav-tabs pull-right">
+
+
+
+                    <li class="active">
+                        <a data-toggle="tab" href="@String.Format("#tab_{0}", "tablelist")">Vị trí</a>
+                    </li>
+                    <li><a data-toggle="tab" href="@String.Format("#tab_{0}", "resorderview")">Order</a></li>
+
+                    <li><a data-toggle="tab" href="@String.Format("#tab_{0}", "kitchenview")">Bếp</a></li>
+
+                    <li class="pull-left header">
+                        <i class="fa fa-th"></i>
+                        @item.Name
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_tablelist" class="tab-pane active">
+                        <div class="row-fluid">
+
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+
+                                    @{
+                                        string orderlink = Url.Action("Create2", "ResOrder");
+
+                                    }
+                                    <a class="btn btn-primary" href="@(orderlink)" @(ajaxstring) onclick="appaccountingreshome.tabdashboard.orderactive()">
+                                        <span class="fa fa-plus"></span>
+                                    </a>
+                                    <h3 class="box-title">&nbsp;&nbsp; Mang về</h3>
+
+                                    <!-- /.box-tools -->
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div id="takeawayview_container">
+                                            @Html.Action("GetTakeaway", "ResOrder")
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <div class="row">
+                                        @foreach (var item2 in item2s)
+                                        {
+                                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                                                <!-- small box -->
+                                                @Html.Action("GetTable", "ResOrder", new { TableId = item2.TableId })
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab_resorderview" class="tab-pane">
+                        <div class="row">
+                            <div id="resorderview_container"></div>
+                        </div>
+                    </div>
+
+                    <div id="tab_kitchenview" class="tab-pane">
+                        <div class="row">
+                            <div id="kitchenview_container">
+                                @Html.Partial("GetKitchen")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                            }
+
+                                        }
+
+</section>
+<!-- /.content -->
+@*</aside>*@
+<!-- /.right-side -->
+
+
+
+
+@Scripts.Render("~/bundles/accapp")
+
+
+<script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("/signalr/hubs")"></script>
+
+
+<script type="text/javascript">
+
+
+    var appaccountingreshomeconnectionid = "";
+    if (typeof appaccountingreshome != "undefined") {
+        appaccountingreshomeconnectionid = appaccountingreshome.connectionid;
+    }
+
+
+
+    var appaccountingreshome = {
+        tabdashboard: {
+            id: "#dashboardtabcontainer",
+            tableactive: function () { $('#dashboardtabcontainer li:eq(0) a').tab('show'); },
+            orderactive: function () { $('#dashboardtabcontainer li:eq(1) a').tab('show'); }
+        },
+        connectionid: appaccountingreshomeconnectionid,
+        itemgroups: [],
+        selectitemlist: document.createElement("select"),
+        inputbygroup: document.createElement("div"),
+        appHub: {},
+        tablerefreshkitchen: function (a) { },
+        tablerefresh: function (a) { },
+        printkitchen: function (a, b) { }
+    };
+
+
+    //var dmvt = "dmvt";
+    //var postables = [];  //danh sach ban
+
+    //danh muc nhom vat tu va chi tiet vat tu
+
+    appaccountingreshome.selectitemlist.id = "selectitemlistid";
+
+    appaccountingreshome.appHub = $.connection.appHub; // appHub is the name of the Hub as declared in server side code
+    appaccountingreshome.appHub.state.companyid = "@(WebApp.Areas.Accounting.Services.GlobalVariant.GetCompanyId())"; // This is the round-trip state
+    // Client-side event handlers, as declared inside the  Hub
+
+
+    appaccountingreshome.appHub.client.onPosTableRefresh = function (a) {
+
+        var tableid = $("#" + a).attr("data-tableid");
+        var tablename = $("#" + a).attr("data-tablename");
+
+        var url = "@(Url.Action("GetTable", "ResOrder"))";
+        if (tableid != "") {
+            url = url + "/?TableId=" + tableid;
+            var mytable = "#" + a;
+            // Load the content using AJAX
+            $.get(url, function (data) {
+                $(mytable).replaceWith(data);
+            });
+
+            appcommon.notification("thông báo cập nhật", tablename);
+
+            //var div = $('<div class="col-md-3"><div class="box box-success"><div class="box-header with-border"><h3 class="box-title">' + tablename + '</h3><div class="box-tools pull-right"><button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button></div></div><div class="box-body">The body of the box</div></div></div>');
+            //$("#kitchenview_container").append(div);
+
+            return false;
+        }
+        else {
+        }
+    };
+
+    appaccountingreshome.appHub.client.onPosTakeawayRefresh = function (a) {
+        var b = 'dashboardtakeaway_' + a;
+        appcommon.notification("thông báo cập nhật", a);
+        appaccountingreshome.takeawayorder(b, a);
+
+    };
+
+    appaccountingreshome.appHub.client.onPosPrintKitchen = function (a, b) {
+
+        var url = "@(Url.Action("PrintKitchen", "ResOrder"))";
+        url = url + "/?Id=" + a + "&TableId=" + b;
+
+        // Load the content using AJAX
+        $.get(url, function (data) {
+            $("#kitchenview_container").append(data);
+        });
+
+    };
+    appaccountingreshome.printkitchen = function (a, b) {
+        appaccountingreshome.appHub.server.posPrintKitchen(a, b);
+    };
+
+    appaccountingreshome.appHub.client.onPosTableRefreshKitchen = function (a) {
+
+        // Load the content using AJAX
+
+        $("#kitchenview_container > [data-orderid='" + a + "']").remove();
+
+
+    };
+
+    appaccountingreshome.tablerefreshkitchen = function (a) {
+        appaccountingreshome.appHub.server.posTableRefreshKitchen(a);
+    };
+    appaccountingreshome.appHub.client.onPosKitchenQuantityProcess = function (a) {
+
+        // Load the content using AJAX
+        //alert(a);
+        $("#" + a + " > .box").removeClass('box-primary').addClass('box-success');
+
+
+    };
+    appaccountingreshome.quantityprocess = function (a) {
+        var url = "@(Url.Action("QuantityProcess", "ResOrder"))";
+        var orderid = $(a).attr("data-orderid");
+        var createdate = $(a).attr("data-createdate");
+        var idupdate = $(a).attr("data-idupdate");
+        if ($("#" + idupdate + " > .box").hasClass('box-success')) return;
+
+        if (orderid != "") {
+            //url = url + "/?Id=" + orderid + "&createdate=" + createdate;
+            var jqxhr = $.post(url, { Id: orderid, createdate: createdate }, function (data) {
+                //alert("success");
+                if (data.ketqua != 0) {
+                    appaccountingreshome.appHub.server.posKitchenQuantityProcess(idupdate);
+                }
+            })
+    .done(function () {
+        //alert("second success");
+    })
+    .fail(function () {
+        //alert("error");
+    })
+    .always(function () {
+        //alert("finished");
+    });
+        };
+    }
+
+
+
+    $.connection.hub.start()
+     .done(function () {
+         appaccountingreshome.appHub.server.joined(appaccountingreshome.appHub.state.companyid).done(function (id) {
+             if (appaccountingreshome.connectionid != "") {
+                 $.connection.appHub.server.leave(appaccountingreshome.connectionid);
+             }
+             appaccountingreshome.connectionid = id;
+         });
+     });
+
+    appaccountingreshome.createinputbygroup = function (item) {
+
+        $(appaccountingreshome.inputbygroup).append('<div class="form-horizontal form-group has-feedback"><input autocomplete="off" id="filteritem" type="text" placeholder="Tìm kiếm" value="" class="form-control hasclear"> <span class="clearer glyphicon glyphicon-remove text-danger form-control-feedback" style="top:0;"></span></div>');
+        var divcontainer = $('<div class="nav-tabs-custom" id="itemselectcontainer"></div>');
+        var tabheader = $('<ul class="nav nav-tabs"></ul>');
+        var tabcontent = $('<div class="tab-content"></div>');
+
+        var allliheader = $('<li class=""><a data-toggle="tab" href="#tab_all"><b>Tất cả</b></a></li>');
+        var alldiv1 = $('<div id="tab_all" class="tab-pane"></div>');
+        var alldiv1row = $('<div class="row"></div>');
+
+        for (var i = 0; i < item.length; i++) {
+            var li = '<li class="' + (i == 0 ? "active" : "") + '"><a data-toggle="tab" href="#tab_' + item[i].id + '">' + item[i].name + '</a></li>';
+            $(tabheader).append(li);
+
+            var div1 = $('<div id="tab_' + item[i].id + '" class="tab-pane ' + (i == 0 ? " active" : "") + '"></div>');
+            var div1row = $('<div class="row"></div>');
+            var items = item[i].items;
+            for (var j = 0; j < items.length; j++) {
+                var div1rowbox = $('<div class="col-md-3 col-sm-4  col-xs-6 itemselect" data-filter="' + items[j].name.toLocaleLowerCase() + '"></div>');
+                var div1rowbox2 = $('<div class="text-center"></div>');
+                $(div1rowbox).append(div1rowbox2);
+
+                var div1rowboxiner = $('<div class="inner"></div>');
+                var boxproduct = appaccountingreshome.createproductbox(items[j]);
+                $(div1rowboxiner).append(boxproduct);
+
+                $(div1rowbox2).append(div1rowboxiner);
+                $(div1row).append(div1rowbox);
+
+                $(alldiv1row).append($(div1rowbox).clone());
+            }
+
+
+            $(div1).append(div1row);
+            $(tabcontent).append(div1);
+        }
+        $(tabheader).append(allliheader);
+        $(alldiv1).append(alldiv1row);
+        $(tabcontent).append(alldiv1);
+
+
+        $(divcontainer).append(tabheader);
+        $(divcontainer).append(tabcontent);
+        $(appaccountingreshome.inputbygroup).append(divcontainer);
+
+    }
+
+    appaccountingreshome.createproductbox = function (item) {
+        var div = $('<div style="padding-bottom:4px;" class="product-box"></div>');
+
+        var diveffect = $("<div class='product-add-number text-center'>+1</div>");
+        $(div).append(diveffect);
+
+        $(div).append('<a href="javascript:;" onclick="appaccountingresorderupdate.AddItem3(this);"><img src="' + item.picture + '"></img></a>');
+
+
+        var divdiv = $('<div class="input-group input-group-sm"></div>');
+
+        $(divdiv).append('<input data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="1" decimaldigits=' + globalvariant.sysoption.RoundQuantity + ' type="text" placeholder="" class="form-control numeric enter-quantity" />');
+        //$(divdiv).append('<span class="input-group-btn"><button onclick="AddItem3(this);" type="button" class="btn btn-default btn-flat btn-add-quantity"><i class="fa fa-cutlery"></i></button></span>');
+
+        var divdivdiv = $('<div class="input-group-btn"></div>');
+        $(divdivdiv).append('<button aria-expanded="false" data-toggle="dropdown" class="btn btn-flat btn-default dropdown-toggle" type="button"><span class="caret"></span></button>');
+        var divdivdivul = $('<ul role="menu" class="dropdown-menu dropdown-menu-right"></ul>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="1"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">1</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="2"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">2</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="3"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">3</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="4"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">4</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="5"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">5</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="6"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">6</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="7"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">7</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="8"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">8</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itempicture="' + item.picture + '" data-itemname="' + item.name + '" data-quantity="9"  href="javascript:;" onclick="appaccountingresorderupdate.AddItem(this);">9</a></li>');
+
+        $(divdivdiv).append(divdivdivul);
+
+        $(divdiv).append(divdivdiv);
+        $(div).append(divdiv);
+        $(div).append('<p class="product-title">' + item.name + '</p>');
+        return div;
+
+    }
+
+    appaccountingreshome.additemlist = function (items, id, name, picture, price) {
+        items.push({ id: id, name: name, picture: picture, price: price });
+    };
+
+    appaccountingreshome.additemgrouplist = function (itemgroups, id, name) {
+        itemgroups.push({ id: id, name: name, items: [] });
+    };
+
+    appaccountingreshome.tablerefresh = function (a) {
+
+        var tableid = $("#" + a).attr("data-tableid");
+        var url = "@(Url.Action("GetTable", "ResOrder"))";
+        if (tableid != "") {
+            url = url + "/?TableId=" + tableid;
+            var mytable = "#" + a;
+            // Load the content using AJAX
+            $.get(url, function (data) {
+                $(mytable).replaceWith(data);
+            });
+
+            return false;
+        }
+        else {
+        }
+    };
+
+
+    appaccountingreshome.tablerefreshalls = function (a) {
+        appaccountingreshome.appHub.server.posTableRefresh(a);
+    };
+
+    appaccountingreshome.takeawayorder = function (a, voucherid) {
+
+        var tableid = $("#" + a).attr("data-tableid");
+        var url = "@(Url.Action("TakeawayOrder", "ResOrder"))";
+
+        if (tableid != "" && typeof tableid != 'undefined') {
+            url = url + "/?OrderId=" + voucherid;
+            var mytable = "#" + a;
+            // Load the content using AJAX
+            $.get(url, function (data) {
+
+                if (data != "") {
+                    $(mytable).replaceWith(data);
+                }
+                else {
+                    //alert(mytable);
+                    $(mytable).parent().remove();
+                }
+            });
+
+            return false;
+        }
+        else {
+
+            url = url + "/?OrderId=" + voucherid;
+            var mytable = "#takeawayview_container";
+            // Load the content using AJAX
+            $.get(url, function (data) {
+                $(mytable).append('<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">' + data + '</div>');
+            });
+        }
+    };
+    appaccountingreshome.takeawayorderalls = function (a) {
+        appaccountingreshome.appHub.server.posTakeawayRefresh(a);
+    };
+
+    appaccountingreshome.printorder = function (voucherid) {
+        if (voucherid != 0) {
+            var url = "@(Url.Action("PrintOrder", "ResOrder"))";
+            url = url + "/" + voucherid;
+            window.open(url, "_blank"); // <- This is what makes it open in a new window.
+        }
+        return false;
+    };
+
+    appaccountingreshome.printorder2 = function (voucherid, tableid) {
+        //if (voucherid != 0) {
+        var url = "@(Url.Action("PrintOrder2", "ResOrder"))";
+        url = url + "/?Id=" + voucherid + "&TableId=" + tableid;
+        window.open(url, "_blank"); // <- This is what makes it open in a new window.
+        //}
+        return false;
+    };
+
+    appaccountingreshome.payorder = function (a, voucherid, status) {
+        var url = "@(Url.Action("PayOrder", "ResOrder"))";
+        if (voucherid != "") {
+            url = url + "/?Id=" + voucherid + "&status=" + status;
+            var jqxhr = $.post(url, function (data) {
+                //alert(data.tableid);
+                if (data.ketqua != 0 && data.tableid != 0) {
+                    appaccountingreshome.tablerefresh(a);
+                    if (status == '2') {
+                        appaccountingreshome.printorder(voucherid);
+                    }
+                    else {
+                        appaccountingreshome.tablerefreshkitchen(voucherid);
+                    }
+
+                    appaccountingreshome.tablerefreshalls(a)
+                }
+
+                if (data.ketqua != 0 && data.tableid == 0) {
+                    //alert(data.tableid);
+                    appaccountingreshome.takeawayorder(a, voucherid);
+                    if (status == '2') {
+                        appaccountingreshome.printorder(voucherid);
+                    }
+                    else {
+                        appaccountingreshome.tablerefreshkitchen(voucherid);
+                    }
+
+                    appaccountingreshome.takeawayorderalls(voucherid)
+                }
+
+            })
+    .done(function () {
+        //alert("second success");
+    })
+    .fail(function () {
+        //alert("error");
+    })
+    .always(function () {
+        //alert("finished");
+    });
+        };
+    };
+
+
+
+    appaccountingreshome.hideobject = function (a) {
+        var b = $(a).val().toLowerCase();
+
+        if (b != "") {
+            $("#itemselectcontainer .itemselect[data-filter]").hide();
+            $("#itemselectcontainer .itemselect[data-filter*='" + b + "']").show();
+        }
+        else {
+            $("#itemselectcontainer .itemselect[data-filter]").show();
+        }
+
+    }
+
+    $(document).ready(function () {
+
+        var i = 0;
+        @foreach (var itemgroup in itemgroups)
+            {
+                    <text>
+        appaccountingreshome.additemgrouplist(appaccountingreshome.itemgroups, "@(itemgroup.ItemGroupID)", "@(itemgroup.Name)");
+        </text>
+                var items = itemgroup.AppItemTables.Where(m => m.IsActive && (m.ItemType == 2 || m.ItemType == 3)).OrderBy(m => m.Name).ToList();
+                foreach (var item in items)
+                {
+                        <text>
+        appaccountingreshome.additemlist(appaccountingreshome.itemgroups[i].items, "@(item.ItemID)", "@(string.Format("{0} - {1}",item.ItemCode,item.Name))", "@(PictureService.GetPictureUrl(item.GetExProperty("ItemPicture"), 125, 125))", "@(item.Price)");
+        </text>
+                }
+                    <text>
+        i++;
+        </text>
+            }
+
+        for (var j = 0; j < appaccountingreshome.itemgroups.length; j++) {
+            var optgroup = $("<optgroup label='" + appaccountingreshome.itemgroups[j].name + "'></optgroup>");
+            for (var i = 0; i < appaccountingreshome.itemgroups[j].items.length; i++) {
+                var item = appaccountingreshome.itemgroups[j].items[i];
+                $(optgroup).append("<option value=" + item.id
+                    + " data-price='" + item.price + "'"
+                    + " data-itemid='" + item.id + "'"
+                    + " data-itemname='" + item.name + "'"
+                    + " data-itempicture='" + item.picture + "'"
+                    + " data-quantity='1'>" + item.name + "</option>");
+            }
+            $(appaccountingreshome.selectitemlist).append(optgroup);
+        }
+
+        appaccountingreshome.createinputbygroup(appaccountingreshome.itemgroups);
+
+    });
+
+</script>

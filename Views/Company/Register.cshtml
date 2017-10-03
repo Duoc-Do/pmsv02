@@ -1,0 +1,388 @@
+﻿@model WebApp.Models.SenCompany
+@using WebApp.Services.Helpers
+@using WebApp.Services.Media
+@{
+    ViewBag.Title = "Đăng ký doanh nghiệp";
+
+    var db = new WebApp.Models.SenContext();
+
+    var apps = (List<WebApp.Models.SenApplication>)ViewBag.apps;
+    
+
+}
+<style>
+    .pricing-tables {
+        margin: 60px 0 0;
+    }
+
+    .plan {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        border-color: -moz-use-text-color #c5c5c5 #c5c5c5;
+        border-image: none;
+        border-style: none solid solid;
+        border-width: medium 1px 1px;
+        margin-bottom: 40px !important;
+        text-align: center;
+    }
+
+        .plan + .plan {
+            border-left: medium none;
+        }
+
+        .plan .header {
+            margin: 0 -1px;
+            padding: 10px 0;
+        }
+
+            .plan .header h3 {
+                display: inline-block;
+                font-size: 24px;
+                font-weight: normal;
+                letter-spacing: 0.04em;
+                line-height: 28px;
+                margin: 0;
+                text-shadow: 0 1px 1px #494949;
+                text-transform: uppercase;
+            }
+
+            .plan .header .price {
+                color: inherit;
+                display: inline-block;
+                font-size: 16px;
+                font-weight: 400;
+                padding: 10px 0 0;
+            }
+
+                .plan .header .price span {
+                    text-transform: uppercase;
+                }
+
+        .plan ul {
+            font-size: 14px;
+            list-style: outside none none;
+            margin: 0;
+            padding: 0;
+        }
+
+            .plan ul li {
+                font-size: 13px;
+                line-height: 18px;
+                padding: 12px 0;
+                text-shadow: 1px 1px 0 #fff;
+            }
+
+                .plan ul li a.pt-popover {
+                    border-bottom: 1px dashed #000;
+                    color: #000;
+                    position: relative;
+                }
+
+                    .plan ul li a.pt-popover:hover {
+                        text-decoration: none;
+                    }
+
+                    .plan ul li a.pt-popover::after {
+                        color: #dddddd;
+                        content: "";
+                        font-family: "FontAwesome";
+                        font-size: 12px;
+                        left: -15px;
+                        position: absolute;
+                        top: 0;
+                    }
+
+    .best-value.plan ul li {
+        padding: 15px 0;
+    }
+
+    .plan .popover {
+        border: medium none;
+        border-radius: 0;
+        font-size: 13px;
+        text-align: center;
+        width: 250px;
+    }
+
+    .plan .popover-title {
+        background-color: #e84c3d;
+        border-radius: 0;
+        color: #ffffff;
+        font-size: 13px;
+        text-shadow: none;
+    }
+
+    .plan .popover-content {
+        font-size: 12px;
+    }
+
+    .plan .btn {
+        text-shadow: none;
+    }
+
+    .gray .plan {
+        background-color: #f1f1f1;
+        border-top: 1px solid #c5c5c5;
+        box-shadow: -1px 0 0 rgba(0, 0, 0, 0.15);
+    }
+
+        .gray .plan .header {
+            background: #fafafa none repeat scroll 0 0;
+            border: 1px solid #cacaca;
+            border-radius: 100%;
+            height: 150px;
+            margin: 15px auto;
+            width: 150px;
+        }
+
+            .gray .plan .header h3 {
+                color: #e84c3d;
+                display: block;
+                margin-top: 30px;
+            }
+
+            .gray .plan .header .price {
+                font-size: 24px;
+                padding-top: 5px;
+            }
+
+        .gray .plan ul {
+            background: #f1f1f1 none repeat scroll 0 0;
+            border-top: 1px solid #e4e4e4;
+        }
+
+            .gray .plan ul li {
+                border-bottom: 1px solid #e4e4e4;
+                border-top: 1px solid #f8f8f8;
+                color: #333333;
+            }
+
+    .white .plan {
+        border-color: #f3f3f3;
+    }
+
+        .white .plan .header {
+            background: #e84c3d none repeat scroll 0 0;
+            color: #fff;
+        }
+
+            .white .plan .header h3 {
+                color: #fff;
+            }
+
+        .white .plan ul {
+            background-color: #fbfbfb;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+            .white .plan ul li {
+                border-bottom: 1px solid #f5f5f5;
+            }
+
+    .stripped .header {
+        background: #e84c3d none repeat scroll 0 0;
+        border: medium none;
+        box-shadow: 0 0 60px #cd3c2e inset;
+        color: #fff;
+    }
+
+        .stripped .header h3 {
+            color: #fff;
+        }
+
+    .stripped .plan ul {
+        background: #fdfdfd none repeat scroll 0 0;
+        box-shadow: 0 0 32px 0 #cacaca inset;
+    }
+
+        .stripped .plan ul li {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            border-color: -moz-use-text-color #ececec #ececec;
+            border-image: none;
+            border-style: none solid solid;
+            border-width: medium 1px 1px;
+            color: #666;
+        }
+
+            .stripped .plan ul li:nth-child(2n) {
+                background: #ffffff none repeat scroll 0 0;
+                border-bottom: 1px solid #e2e2e2;
+                border-right: 1px solid #e2e2e2;
+                box-shadow: 0 0 40px #e4e4e4 inset;
+            }
+
+    @@media (min-width: 768px) {
+        .best-value.plan {
+            position: relative;
+            top: -30px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm())
+                    {
+
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.CompanyId)
+
+                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.Address)
+                        @Html.bsEditorFor(model => model.TaxCode)
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Telephone)                                @Html.bsEditorFor(model => model.FaxNumber)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Email)                                @Html.bsEditorFor(model => model.Website)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsLabelFor(model => model.Logo)
+                                <div id="ImagePathvalue">
+                                    @Html.HiddenFor(model => model.Logo)
+                                </div>
+
+                                <div id="ImagePathimage" style="margin-bottom: 8px;">
+                                    <a href="#" class="thumbnail">
+                                        <img style="max-height:250px;max-width:250px;"  src="@(PictureService.GetPictureUrl(Model.Logo, 250))"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    @{
+                        string showremove = "";
+                        if (String.IsNullOrEmpty(Model.Logo)) { showremove = "style=\"display: none;\""; }
+                                    }
+                                    <div class="btn-group" style="margin-right: 8px; margin-bottom: 8px;">
+                                        <button id="ImagePathremove" type="button" class="btn btn-default" @showremove>Xóa hình</button>
+                                    </div>
+                                    <div id="ImagePathUpload" class="btn-group">
+
+                                        <noscript>
+                                            <p>
+                                                Xin vui lòng cho phép chạy JavaScript để tải file lên.
+                                            </p>
+                                            <!-- or put a simple form for upload here -->
+                                        </noscript>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div data-animation-effect="fadeInUpSmall" class="pricing-tables gray object-non-visible animated object-visible fadeInUpSmall">
+                            <div class="row-fluid grid-space-0">
+
+                                @Html.HiddenFor(model => model.PackageId)
+                                @{
+                                    int num=0;
+                                foreach (var item in apps.FirstOrDefault().SenPackages)
+                                {
+                                    string bestvalue = "";
+                                    if (num==2)
+                                    {
+                                        bestvalue = " best-value";
+                                    }
+                                    //string price = string.Format("{0}", item.UnitPrice != 0 ? WebApp.Areas.Admin.Services.ExConvert.Data2String(item.UnitPrice, "Numeric", "n", "") + " ₫ / tháng" : "");
+                                    <div class="col-sm-3 plan @bestvalue">
+                                        <div class="header">
+                                            <div class="price"><span></span></div>
+                                            <h3>@item.Name</h3>
+                                            
+                                        </div>
+
+                                        @Html.Raw(item.Description)
+
+                                        <br />
+                                        <p>
+                                            <a href="javascript:void(0);" onclick="submitplan(this)" class="btn btn-primary" data-packageid="@item.PackageId"><i class="fa fa-shopping-cart pr-10"></i>&nbsp Đăng ký</a>
+                                        </p>
+                                    </div>
+                                    num++;  
+                                }
+                                }
+                            </div>
+                        </div>
+                        
+                    }
+
+                    @*@Html.bsEditorFor(model => model.IsLockedOut)                    @Html.bsEditorFor(model => model.IsApproved)                    @Html.bsEditorFor(model => model.Description)                    @Html.bsTextAreaFor(model => model.Comment)*@
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Scripts/fileuploader/css/fileuploader.css" rel="stylesheet" />
+    <script src="~/Scripts/fileuploader/js/fileuploader.js"></script>
+
+    <script type="text/javascript">
+
+
+        function submitplan(a) {
+            var packageid = parseInt($(a).attr("data-packageid"));
+            $("#PackageId").val(packageid);
+            $(a).closest('form').submit();
+        };
+
+        $(function () {
+
+            var urlupload = "@(Url.RouteUrl("UploadImage", new { size = 250 }))";
+            var uploaderpicture = new qq.FileUploader({
+                element: document.getElementById('ImagePathUpload'),
+                action: urlupload,
+                onComplete: function (id, fileName, responseJSON) {
+                    if (responseJSON.success) {
+                        $("#ImagePathimage").html("<img src='" + responseJSON.imageurl + "'/>");
+                        $("#ImagePathvalue input").val(responseJSON.imagename);
+                        $("#ImagePathremove").show();
+                    }
+                },
+                strings: {
+                    upload: "Chọn hình",
+                    drop: "Kéo tập tin vào đây để tải lên",
+                    cancel: "Hủy",
+                    failed: "Thất bại"
+                }
+            });
+
+            $("#ImagePathremove").click(function (e) {
+                $("#ImagePathimage").html("<img src='/images/logos/noDefaultImage.png'/>");
+                $("#ImagePathvalue input").val("");
+                $(this).hide();
+            });
+        });
+
+    </script>
+
+}
+
+

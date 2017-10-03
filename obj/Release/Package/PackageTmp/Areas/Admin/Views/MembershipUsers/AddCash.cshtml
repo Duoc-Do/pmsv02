@@ -1,0 +1,42 @@
+﻿@model Guid?
+@using WebApp.Services.Helpers
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    ViewBag.Title = "Nạp tiền";
+
+    ajaxoption["ajaxupdateid"] += "addcash";
+}
+
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderModal")
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(false)
+                @Html.Hidden("UserId", Model)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="Amount" class="control-label">Tiền ứng</label>
+                            <input type="text" value="" style="text-align: right;" name="Amount" id="Amount" fieldname="Amount" decimaldigits="0" class="numeric form-control text-box single-line"></div>
+                        <div style="padding-top: 2px;"></div>
+                        <button class="btn btn-primary" data-dismiss="modal" id="addcashsubmit">Thực hiện</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")
+
+<script>
+    $('#addcashsubmit').click(function (e) {
+        e.preventDefault();
+        $(this).closest('form').submit();
+        return true;
+    });
+</script>

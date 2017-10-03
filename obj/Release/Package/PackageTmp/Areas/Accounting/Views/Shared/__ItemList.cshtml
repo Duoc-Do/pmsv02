@@ -1,0 +1,21 @@
+﻿@model IEnumerable<WebApp.Areas.Accounting.Models.AppItemTable>
+@{
+    var ItemID = (int)ViewData["ItemID"];
+    var FieldName = "ItemID";
+    if (ViewData.ContainsKey("FieldName"))
+    {
+        FieldName = (string)ViewData["FieldName"];
+    }
+ }
+
+@*@Html.Partial("_AddNew")*@
+
+<div class="form-group">
+    <select class="form-control" id="@(FieldName)" name="@(FieldName)">
+        <option value="0" @(ItemID == 0 ? "selected='selected'" : "")>Chọn vật tư</option>
+        @foreach (var item in Model)
+        {
+            <option value="@(item.ItemID)" @(ItemID == item.ItemID ? "selected='selected'" : "") data-uomid="@(item.UOMID)">@item.Name</option>
+        }
+    </select>
+</div>

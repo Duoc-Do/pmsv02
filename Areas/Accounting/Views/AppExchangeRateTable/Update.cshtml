@@ -1,0 +1,90 @@
+﻿@model WebApp.Areas.Accounting.Models.AppExchangeRateView
+@using WebApp.Areas.Accounting.Services
+@{Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;}
+
+@Html.Partial("_AddNew")
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                @*phần thay đổi*@
+                @Html.svHiddenFor(model => model.ExchangeRateID)                @Html.svHiddenFor(model => model.CurrencyID)
+                                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.bsEditorFor(model => model.FromDate)
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.bsEditorFor(model => model.IsoCode)
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.bsEditorFor(model => model.Value)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*kết thúc phần thay đổi*@
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+            var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "IsoCode":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#CurrencyID').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#CurrencyID').val(data.rows.CurrencyID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                default:
+            }
+        });
+    });
+</script>

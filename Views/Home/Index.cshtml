@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+
+    string senbooksurl = Url.Action("Index", "Dashboard", new { area = "Accounting" });
+    string senposurl = Url.Action("Index", "Dashboard", new { area = "Pos" });
+    string sengapurl = Url.Action("Index", "Dashboard", new { area = "Gap" });
+    string senresurl = Url.Action("Index", "Dashboard", new { area = "Res" });
+
+
+    bool RoleName = User.IsInRole("Admin")| User.IsInRole("GAP");
+}
+
+
+@section featured {
+    <section class="featured text-center">
+
+        <h2>Chào mừng bạn đến với hệ thống ứng dụng trực tuyến LotusViet.</h2>
+        <h3>Xin vui lòng chọn ứng dụng</h3>
+
+        <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Kế toán</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        @*<a href="@(senbooksurl)" class="">
+                            <img style="max-height: 125px; max-width: 100%;" src="~/Content/themes/accounting/images/senbooks.jpg" />
+                        </a>*@
+                        <a href="http://localhost:60587/pmscontracts/contract" class="">
+                            <img style="max-height: 125px; max-width: 100%;" src="~/Content/themes/accounting/images/senbooks.jpg" />
+                        </a>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <div class="col-md-3">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Quản lý nhà hàng</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <a href="@(senresurl)" class="">
+                            <img style="max-height: 125px; max-width: 100%;" src="~/Content/themes/accounting/images/senpos.jpg" />
+                        </a>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+
+        </div>
+    @if (RoleName)
+    {
+        <div class="row">
+
+            <div class="col-md-3 col-md-offset-3">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">SenGAP</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <a href="@(sengapurl)" class="">
+                            <img style="max-height: 125px; max-width: 100%;" src="~/Content/themes/accounting/images/senpos.jpg" />
+                        </a>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+
+        </div>
+
+    }
+
+@*      <h4>Hoặc</h4>
+        <h2><a class="btn btn-primary" href="@(Url.Action("Register", "Company", new { area = "" }))">Đăng ký doanh nghiệp</a>  </h2>*@
+
+
+    </section>}

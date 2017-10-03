@@ -1,0 +1,136 @@
+﻿@model IEnumerable<WebApp.Areas.Admin.Models.SenContract>
+@using WebApp.Areas.Admin.Services
+@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Linq.Dynamic;
+@{
+
+    //var builderdiv = new TagBuilder("div");
+    //builderdiv.AddCssClass("btn-group");
+    MvcHtmlString divex = Html.Partial("_Ex");
+    //builderdiv.InnerHtml = divex.ToString();
+    ViewBag._ToolbarListEx = divex.ToString();
+
+    var appajaxoption = (WebApp.Areas.Admin.Models.AppAjaxOption)ViewBag.appajaxoption;
+    var ajaxoption = appajaxoption.ajaxoption;
+    string ajaxstring = appajaxoption.ajaxstring();
+
+    var metaobject = WebApp.Areas.Admin.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+    var columns = metaobject.GetMetaTable();
+
+    var contractstatus = new WebApp.Areas.Admin.Models.ContractStatus().selectlist.ToDictionary(m => m.Value);
+    
+}
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderList", ajaxoption)
+
+        <div class="box-body">
+            @Html.Partial("_bsToolbarList", ajaxoption)
+            <hr />
+
+            <div class="row-fluid">
+                @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+                {
+
+                    <div class="row-fluid">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-condensed table-hover" data-tablename="@columns["ContractId"].TableName" data-senviet-keys="ContractId">
+                                <tbody>
+                                    @*phần header*@
+                                    <tr class="headerrow">
+                                        @Html.Partial("_bsTableHeaderCellConfig", columns)
+                                        @Html.Partial("_bsTableHeaderRow", columns)
+                                        <th></th>
+                                    </tr>
+                                    @*phần lọc số liệu*@
+                                    <tr class="filterrow">
+                                        <th></th>
+                                        @Html.Partial("_bsTableFilterRow", columns)
+                                        <th></th>
+                                    </tr>
+
+
+                                    @*phần nội dung*@
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="datarow" data-datarow-key="@(item.ContractId)"  data-datarow-para="@(string.Format("&{0}={1}", "ContractId", item.ContractId))">
+
+                                            @Html.Partial("_bsTableEditCell", ajaxstring)
+
+                                            @foreach (var column in columns)
+                                            {
+                                                if (!column.Value.GridViewShow == true) { continue; }
+
+                                                column.Value.CalSummary(item);
+
+                                                switch (column.Value.ColumnName)
+                                                {
+                                                    case "Assign.UserName":
+                                                        {
+                                                <td>
+                                                    @if (item.Assign != null)
+                                                    {
+                                                        string urluser = Url.Action("Edit", "MembershipUsers", new { UserId = item.AssignedTo, action_return = "noaction" });
+                                                        <a href="javascript:;" data-url="@(urluser)" onclick="appcommon.popup(this);">@item.Assign.UserName</a>
+                                                    }
+                                                </td>
+                                                        }
+
+                                                        break;
+                                                    case "SenCustomer.Name":
+                                                        {
+                                                            string urlcustomer = Url.Action("Edit", "SenCustomer", new { CustomerId = item.CustomerId, action_return = "noaction" });
+                                                <td><a href="javascript:;" data-url="@(urlcustomer)" onclick="appcommon.popup(this);">@item.SenCustomer.Name</a></td>
+                                                        }
+
+                                                        break;
+                                                    case "SenProduct.Name":
+                                                        {
+                                                            string urlproduct = Url.Action("Edit", "SenProduct", new { ProductId = item.ProductId, action_return = "noaction" });
+                                                <td><a href="javascript:;" data-url="@(urlproduct)" onclick="appcommon.popup(this);">@item.SenProduct.Name</a></td>                                                            
+                                                        }
+                                                        break;
+                                                    case "Status":
+                                                <td>@contractstatus[item.Status.ToString()].Text</td>
+                                                        break;
+                                                    default:
+                                                @Html.Partial("_bsTableDataCell", item, new ViewDataDictionary() { { "column", column.Value } })
+                                                        break;
+                                                }
+                                            }
+                                                                                        <td>
+                                                @Html.Partial("_ExView",item)
+                                            </td>
+                                        </tr>
+                                    }
+                                    @*phần footer*@
+                                    <tr class="footerrow">
+                                        @Html.Partial("_bsTableFooterCellConfig")
+                                        @Html.Partial("_bsTableFooterRow", columns)
+                                        <th></th>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        @Html.Partial("_PagingPartial", metaobject.Paging)
+
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="box-footer">
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/adminapp")
+@*<script src="~/Scripts/App/Admin/InitApp.js"></script>*@
+@*@Html.svGridList(Model, ajaxoption["keyfield"], ajaxoption["metaname"])*@

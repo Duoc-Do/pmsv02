@@ -1,0 +1,201 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+    WebAppAccEntities db = new WebAppAccEntities(GlobalVariant.GetConnection());
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    int roleid = GlobalVariant.GetAppUser().RoleID;
+    var query = from m in db.SysMenus
+                join n in db.SysMenuRoles on m.MenuID equals n.MenuID
+                where n.RoleID == roleid && m.IsActive == true && n.IsActive
+                orderby m.MenuID
+                select m;
+    var menu = query.ToList();
+    var menu_main = menu.Where(m => m.ParentID == null && m.IsActive && m.MenuID=="19.00.00").ToList();
+    
+}
+
+<ul class="sidebar-menu">
+    @if (User.IsInRole("Admin"))
+    {
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>Cấu hình quản trị</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a id="SysTableDetail" href="@Url.Action("Index", "SysTableDetail", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysTableDetail</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysBusiness" href="@Url.Action("Index", "SysBusiness", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysBusiness</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysMenu" href="@Url.Action("Index", "SysMenu", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysMenu</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+        <li class="active">
+            <a href="@Url.Action("Index", "AppHome", new { area = "Pos" })" >
+                <i class="fa fa-dashboard"></i><span>Bảng điều khiển</span>
+            </a>
+        </li>        
+    
+
+
+
+    @foreach (var item in menu_main)
+    {
+        var menu_main_sub = menu.Where(m => m.ParentID == item.MenuID).ToList();
+        var iconmenu = "fa fa-folder";
+        switch (item.MenuID)
+        {
+            case "01.00.00":// he thong
+                iconmenu = "fa fa-cog";
+                break;
+            case "02.00.00":// tong hop
+                iconmenu = "fa fa-book";
+                break;
+            case "03.00.00"://tien mat
+                iconmenu = "fa fa-money";
+                break;
+
+            case "04.00.00"://ban hang
+                iconmenu = "fa fa-gift";
+                break;
+
+            case "05.00.00"://mua hang
+                iconmenu = "fa fa-shopping-cart";
+                break;
+
+            case "08.00.00"://kho hang
+                iconmenu = "fa fa-cubes";
+                break;
+            case "09.00.00"://quan he khach hang
+                iconmenu = "fa fa-bar-chart-o";
+                break;
+            case "10.00.00"://quan he khach hang
+                iconmenu = "fa fa-life-ring";
+                break;
+
+            case "14.00.00"://tai san
+                iconmenu = "fa fa-truck";
+                break;
+
+            case "17.00.00"://xay dung
+                iconmenu = "fa fa-building";
+                break;
+
+            case "19.00.00"://diem ban hang nha hang
+                iconmenu = "fa fa-cutlery";
+                break;
+
+            case "99.00.00"://mo rong
+                iconmenu = "fa fa-cogs";
+                break;
+            default:
+                break;
+        }
+        
+        <li class="treeview">
+            <a href="#">
+                <i class="@(iconmenu)"></i>
+                <span>@item.Des</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                @foreach (var item_sub in menu_main_sub)
+                {
+                    var menu_main_sub_sub = menu.Where(m => m.ParentID == item_sub.MenuID).ToList();
+                    var iconmenusub = "fa fa-folder";
+                    
+                    
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="@(iconmenusub)"></i>
+                            <span>@item_sub.Des</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @foreach (var item_sub_sub in menu_main_sub_sub)
+                            {
+                                var businesscodeweb = item_sub_sub.BusinessCode.Replace("Browse", "");
+                                <li>
+                                    <a id="@(businesscodeweb)" href="/Accounting/@(businesscodeweb)" @(ajaxstring)>@item_sub_sub.Des</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>                    
+                }
+
+            </ul>
+        </li>        
+    }
+
+
+
+
+</ul>
+
+
+<script>
+
+    // Run on document ready
+    $(function () {
+        @*var IsAuthenticated="@User.Identity.IsAuthenticated";*@
+
+        $('.sidebar-menu a').click(function () {
+            if ($(this).attr("id") == null) { return; }
+            location.hash = $(this).attr("id");
+            $(document).scrollTop(0);
+        });
+
+    });
+
+
+
+    var globalvariant = {
+        syscompany: {},
+        sysoption: {}
+    }
+    $(document).ready(function () {
+        @{
+            var sysoption = GlobalVariant.GetSysOption();
+            var syscompany = GlobalVariant.GetSysCompany();
+          <text>
+        globalvariant.syscompany.CompanyName = "@(syscompany["CompanyName"].ToString())";
+        globalvariant.syscompany.CompanyAddress = "@(syscompany["CompanyAddress"].ToString())";
+        globalvariant.syscompany.CompanyPhone = "@(syscompany["CompanyPhone"].ToString())";
+        globalvariant.syscompany.CompanyHomePage = "@(syscompany["CompanyHomePage"].ToString())";
+
+        globalvariant.sysoption.RoundQuantity = "@(sysoption["RoundQuantity"].ToString())";
+        globalvariant.sysoption.RoundAmount = "@(sysoption["RoundAmount"].ToString())";
+        globalvariant.sysoption.RoundAmountFC = "@(sysoption["RoundAmountFC"].ToString())";
+
+        globalvariant.sysoption.RoundUnitPrice = "@(sysoption["RoundUnitPrice"].ToString())";
+        globalvariant.sysoption.RoundUnitPriceFC = "@(sysoption["RoundUnitPriceFC"].ToString())";
+
+        </text>
+            }
+    });
+
+
+</script>

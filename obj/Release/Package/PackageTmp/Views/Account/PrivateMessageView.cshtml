@@ -1,0 +1,62 @@
+﻿@model WebApp.Models.SenPrivateMessage
+@using WebApp.Services
+@{
+    
+    ViewBag.Title = Model.Subject;
+
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+    IEnumerable<SelectListItem> lists =
+    from value in db.aspnet_Users
+    orderby value.UserName
+    select new SelectListItem
+    {
+        Text = value.UserName,
+        Value = value.UserId.ToString()
+    };
+
+    ajaxoption["action-return"] = Url.Action("PrivateMessage", "Account", new { area = "" });
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderView")
+        <div class="box-header container-fluid">
+            <a id="PrivateMessageSend" href="@(Url.RouteUrl("sendpm", new { userid = Model.FromUserId,action_return=Url.Action("PrivateMessage","Account")}))" class="btn btn-default" @(ajaxstring)>Trả lời</a>
+        </div>
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+
+                @*@Html.AntiForgeryToken()*@
+                @*@Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.PrivateMessageId)*@
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.DisplayFor(model => model.Text)
+
+                        @*@Html.bsDropDownListFor(model => model.FromUserId,lists)                        @Html.bsDropDownListFor(model => model.ToUserId,lists)                        @Html.bsEditorFor(model => model.Subject)                        @Html.bsTextAreaFor(model => model.Text)                        @Html.bsEditorFor(model => model.IsRead)                        @Html.bsEditorFor(model => model.IsDeletedByRecipient)                        @Html.bsEditorFor(model => model.IsDeletedByAuthor)                        @Html.bsDisplayFor(model => model.CreatedOnUtc)*@
+
+                    </div>
+                </div>
+
+                @*@Html.Partial("_ToolbarListUpdate", ajaxoption)*@
+
+            </div>
+        }
+
+
+        @*@Html.Partial("_FooterEdit")*@
+
+
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@
+

@@ -1,0 +1,95 @@
+﻿@model Dictionary<string, string>
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", Model["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", Model["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+
+    string action_return = "Index";
+    string action_create = Url.Action("Create");
+    string action_edit = Url.Action("Edit");
+    string action_delete = Url.Action("Delete");
+    string action_importexcel = Url.Action("ImportExcel");
+    
+}
+
+<div class="row-fluid">
+    <div class="btn-toolbar" role="toolbar">
+        <!-- Split button -->
+        <div class="btn-group">
+
+            <a class="btn btn-primary" id = "sv-toolbar-create" href="@(string.Format("{0}?action_return={1}", action_create, action_return))" @(ajaxstring)><span class="fa fa-plus"></span>&nbsp;Tạo mới</a>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a id = "sv-toolbar-create-2" href="@(string.Format("{0}?action_return={1}", action_create, action_return))" @(ajaxstring)><span class="fa fa-plus"></span>&nbsp;Tạo mới</a>
+                </li>
+                <li>
+                    <a id = "sv-toolbar-copy" href="@(action_create)" @(ajaxstring)><span class="fa fa-copy"></span>&nbsp;Copy</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a id = "sv-toolbar-importexcel" href="@(action_importexcel)" @(ajaxstring)><i class="fa fa-file-excel-o"></i>&nbsp;Import excel</a>
+                </li>
+            </ul>
+            <a class="btn" id = "sv-toolbar-edit" href="@(action_edit)" @(ajaxstring)><span class="fa fa-edit"></span>&nbsp;Sửa</a>
+            <a class="btn" id = "sv-toolbar-delete" href="@(action_delete)" @(ajaxstring)><span class="fa fa-trash-o"></span>&nbsp;Xóa</a>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var $rowfocused;
+        $(".sv-gv-datarow").click(function () {
+            if ($rowfocused != null) {
+                $rowfocused.removeClass("sv-gv-datarow-focused");
+            }
+            $rowfocused = $(this);
+            $rowfocused.addClass("sv-gv-datarow-focused");
+        });
+
+        $("#sv-toolbar-edit").click(function () {
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "/" + para + "?action_return=@(action_return)");
+            }
+            else {
+                return false;
+            }
+        });
+
+        $("#sv-toolbar-delete").click(function () {
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "/" + para + "?action_return=@(action_return)");
+            }
+            else {
+                return false;
+            }
+        });
+
+        $("#sv-toolbar-copy").click(function () {
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "/" + para + "?action_return=@(action_return)");
+            }
+            else {
+                return false;
+            }
+        });
+
+    })
+</script>

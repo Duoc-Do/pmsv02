@@ -1,0 +1,94 @@
+﻿@model WebApp.Areas.Accounting.Models.GapField
+@using WebApp.Areas.Accounting.Services
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string urlfieldedit = Url.Action("Edit", "GapField", new { area = "Accounting", id = Model.FieldId, action_return = "noaction" });
+
+    string urlfielddelete = Url.Action("Delete", "GapField", new { area = "Accounting", id = Model.FieldId, action_return = "noaction" });
+
+    string urlfieldview = Url.Action("GetRow", "GapHome", new { area = "Accounting", fieldid = Model.FieldId });
+
+    string urlgapjournal = Url.Action("Create", "GapJournal", new { area = "Accounting", fieldid = Model.FieldId, action_return = "noaction" });
+
+    string urlgapjournalcare = Url.Action("Create", "GapJournalCare", new { area = "Accounting", journalid = Model.RefJournalId, action_return = "noaction" });
+
+    string urlgapjournalharvest = Url.Action("Create", "GapJournalHarvest", new { area = "Accounting", journalid = Model.FieldId, action_return = "noaction" });
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    var gapjournal = db.GapJournals.SingleOrDefault(m => m.JournalId == Model.RefJournalId);
+
+    string urlgapjournalview = Url.Action("JournalView", "GapJournal", new { area = "Accounting", id = Model.RefJournalId, action_return = "noaction" });
+    string urlgapjournalqrcode = Url.Action("JournalQRCode", "GapJournal", new { area = "Accounting", id = Model.RefJournalId, action_return = "noaction" });
+
+    string color = "bg-green";
+    DateTime IsolationDateEnd = new DateTime();
+    if (gapjournal != null)
+    {
+        color = "bg-light-blue";
+
+        IsolationDateEnd = gapjournal.IsolationDateEnd();
+        if (IsolationDateEnd > DateTime.Today)
+        {
+            color = "bg-yellow";
+        }
+    }
+}
+
+
+<div class="small-box @color" id="@(string.Format("dashboardtable_{0}", Model.FieldId))" data-farmid="@(Model.FieldId)" data-Name="@(Model.Name)">
+    <div class="inner">
+        <div class="btn-group">
+            <div class="btn-group">
+                <input type="checkbox" value="@(Model.FieldId)" name="RowSelected" class="check-box">
+            </div>
+            <h3 style="font-size: 24px;">&nbsp;&nbsp;@Model.Name</h3>
+        </div>
+        <a style="color:#fff;"  class="btn btn-block" data-toggle="collapse" href="#gapfieldex@(Model.FieldId)" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-angle-double-down"></i></a>
+        <div class="collapse" id="gapfieldex@(Model.FieldId)">
+            @*<strong>Số luống (@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.GapRows.Count, "Numeric", "c", "CICC"))</strong>*@
+            @*<br />*@
+            @{if (gapjournal != null)
+                {
+                    <div>Ngày gieo: @gapjournal.JournalDate.ToString("dd/MM/yyyy")</div>
+                    <div>Ngày bắt đầu thu hoạch: @gapjournal.HarvestDateBG.ToString("dd/MM/yyyy")</div>
+                    <div>Ngày thu hoạch sau cùng: @gapjournal.HarvestDateEnd.ToString("dd/MM/yyyy")</div>
+
+                    <div>Cây trồng: @gapjournal.GapTree.Name </div>
+                    <div>Giống: @gapjournal.GapSeed.Name </div>
+                    <div>Chăm sóc: @gapjournal.GapJournalCares.Count </div>
+                    <div>Thu hoạch: @gapjournal.GapJournalHarvests.Count </div>
+                    if (IsolationDateEnd != DateTime.MinValue)
+                    {
+                        <div>Ngày cách ly sau cùng: @gapjournal.IsolationDate.GetValueOrDefault().ToString("dd/MM/yyyy")</div>
+                        <div>Số ngày cách ly: @gapjournal.IsolationDay</div>
+                        <div>Cách ly đến ngày: @IsolationDateEnd.ToString("dd/MM/yyyy")</div>
+                    }
+                }
+            }
+        </div>
+    </div>
+
+    @*<div class="icon">
+            <i class="ion ion-leaf"></i>
+        </div>*@
+    <a class="small-box-footer" href="javascript:;" data-url="@(urlfieldedit)" onclick="appcommon.popup(this,1)">Sửa <i class="fa fa-edit"></i></a>
+    <a class="small-box-footer" href="javascript:;" data-url="@(urlfielddelete)" onclick="appcommon.popup(this,1)">Xóa <i class="fa fa-trash-o"></i></a>
+    @if (gapjournal != null)
+    {
+        <a class="small-box-footer" href="javascript:;" data-url="@(urlgapjournalview)" onclick="appcommon.popup(this,1)">Hồ sơ gieo trồng <i class="fa fa-eye"></i></a>
+
+        <a class="small-box-footer" href="@urlgapjournalqrcode" target="_blank">QRCode <i class="fa fa-qrcode"></i></a>
+    }
+
+    @*<a class="small-box-footer" href="javascript:;" data-url="@(urlgapjournal)" onclick="appcommon.popup(this,1)">Gieo trồng <i class="fa fa-bell"></i></a>
+        <a class="small-box-footer" href="javascript:;" data-url="@(urlgapjournal)" onclick="appcommon.popup(this,1)">Chăm sóc <i class="fa fa-bell"></i></a>
+        <a class="small-box-footer" href="javascript:;" data-url="@(urlgapjournal)" onclick="appcommon.popup(this,1)">Cách ly <i class="fa fa-bell"></i></a>
+        <a class="small-box-footer" href="javascript:;" data-url="@(urlgapjournal)" onclick="appcommon.popup(this,1)">Thu hoạch <i class="fa fa-bell"></i></a>*@
+
+</div>
+

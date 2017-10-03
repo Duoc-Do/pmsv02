@@ -1,0 +1,42 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+
+    ViewBag.Title = "SenGAP";
+    Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";
+
+}
+
+@section leftsidesidebarsection
+{
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img class="img-circle" src="@(WebApp.Services.Media.PictureService.GetPictureUrl(WebApp.Services.GlobalUserContext.GetContext().SenUser.Avatar, 160, 160))" alt="User Image" />
+                </div>
+                <div class="pull-left info">
+                    <p>@(WebApp.Areas.Accounting.Services.GlobalVariant.GetAppUser().FullName)</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i>Online</a>
+                </div>
+            </div>
+
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            @Html.Partial("_AppMenu")
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+}

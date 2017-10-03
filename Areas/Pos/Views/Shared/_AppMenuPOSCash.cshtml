@@ -1,0 +1,56 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+    
+}
+
+<ul class="sidebar-menu">
+    @if (User.IsInRole("Admin"))
+    {
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>Cấu hình quản trị</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a id="SysTableDetail" href="@Url.Action("Index", "SysTableDetail", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysTableDetail</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysBusiness" href="@Url.Action("Index", "SysBusiness", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysBusiness</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysMenu" href="@Url.Action("Index", "SysMenu", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysMenu</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    <li class="active">
+        <a id="ResHome" href="@Url.Action("Index", "ResHome", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-table"></i><span>Bảng theo dõi</span></a>
+    </li>
+    <li>
+        <a id="ResReport" href="@Url.Action("Index", "ResReport", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-bar-chart"></i><span>Báo cáo</span></a>
+    </li>
+   
+
+
+</ul>
+

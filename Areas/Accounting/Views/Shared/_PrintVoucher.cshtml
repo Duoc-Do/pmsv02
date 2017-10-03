@@ -1,0 +1,54 @@
+﻿@model string
+@{
+    var ReportInfo = WebApp.Areas.Accounting.Services.Report.Uti.GetReports(Model);
+    string urlprint = Url.Action("Print");
+}
+
+<div class="btn-group">
+    <select id="sv-toolbar-sysreport" name="SysReport" class="form-control input-sm" style="margin-top: 2px;">
+        @foreach (var item in ReportInfo)
+        {
+            <option value="@item.SysReportID" >@item.Des </option>
+        }
+    </select>
+</div>
+
+<div class="btn-group">
+    <a class="btn btn-default sv-toolbar-print" target="_blank" senviet-reporttype="PDF" href="@Url.Action("Print", new { reporttype = "PDF" })"><span class="fa fa-print"></span>&nbsp;In</a>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            <a class="sv-toolbar-print" target="_blank" senviet-reporttype="PDF" href="@Url.Action("Print", new { reporttype = "PDF" })">&nbsp;Pdf</a>
+        </li>
+        <li>
+            <a class="sv-toolbar-print" target="_blank" senviet-reporttype="EXCEL" href="@Url.Action("Print", new { reporttype = "EXCEL" })">&nbsp;Excel</a>
+        </li>
+
+        <li>
+            <a class="sv-toolbar-print" target="_blank" senviet-reporttype="WORD" href="@Url.Action("Print", new { reporttype = "WORD" })">&nbsp;Word</a>
+        </li>
+        <li>
+            <a class="sv-toolbar-print" target="_blank" senviet-reporttype="IMAGE" href="@Url.Action("Print", new { reporttype = "IMAGE" })">&nbsp;Hình</a>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".sv-toolbar-print").click(function () {
+            var linkprinttmp = "@(urlprint)";
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var reporttype = $(this).attr("senviet-reporttype");
+                var sysreportid = $("#sv-toolbar-sysreport").val();
+                $(this).attr("href", linkprinttmp + "?id=" + para + "&sysreportid=" + sysreportid + "&reporttype=" + reporttype);
+            }
+            else {
+                return false;
+            }
+        });
+    });
+</script>

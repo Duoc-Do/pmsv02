@@ -1,0 +1,81 @@
+﻿@model WebApp.Models.SenCompany
+@using WebApp.Services.Helpers
+@using WebApp.Services.Media
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    ViewBag.Title = "Gia hạn ứng dụng";
+    //var db = new WebApp.Models.SenContext();
+
+
+    List<SelectListItem> Quantity = new List<SelectListItem>();
+    Quantity.AddRange(new[]{
+                            new SelectListItem() { Text = "1 tháng", Value = "1" },
+                            new SelectListItem() { Text = "3 tháng", Value = "3" },
+                            new SelectListItem() { Text = "6 tháng", Value = "6" },
+                            new SelectListItem() { Text = "12 tháng", Value = "12" }
+    });
+        
+}
+
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderModal")
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="modal-body">
+
+                @Html.AntiForgeryToken()
+                <div class="text-red">
+                @Html.ValidationSummary(false)
+                    </div>
+                @Html.HiddenFor(model => model.CompanyId)
+                @Html.HiddenFor(model => model.SenPackage.UnitPrice)
+                @Html.Hidden("SenPackage_Amount", 0)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>@Html.DisplayFor(model => model.Name)</h4>
+                        <h5> Gói: @Html.DisplayFor(model => model.SenPackage.Name)</h5>
+
+                        <h3> Số dư hiện tại: @ViewBag.Balance VND </h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.DropDownList("Quantity", Quantity, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-12">
+                                <h3> <span id="Amount">@WebApp.Services.ExConvert.Data2String(Model.SenPackage.UnitPrice, "Numeric", "n", "")</span> VND  </h3>
+                            </div>
+
+                        </div>
+
+                        @*@Html.bsDropDownListFor(model => model.PackageId, lists)*@
+
+                        <div style="padding-top: 2px;"></div>
+                        <button class="btn btn-primary" type="submit">Gia hạn</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+
+
+
+@*@Scripts.Render("~/bundles/jqueryval")*@
+
+<script type="text/javascript">
+
+    $("#Quantity").change(function (e)
+    {
+        //var QuantityValue = parseFloat($(sectionid + '#Quantity').autoNumericGet());
+        var QuantityValue = parseFloat($(this).val());
+        var UnitPriceValue = parseFloat($('#SenPackage_UnitPrice').val());
+
+        var AmountValue = QuantityValue * UnitPriceValue;
+        $('#SenPackage_Amount').autoNumericSet(AmountValue);
+        $("#Amount").text($('#SenPackage_Amount').val());
+
+    });
+</script>

@@ -1,0 +1,21 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+    
+}
+
+<ul class="sidebar-menu">
+
+    <li class="active">
+        <a id="ResHome" href="@Url.Action("Index", "ResHome", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-table"></i><span>Đặt món</span></a>
+    </li>
+
+</ul>
+

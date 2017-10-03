@@ -1,0 +1,40 @@
+﻿@model WebApp.Areas.Accounting.Models.AppItemGroupTable
+    @{
+        string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+        ajaxstring += "data-ajax-mode=replace ";
+        ajaxstring += "data-ajax-method=GET ";
+        ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+        ajaxstring += "data-ajax=true ";
+
+        string urledit = Url.Action("Edit", "AppItemGroupTable", new { area = "Accounting", id = Model.ItemGroupID, action_return = "noaction" });
+
+        string urldelete = Url.Action("Delete", "AppItemGroupTable", new { area = "Accounting", id = Model.ItemGroupID, action_return = "noaction" });
+
+        string urlview = Url.Action("GetItem", "GapHome", new { area = "Accounting", itemgroupid = Model.ItemGroupID });
+
+    }
+
+
+    <div class="small-box bg-green" id="@(string.Format("dashboardtable_{0}", Model.ItemGroupID))" data-treeid="@(Model.ItemGroupID)" data-Name="@(Model.Name)">
+        <div class="inner">
+            <div class="btn-group">
+                <div class="btn-group">
+
+                </div>
+
+                <a style="color:#fff;" href="@(urlview)" @ajaxstring>
+                    <h3 style="font-size: 24px;">@Model.Name</h3>
+                </a>
+            </div>
+            <div>
+                <strong>Vật tư (@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.AppItemTables.Count, "Numeric", "c", "CICC"))</strong>
+            </div>
+        </div>
+
+        @*<div class="icon">
+                <i class="ion ion-leaf"></i>
+            </div>*@
+        <a class="small-box-footer" href="javascript:;" data-url="@(urledit)" onclick="appcommon.popup(this,1)">Sửa <i class="fa fa-edit"></i></a>
+        <a class="small-box-footer" href="javascript:;" data-url="@(urldelete)" onclick="appcommon.popup(this,1)">Xóa <i class="fa fa-trash-o"></i></a>
+
+    </div>

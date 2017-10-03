@@ -1,0 +1,91 @@
+﻿
+@model WebApp.Areas.Accounting.Models.GapJournalCare
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    int[] fieldid = ViewBag.fieldid;
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    IEnumerable<SelectListItem> works =
+from value in db.AppWorkTables where value.IsActive==true
+orderby value.Name
+select new SelectListItem
+{
+    Text = value.Name,
+    Value = value.WorkID.ToString()
+};
+
+var items =
+from value in db.AppItemTables
+where value.IsActive == true && value.ItemType ==1
+orderby value.Name
+select value;
+
+
+    IEnumerable<SelectListItem> uoms =
+from value in db.AppUnitOfMeasureTables
+where value.IsActive == true
+orderby value.UOMCode
+select new SelectListItem
+{
+Text = value.Name,
+Value = value.UOMID.ToString()
+};
+
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @foreach (var item in fieldid)
+                        {
+                            @Html.Hidden("fieldid[]", item)
+
+                        }
+                        @Html.svHiddenFor(model => model.JournalId)
+                        @Html.svHiddenFor(model => model.JournalCareId)
+                        @*@Html.bsEditorFor(model => model.JobName)*@
+                        @Html.bsDropDownList2For(model => model.WorkID, works, "Chọn công việc")
+
+                        @Html.Partial("__ItemList",items,new ViewDataDictionary() { { "ItemID", Model.ItemID??0 } })
+
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.Quantity0)</div>
+                            <div class="col-md-6">
+                            @Html.bsDropDownList2For(model => model.UOMID, uoms, "Chọn Đvt", "&nbsp;")
+                            </div> 
+                        </div>
+                        @Html.bsEditorFor(model => model.Note)
+                        @Html.bsEditorFor(model => model.JournalCareDate)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script>
+    $("#ItemID").change(function ()
+    {
+        var a = this.value;
+        var uomid = $("option:selected", this).attr("data-uomid");
+        $('#UOMID').val(uomid);
+    })
+</script>

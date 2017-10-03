@@ -1,0 +1,90 @@
+﻿@model WebApp.Areas.Admin.Models.SenGiftCard
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var giftcardtype = new WebApp.Areas.Admin.Models.GiftCardType().selectlist;
+    
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.svHiddenFor(model => model.UserCashId)                        @Html.svHiddenFor(model => model.Id)
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsDropDownListFor(model => model.GiftCardTypeId, giftcardtype)</div>
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.Amount)</div>
+                        </div>
+                        @Html.bsEditorFor(model => model.IsGiftCardActivated)
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.GiftCardCouponCode)</div>
+                            <div class="col-md-6">
+                                <div style="margin-top: 25px;"></div>
+                                <button type="button" class="btn btn-primary" id="generateCouponCode">Tạo mã</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.SenderName)</div>
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.SenderEmail)</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.RecipientName)</div>
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.RecipientEmail)</div>
+                        </div>
+                        @Html.bsTextAreaFor(model => model.Message)
+
+                        @Html.bsEditorFor(model => model.IsRecipientNotified)
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.CreatedOnUtc)
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsDisplayFor(model => model.UserCashId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#generateCouponCode').click(function () {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/Admin/SenGiftCard/GenerateCouponCode",
+                success: function (data) {
+                    $('#GiftCardCouponCode').val(data.CouponCode);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to generate code.');
+                }
+            });
+        });
+    });
+</script>

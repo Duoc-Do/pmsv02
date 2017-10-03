@@ -1,0 +1,92 @@
+﻿@using WebApp.Models
+@using WebApp.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string ispartner = (User.IsInRole("Admin") || User.IsInRole("Partner")) ? "" : "style=display:none;";
+}
+<script>
+
+    // Run on document ready
+    $(function () {
+        $('.sidebar-menu a').click(function () {
+            if ($(this).attr("id") == null) { return; }
+            location.hash = $(this).attr("id");
+            $(document).scrollTop(0);
+        });
+    });
+
+</script>
+
+
+<ul class="sidebar-menu">
+
+
+    <li>
+        <a id="UserProfile" href="@Url.Action("UserProfile", "Account", new { area = "" })" @(ajaxstring)>
+            <i class="fa fa-user"></i><span>Thông tin cá nhân</span>
+        </a>
+    </li>
+    <li>
+        <a id="PrivateMessage" href="@Url.Action("PrivateMessage", "Account", new { area = "" })" @(ajaxstring)>
+            <i class="fa fa-envelope"></i><span>Tin nhắn</span>
+        </a>
+    </li>
+    <li>
+        <a id="UserCompany" href="@Url.Action("UserCompany", "Account", new { area = "" })" @(ajaxstring)>
+            <i class="fa fa-building"></i><span>Doanh nghiệp của bạn</span>
+        </a>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-cog"></i>
+            <span>Thanh toán</span>
+            <i class="fa pull-right fa-angle-left"></i>
+        </a>
+        <ul style="display: none;" class="treeview-menu">
+            <li>
+                <a id="UserPromotion" href="@Url.Action("UserPromotion", "Account", new { area = "" })" @(ajaxstring)>
+                    <i class="fa fa-gift"></i><span>Mã khuyến mại</span>
+                </a>
+            </li>
+
+            <li>
+                <a id="UserTransaction" href="@Url.Action("UserTransaction", "Account", new { area = "" })" @(ajaxstring)>
+                    <i class="fa fa-history"></i><span>Lịch sử giao dịch</span>
+                </a>
+            </li>
+
+            @*  <li>
+                <a href="/Admin/SenPackage" data-ajax-update="#page-body-contain-id" data-ajax-success="ajaxmenu_onsuccess" data-ajax-mode="replace" data-ajax-method="GET" data-ajax-loading="#ajaxloadingelementid" data-ajax="true">
+                    <i class="fa fa-dashboard"></i><span>Cài đặt thanh toán</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/Admin/SenMessageTemplate" data-ajax-update="#page-body-contain-id" data-ajax-success="ajaxmenu_onsuccess" data-ajax-mode="replace" data-ajax-method="GET" data-ajax-loading="#ajaxloadingelementid" data-ajax="true">
+                    <i class="fa fa-dashboard"></i><span>Hồ sơ thanh toán</span>
+                </a>
+            </li>*@
+
+
+        </ul>
+    </li>
+
+    <li @ispartner>
+        <a id="UserPartner" href="@Url.Action("UserPartner", "Account", new { area = "" })" @(ajaxstring)>
+            <i class="fa fa-dollar"></i><span>Cộng tác</span>
+        </a>
+    </li>
+
+
+
+</ul>
+
+

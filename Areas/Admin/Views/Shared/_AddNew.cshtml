@@ -1,0 +1,85 @@
+﻿@{    
+    string appunitofmeasuretable = Url.Action("Create", "AppUnitOfMeasureTable", new { area = "Admin", action_return = "noaction" });
+    string appaccounttable = Url.Action("Create", "AppAccountTable", new { area = "Admin", action_return = "noaction" });
+
+    string appcustomertable = Url.Action("Create", "AppCustomerTable", new { area = "Admin", action_return = "noaction" });
+    string appcustomergrouptable = Url.Action("Create", "AppCustomerGroupTable", new { area = "Admin", action_return = "noaction" });
+    string appsalespricegrouptable = Url.Action("Create", "AppSalesPriceGroupTable", new { area = "Admin", action_return = "noaction" });
+
+    string appemployeetable = Url.Action("Create", "AppEmployeeTable", new { area = "Admin", action_return = "noaction" });
+
+    string appitemtable = Url.Action("Create", "AppItemTable", new { area = "Admin", action_return = "noaction" });
+    string appitemgrouptable = Url.Action("Create", "AppItemGroupTable", new { area = "Admin", action_return = "noaction" });
+    string appwarehousetable = Url.Action("Create", "AppWarehouseTable", new { area = "Admin", action_return = "noaction" });
+
+
+    string appdepartmenttable = Url.Action("Create", "AppDepartmentTable", new { area = "Admin", action_return = "noaction" });
+
+    string appfixedassettypetable = Url.Action("Create", "AppFixedAssetTypeTable", new { area = "Admin", action_return = "noaction" });
+    string appfixedassetgrouptable = Url.Action("Create", "AppFixedAssetGroupTable", new { area = "Admin", action_return = "noaction" });
+    
+}
+
+<section>
+    <div id="addnew_container"></div>
+    <script type="text/javascript">
+        function Addnew(fieldname) {
+
+            $("#addnew_container").hide();
+            var urladdnew = "";
+            switch (fieldname) {
+                case "FixedAssetGroupCode":
+                    urladdnew = "@(appfixedassetgrouptable)";
+                    break;
+                case "FixedAssetTypeCode":
+                    urladdnew = "@(appfixedassettypetable)";
+                    break;
+                case "DepartmentCode":
+                    urladdnew = "@(appdepartmenttable)";
+                    break;
+                case "WarehouseCode":
+                    urladdnew = "@(appwarehousetable)";
+                    break;
+                case "ItemGroupCode":
+                    urladdnew = "@(appitemgrouptable)";
+                    break;
+                case "ItemCode":
+                    urladdnew = "@(appitemtable)";
+                    break;
+                case "EmployeeCode":
+                    urladdnew = "@(appemployeetable)";
+                    break;
+                case "SalesPriceGroupCode":
+                    urladdnew = "@(appsalespricegrouptable)";
+                    break;
+                case "UOMLinkCode":
+                case "UOMCode":
+                    urladdnew = "@(appunitofmeasuretable)";
+                    break;
+                case "CustomerCode":
+                    urladdnew = "@(appcustomertable)";
+                    break;
+                case "CustomerGroupCode":
+                    urladdnew = "@(appcustomergrouptable)";
+                    break;
+                case "DisplayNumberLineCredit":
+                case "DisplayNumberLineDebit":
+                case "DisplayNumberDebit":
+                case "DisplayNumberCredit":
+                case "DisplayNumber":
+                    urladdnew = "@(appaccounttable)";
+                    break;
+                default:
+                    alert(fieldname);
+                    return false;
+            }
+
+            $("#addnew_container").load(urladdnew, function () {
+                $("#addnew_container").slideDown();
+                $("#addnew_container input:enabled:visible:first").focus();
+            });
+
+
+        }
+    </script>
+</section>

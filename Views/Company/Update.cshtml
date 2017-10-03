@@ -1,0 +1,126 @@
+﻿@model WebApp.Models.SenCompany
+@using WebApp.Services.Helpers
+@using WebApp.Services.Media
+@{
+    ViewBag.Title = "Cập nhật doanh nghiệp";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm())
+                    {
+
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.CompanyId)
+
+                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.Address)
+                        @Html.bsEditorFor(model => model.TaxCode)
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Telephone)                                @Html.bsEditorFor(model => model.FaxNumber)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Email)                                @Html.bsEditorFor(model => model.Website)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsLabelFor(model => model.Logo)
+                                <div id="ImagePathvalue">
+                                    @Html.HiddenFor(model => model.Logo)
+                                </div>
+
+                                <div id="ImagePathimage" style="margin-bottom: 8px;">
+                                    <a href="#" class="thumbnail">
+                                        <img style="max-height:250px;max-width:250px;"  src="@(PictureService.GetPictureUrl(Model.Logo, 250))"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    @{
+                        string showremove = "";
+                        if (String.IsNullOrEmpty(Model.Logo)) { showremove = "style=\"display: none;\""; }
+                                    }
+                                    <div class="btn-group" style="margin-right: 8px; margin-bottom: 8px;">
+                                        <button id="ImagePathremove" type="button" class="btn btn-default" @showremove>Xóa hình</button>
+                                    </div>
+                                    <div id="ImagePathUpload" class="btn-group">
+                                        <noscript>
+                                            <p>
+                                                Xin vui lòng cho phép chạy JavaScript để tải file lên.
+                                            </p>
+                                            <!-- or put a simple form for upload here -->
+                                        </noscript>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @*@Html.bsDropDownListFor(model => model.PackageId, lists)*@
+                        
+                        <button class="btn btn-primary" type="submit">Cập nhật</button>
+                    }
+
+                    @*@Html.bsEditorFor(model => model.IsLockedOut)                    @Html.bsEditorFor(model => model.IsApproved)                    @Html.bsEditorFor(model => model.Description)                    @Html.bsTextAreaFor(model => model.Comment)*@
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Scripts/fileuploader/css/fileuploader.css" rel="stylesheet" />
+    <script src="~/Scripts/fileuploader/js/fileuploader.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            var urlupload = "@(Url.RouteUrl("UploadImage", new { size = 250 }))";
+                var uploaderpicture = new qq.FileUploader({
+                    element: document.getElementById('ImagePathUpload'),
+                    action: urlupload,
+                    onComplete: function (id, fileName, responseJSON) {
+                        if (responseJSON.success) {
+                            $("#ImagePathimage").html("<img src='" + responseJSON.imageurl + "'/>");
+                            $("#ImagePathvalue input").val(responseJSON.imagename);
+                            $("#ImagePathremove").show();
+                        }
+                    },
+                    strings: {
+                        upload: "Chọn hình",
+                        drop: "Kéo tập tin vào đây để tải lên",
+                        cancel: "Hủy",
+                        failed: "Thất bại"
+                    }
+                });
+
+                $("#ImagePathremove").click(function (e) {
+                    $("#ImagePathimage").html("<img src='/images/logos/noDefaultImage.png'/>");
+                    $("#ImagePathvalue input").val("");
+                    $(this).hide();
+                });
+            });
+
+    </script>
+
+}
+
+

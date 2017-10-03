@@ -1,0 +1,474 @@
+﻿<style>
+    .direct-chat-contacts-header {
+        display:none;
+    }
+    .direct-chat-contacts-open .direct-chat-messages-header,.direct-chat-contacts-open .box-footer .input-group {
+        display:none;
+    }
+
+     .direct-chat-contacts-open .direct-chat-contacts-header {
+        display:table;
+    }
+
+
+</style>
+
+<!-- Info boxes -->
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="direct-chat direct-chat-warning direct-chat-contacts-open">
+            <div class="box-header with-border direct-chat-messages-header">
+                <h3 class="box-title" id="UserName">Chat</h3>
+                <div class="box-tools pull-right">
+                    <button onclick="chatapp.isToggleContacts='1';" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div class="box-header with-border direct-chat-contacts-header">
+                <h3 class="box-title" >Hỗ trợ online</h3>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <!-- Conversations are loaded here -->
+                <div id="containerchat">
+                    <div class="direct-chat-messages">
+                    </div>
+
+                </div>
+                <!--/.direct-chat-messages-->
+
+                <!-- Contacts are loaded here -->
+                <div id="containercontacts">
+                    <div class="direct-chat-contacts" style="background: #f9fafc none repeat scroll 0 0;">
+
+                        <ul class='contacts-list'>
+                        </ul>
+                        <!-- /.contatcts-list -->
+                    </div>
+                </div>
+                <!-- /.direct-chat-pane -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer" style="background:none;height:55px;" id="chatboxfooter">
+                <div class="input-group">
+                    @Html.Hidden("UserId", "")
+                    <input type="text" name="message" id="chatmessage" placeholder="Nhập nội dung ..." class="form-control" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-warning btn-flat" id="send-btn">Gửi</button>
+                    </span>
+                </div>
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!--/.direct-chat -->
+        <!-- /.info-box -->
+    </div>
+
+</div>
+<!-- /.row -->
+
+@*<script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/knockout-2.2.0.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.scrollTo-1.4.2-min.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("/signalr/hubs")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/App/Hubs/senChat.js")"></script>
+
+<script>
+
+    var chatapp = {};
+
+
+    $(document).ready(function () {
+
+        var _height = $(window).height() - 198;
+
+        
+        //$('.direct-chat .direct-chat-contacts .contacts-list,.direct-chat .direct-chat-messages').height(_height);
+        $('.direct-chat .direct-chat-messages').slimScroll({
+            color: "rgba(0,0,0,0.2)",
+            size: "3px",
+            height: _height
+        });
+        $('.direct-chat .direct-chat-contacts').height(_height);
+        $('.direct-chat .direct-chat-contacts .contacts-list').slimScroll({
+            color: "rgba(0,0,0,0.2)",
+            size: "3px",
+            height: _height
+        });
+
+        $('.direct-chat .direct-chat-contacts .contacts-list,.direct-chat .direct-chat-messages').scroll(function () {
+            var _numscroll = $(this).scrollTop();
+            if (_numscroll == 0) {
+                chatapp.recentmessage();
+            }
+        });
+
+
+        chatapp.currentUser = new senChat.user(
+            "@WebApp.Services.GlobalUserContext.GetContext().SenUser.FullName",
+            "@WebApp.Services.GlobalUserContext.GetContext().SenUser.UserProfile.UserName",
+            "@(WebApp.Services.Media.PictureService.GetPictureUrl(WebApp.Services.GlobalUserContext.GetContext().SenUser.Avatar, 120, 120))",
+            Date(),
+            "@WebApp.Services.GlobalUserContext.GetContext().SenUser.SenUserId"
+            ); // The UserName chose by the user is stored in the model
+
+        chatapp.chatUser = {};
+        chatapp.isToggleSidebar = "0";
+        chatapp.isToggleContacts = "1";
+
+        // Proxy creation
+        var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
+        chatHub.state.UserName = chatapp.currentUser.UserName; // This is the round-trip state
+        chatHub.state.UserId = chatapp.currentUser.UserId; // This is the round-trip state
+
+        // Client-side event handlers, as declared inside the  Hub
+        chatHub.client.onMessageReceived = function (message) {
+            var date = new Date();
+            date.setISO8601(message.Timestamp);
+            var chatmsg = new senChat.chatMessage(message.UserId, message.UserName, message.Content, date, message.Avatar);
+            chatapp.addmessage(chatmsg);
+        }
+
+        chatHub.client.leaves = function (SenUserId, UserId, UserName, timestamp) {
+            var disconnectedUser = new senChat.user(UserName, UserId, null, null, SenUserId);
+            removecontact(disconnectedUser);
+        }
+
+        chatHub.client.joins = function (SenUserId, UserId, UserName, timestamp, avatar) {
+            var connectedUser = new senChat.user(UserName, UserId, avatar, timestamp, SenUserId);
+            addcontact(connectedUser);
+        }
+
+        chatHub.client.thongbao = function (message) {
+            //$("#thongbao").text(message);
+            //appcommon.notification("Thông báo", message);
+        }
+
+
+        function sendMessageContent() {
+            var content = $("#chatmessage").val();
+            if (content != "" && content != null) {
+                var msg = new senChat.chatMessage(chatapp.currentUser.UserId, chatapp.currentUser.UserName, content, null, chatapp.currentUser.Avatar);
+                chatHub.server.send(msg).done(function () {
+                    $("#chatmessage").val("");
+                }).fail(function (e) {
+                    alert("Could not connect to server");
+                });
+            }
+        }
+
+        function sendPM() {
+            var content = $("#chatmessage").val();
+            var userid = $("#UserId").val();
+            if (userid == "") {
+                return;
+            }
+            if (content != "" && content != null) {
+                var msg = new senChat.chatMessage(chatapp.currentUser.UserId, chatapp.currentUser.UserName, content, null, chatapp.currentUser.Avatar);
+                chatHub.server.sendPM(userid, msg).done(function () {
+                    $("#chatmessage").val("");
+
+                }).fail(function (e) {
+                    alert("Could not connect to server");
+                });
+            }
+        }
+
+        function sendgroupMessageContent() {
+            var content = $("#groupmessage").val();
+            var groupname = $("#groupnameid").val();
+            if (content != "" && content != null) {
+                var msg = new senChat.chatMessage(chatapp.currentUser.UserId, chatapp.currentUser.UserName, content);
+                chatHub.server.sendToGroup(groupname, msg).done(function () {
+                    $("#groupmessage").val("");
+                }).fail(function (e) {
+                    alert("Could not connect to server");
+                });
+            }
+        }
+
+        function removecontact(user) {
+            
+            chatapp.usercountreset(user.UserId);
+            if (user.UserId == chatapp.chatUser.UserId) {
+                $(".direct-chat-messages > [data-container-usreid='" + user.UserId + "']").hide();
+                $("#UserId").val("");
+                chatapp.chatUser.UserId = "";
+            }
+            $("#chatuser" + user.SenUserId).remove();
+
+        };
+
+        function addcontact(user) {
+            if (user.UserId == chatapp.currentUser.UserId) {
+                return;
+            }
+            var date = new Date();
+            date.setISO8601(user.LastActive);
+
+            $("#chatuser" + user.SenUserId).remove();
+            var li = $('<li></li>');
+            $(li).attr("id", "chatuser" + user.SenUserId);
+            $(li).attr("data-userid", user.UserId);
+            $(li).attr("data-username", user.UserName);
+            $(li).attr("data-avatar", user.Avatar);
+            $(li).attr("data-maxnum", "0");
+
+            var lia = "<a data-link-userid='" + user.UserId + "' href='javascript:;' onclick='chatapp.activecontact2(this)'><img class='contacts-list-img' src='" + user.Avatar + "' alt='Contact Avatar' /><div class='contacts-list-info'><span class='contacts-list-name' style='color:#5e5e5e;'>" + user.UserName + " <span class='badge bg-yellow' title='' data-toggle='tooltip' data-value='0' data-chat-user-count='" + user.UserId + "' data-original-title=''></span></span><small class='contacts-list-date pull-right'>" + date.toLocaleTimeString() + "</small></div></a>";
+
+            $(li).append(lia);
+            $(".direct-chat .direct-chat-contacts .contacts-list").append(li);
+
+            $("[data-container-usreid='" + user.UserId + "']").remove();
+            container = $('<div></div>');
+            $(container).attr("data-container-usreid", user.UserId);
+            if (chatapp.chatUser.UserId != user.UserId) {
+                $(container).hide();
+            }
+            $('.direct-chat-messages').append(container);
+
+
+            //ngam dinh offline count
+            chatHub.server.getNoReadCount(user.UserId)
+                        .done(function (num) {
+                            if (parseInt(num)>0) {
+                                chatapp.usercountup(user.UserId, parseInt(num));
+                            }
+                        });
+        };
+
+        $("#joinserverid").click(function () {
+            joinserver();
+        });
+
+        $("#send-btn").click(function () {
+            sendPM();
+        });
+
+        $("#sendgroupid").click(function () {
+            sendgroupMessageContent();
+        });
+
+        // Handles Enter keystroke press event
+        $('#chatmessage').keypress(function (e) {
+            if (e.which == 13) {
+                //sendMessageContent();
+                sendPM();
+            }
+        });
+
+        // Step 1: Start the connection
+        // Step 2: Get all currenlty connected users
+        // Step 3: Join to the chat and nmotify all the clients (me included) that there is a new user connected
+        $.connection.hub.start()
+                    .done(function () {
+                        chatHub.server.getConnectedUsers()
+                                    .done(function (connectedUsers) {
+                                        ko.utils.arrayForEach(connectedUsers, function (item) {
+                                            addcontact(item);
+                                        });
+                                    }).done(function () {
+                                        //chatHub.server.joined();
+                                    });
+                    });
+
+        chatapp.activecontact2 = function (alink) {
+            var _userid = $(alink).attr("data-link-userid");
+            chatapp.activecontact(_userid);
+        }
+
+        chatapp.togglesidebar = function (a)
+        {
+            var _istoggle = $(a).attr("data-toggle-on");
+            if (_istoggle=="0") {
+                $(a).attr("data-toggle-on", "1");
+                chatapp.isToggleSidebar = "1";
+                if ($("#UserId").val() != "" && chatapp.isToggleContacts=="0") {
+                    chatapp.usercountreset(chatapp.chatUser.UserId);
+                }
+            }
+            else {
+                $(a).attr("data-toggle-on", "0");
+                chatapp.isToggleSidebar = "0";
+            }
+
+        }
+
+        chatapp.activecontact = function (userid) {
+            //var li = $(user).closest("li");
+            var li = $("li[data-userid='" + userid + "']");
+            var _userid = $(li).attr("data-userid");
+            var _username = $(li).attr("data-username");
+            var _maxnum = parseInt($(li).attr("data-maxnum"));
+
+            chatapp.activeuser(_userid, _username);
+
+            $("#UserId").val(_userid);
+            $("#UserName").text(_username);
+            $(".direct-chat.direct-chat-contacts-open").removeClass("direct-chat-contacts-open");
+
+            chatapp.isToggleContacts = "0";
+
+            if (_maxnum == 0) {
+                chatapp.recentmessage();
+            }
+        }
+
+        chatapp.addmessage = function (info, pre) {
+
+
+            var div = $('<div class="direct-chat-msg right"></div>');
+            var divinfo = $("<div class='direct-chat-info clearfix'></div>");
+            var divinfospan1 = $("<span class='direct-chat-name pull-right'>" + info.UserName + "</span>");
+
+
+
+            var divinfospan2 = $("<span class='direct-chat-timestamp pull-left'>" + info.timestamp.toLocaleTimeString() + "</span>");
+
+            if (chatapp.currentUser.UserName == info.UserName) {
+                $(div).removeClass("right");
+                $(divinfospan1).removeClass("pull-right").addClass("pull-left");
+                $(divinfospan2).removeClass("pull-left").addClass("pull-right");
+            }
+
+
+            $(divinfo).append(divinfospan1);
+            $(divinfo).append(divinfospan2);
+
+            var divimg = $('<img class="direct-chat-img" src="' + info.Avatar + '" alt="hình" />');
+            var divchat = $('<div class="direct-chat-text">' + info.content + '</div>');
+
+            $(div).append(divinfo);
+            $(div).append(divimg);
+            $(div).append(divchat);
+
+
+
+            if (chatapp.currentUser.UserId == info.UserId) {
+                info.UserId = $("#UserId").val();
+            }
+            if (pre != null) {
+                $("[data-container-usreid='" + info.UserId + "']").prepend(div);
+
+            }
+            else {
+                $("[data-container-usreid='" + info.UserId + "']").append(div);
+
+            }
+            $('.direct-chat-messages').scrollTo('max');
+
+            if (info.UserId != chatapp.chatUser.UserId || chatapp.isToggleSidebar == "0" || chatapp.isToggleContacts=="1") {
+                chatapp.usercountup(info.UserId);
+                appcommon.notification("Tin nhắn", div);
+            }
+            else {
+		 
+                chatHub.server.setRead(info.UserId);
+            }
+
+        }
+
+
+        chatapp.summarycountup = function (num) {
+            if (num == null) {
+                num = 1;
+            }
+            var _chatsummarycount = parseInt($("#chatsummarycount").attr("data-value")) + num;
+
+            $(".chatsummarycount").attr("data-value", _chatsummarycount).text(_chatsummarycount);
+        }
+        chatapp.summarycountdown = function (num) {
+            if (num == null) {
+                num = 1;
+            }
+            var _chatsummarycount = parseInt($("#chatsummarycount").attr("data-value")) - num;
+
+
+            if (_chatsummarycount == 0) {
+                $(".chatsummarycount").attr("data-value", _chatsummarycount).text("");
+            }
+            else {
+                $(".chatsummarycount").attr("data-value", _chatsummarycount).text(_chatsummarycount);
+            }
+        }
+
+        chatapp.usercountup = function (userid, num) {
+            if (num == null) {
+                num = 1
+            }
+            var _usercount = $("[data-chat-user-count='" + userid + "']");
+            var _chatusercount = parseInt($(_usercount).attr("data-value")) + num;
+            $(_usercount).attr("data-value", _chatusercount).text(_chatusercount);
+            chatapp.summarycountup(num);
+        }
+        chatapp.usercountreset = function (userid) {
+            var _usercount = $("[data-chat-user-count='" + userid + "']");
+            var _chatusercount = parseInt($(_usercount).attr("data-value"));
+            if (isNaN(_chatusercount)) {
+                return;
+            }
+            chatapp.summarycountdown(_chatusercount);
+            $(_usercount).attr("data-value", "0").text("");
+        }
+
+
+        chatapp.activeuser = function (userid, username) {
+            chatapp.chatUser.UserId = userid;
+            chatapp.chatUser.UserName = username;
+
+            chatapp.usercountreset(userid);
+
+            $(".direct-chat-messages > [data-container-usreid!='" + userid + "']").hide();
+            $(".direct-chat-messages > [data-container-usreid='" + userid + "']").show();
+            $("#containerchat").show();
+
+            chatHub.server.setRead(userid);
+        }
+
+        chatapp.recentmessage = function () {
+            //nếu chưa load lan đầu thi load ngam định
+            var li = $("li[data-userid='" + chatapp.chatUser.UserId + "']");
+            var liusername = $(li).attr("data-username");
+            var liuseravatar = $(li).attr("data-avatar");
+            var limaxnum = $(li).attr("data-maxnum");
+
+            chatHub.server.recentMessage(chatapp.chatUser.UserId, limaxnum)
+            .done(function (chatmessages) {
+                ko.utils.arrayForEach(chatmessages, function (item) {
+
+                    if (parseInt(item.Id) < parseInt(limaxnum) || parseInt(limaxnum) == 0) {
+                        $(li).attr("data-maxnum", item.Id);
+                        limaxnum = item.Id;
+                    }
+
+                    var date = new Date();
+                    date.setISO8601(item.Timestamp);
+
+                    if (item.UserId == chatapp.currentUser.UserId) {
+                        chatapp.addmessage(new senChat.chatMessage(item.RefUserId, chatapp.currentUser.UserName, item.Content, date, chatapp.currentUser.Avatar), 1);
+                    }
+                    else {
+
+                        chatapp.addmessage(new senChat.chatMessage(chatapp.currentUser.UserId, liusername, item.Content, date, liuseravatar), 1);
+                    }
+                });
+            }).done(function () {
+                //chatHub.server.joined();
+            });
+        }
+
+
+        chatapp.isactive = function (userid) {
+            if (chatapp.chatUser.UserId == userid) {
+                return true;
+            }
+            return false;
+        }
+
+    });
+
+</script>*@

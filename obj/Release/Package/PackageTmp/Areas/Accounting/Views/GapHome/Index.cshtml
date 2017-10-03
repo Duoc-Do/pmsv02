@@ -1,0 +1,98 @@
+﻿@using WebApp.Services.Media
+@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+
+@{
+    ViewBag.Title = "SenGap";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    var gapfarms = db.GapFarms.OrderBy(m => m.Order).ThenBy(m => m.FarmId).ToList();
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    var appajaxoption = new WebApp.Areas.Accounting.Models.AppAjaxOption();
+    var ajaxoption = appajaxoption.ajaxoption;
+    ajaxoption.Add("ajaxupdateid", "gaphome_container");
+
+    Dictionary<string, string> stringname = new Dictionary<string, string>();
+    stringname.Add("farm", "Thửa");
+
+}
+
+
+
+<style>
+    .inner img {
+            max-width: 100%;
+        }
+
+    .product-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<!-- Right side column. Contains the navbar and content of the page -->
+@*<aside class="right-side">*@
+
+<!-- Main content -->
+@*<section class="content">*@
+
+
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+@using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+{
+    <div class="row-fluid">
+        <div class="box box-primary">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index", "GapHome", new { area = "Accounting" })" @(ajaxstring)> @stringname["farm"]</a> </li>
+            </ul>
+
+
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                        @Html.Partial("_FarmAdd")
+                    </div>
+                    @foreach (var item in gapfarms)
+                    {
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                            <!-- small box -->
+                            @Html.Partial("_Farm", item)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</section>
+<!-- /.content -->
+@*</aside>*@
+<!-- /.right-side -->
+
+
+
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    var appaccountinggaphome=
+        {
+            selectall: function () {
+                $('#gaphome_container input:checkbox').attr('checked', 'checked');
+                $("#gaphome_container input:checkbox").prop('checked', true);
+            },
+            unselectall: function () { $('#gaphome_container input:checkbox').attr('checked', false); }
+        }
+
+</script>

@@ -1,0 +1,40 @@
+﻿@model WebApp.Areas.Admin.Models.Paging
+@{
+    string strshow = string.Format("<span>hiển thị từ {0} đến {1} trong số {2} </span>", Model.GetCurrentRowBegin(), Model.GetCurrentRowEnd(), Model.TotalRows);
+}
+
+    <div class="col-md-6">
+
+
+        <div class="btn-group">
+
+            <select name="paging.pagesize" onchange="PageSizeChange(this)" class="form-control input-sm">
+                <option value=10 @{if (@Model.PageSize == 10)
+                                   {@Html.Raw("selected='selected'")}}>10 </option>
+                <option value=20 @{if (@Model.PageSize == 20)
+                                   {@Html.Raw("selected='selected'")}}>20</option>
+                <option value=50 @{if (@Model.PageSize == 50)
+                                   {@Html.Raw("selected='selected'")}}>50</option>
+                <option value=100 @{if (@Model.PageSize == 100)
+                                    {@Html.Raw("selected='selected'")}}>100</option>
+            </select>
+        </div>
+        <span>dòng trên trang - </span>
+        @Html.Raw(strshow)
+
+    </div>
+    <div class="col-md-6">
+        <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="javascript:;" onclick="PagingCick('dau', this)"><<</a></li>
+            <li><a href="javascript:;" onclick="PagingCick('truoc', this)"><</a></li>
+            <li><a href="javascript:;" onclick="PagingCick('sau', this)">></a></li>
+            <li><a href="javascript:;" onclick="PagingCick('cuoi', this)">>></a></li>
+        </ul>
+    </div>
+
+<script>
+    $(function () {
+
+    })
+</script>
+

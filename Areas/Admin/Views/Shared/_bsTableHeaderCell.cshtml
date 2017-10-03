@@ -1,0 +1,6 @@
+﻿@model WebApp.Areas.Admin.Models.SysTableDetailView
+@{
+    string sort = !string.IsNullOrWhiteSpace(Model.OrderExpression)?Model.OrderExpression.Contains("asc")?"asc":"decs" :"";
+    }
+<th class="header headersort" id="@(string.Format("{0}.sort.{1}",Model.TableName,Model.ColumnName))" orderexpression="@(sort)" style="width:@(Model.GridViewWidth)px;">@Html.Raw(!string.IsNullOrWhiteSpace(Model.OrderExpression)?Model.OrderExpression.Contains("asc")?"<i class=\"fa fa-sort-alpha-asc pull-right\" style=\"padding-left:8px;\"></i>":"<i class=\"fa fa-sort-alpha-desc pull-right\" style=\"padding-left:8px;\"></i>":"") <span style="margin-right:20px;">@Model.Des</span></th>
+

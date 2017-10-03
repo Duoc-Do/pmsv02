@@ -1,0 +1,35 @@
+﻿@model object
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="col-md-12">
+        <div class="box box-danger">
+            @Html.Partial("_HeaderEdit")
+            <div class="box-header">
+                <h3 class="box-title">Bạn có muốn xóa không?</h3>
+            </div>
+
+            <div class="box-body">
+                @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+                {    
+                    @Html.bsValidationSummary(false) 
+                    @Html.AntiForgeryToken()    
+                
+                    <div class="btn-toolbar" role="toolbar">
+                        <!-- Split button -->
+                        <div class="btn-group">
+                            <input id="sv-toolbar-delete-action-return" name="action_return" type="hidden" value="index" />
+                            <button id="sv-toolbar-delete" class="btn btn-primary" type="submit">
+                                <span class="fa fa-trash-o"></span>&nbsp;Xóa
+                            </button>
+                            @*<a class="btn" href="@Url.Action("Index", new {area="Accounting"})" @(ajaxstring) ><span class="fa fa-long-arrow-left"></span>&nbsp;Trở lại danh sách</a>*@
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

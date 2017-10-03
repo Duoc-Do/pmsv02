@@ -1,0 +1,67 @@
+﻿@model WebApp.Models.Paging
+@{
+    string[] label = new string[] { "Số dòng:", "Trước", "Trang", "Sau" };
+
+    if (@Session["SysOption.Lang"] != null)
+    {
+        if (@Session["SysOption.Lang"].ToString() == "en")
+        {
+            label[0] = "Row number:";
+            label[1] = "Previous";
+            label[2] = "Page";
+            label[3] = "Next";
+        }
+
+    }        
+}
+
+<div>
+
+    <span>@label[0] </span>
+    <div class="btn-group">
+        <select id="sv-toolbar-page-size" name="paging.pagesize" onchange="PageSizeChange(this)" class="form-control input-sm">
+            <option value=10 @{if (@Model.PageSize == 10)
+                               {@Html.Raw("selected='selected'")}}>10 </option>
+            <option value=20 @{if (@Model.PageSize == 20)
+                               {@Html.Raw("selected='selected'")}}>20</option>
+            <option value=50 @{if (@Model.PageSize == 50)
+                               {@Html.Raw("selected='selected'")}}>50</option>
+            <option value=100 @{if (@Model.PageSize == 100)
+                                {@Html.Raw("selected='selected'")}}>100</option>
+        </select>
+    </div>
+    &nbsp 
+
+    <input id="paging_page" name="paging.page" type="hidden"  value ="@Model.PageCurrent" />
+    <input id="paging_pagecount" name="paging.pagecount" type="hidden"  value ="@Model.PageCount" />
+
+    @if ((bool)@Model.HasPreviousPage == true)
+    {
+        <a href='javascript:void(0)' onclick="PagingCick('dau',this);"><< </a>
+        <a href='javascript:void(0)' onclick="PagingCick('truoc',this);">< @label[1] </a>
+    }
+    else
+    {
+        @:<<
+        @Html.Raw("&nbsp;");
+        @:< @label[1]
+	}
+    &nbsp @label[2] @Model.PageCurrent / @Model.PageCount  &nbsp ( @Model.TotalRows ) &nbsp
+
+    @if ((bool)@Model.HasNextPage == true)
+    {            
+        <a href='javascript:void(0)' onclick="PagingCick('sau',this);">@label[3] > </a>
+        <a href='javascript:void(0)' onclick="PagingCick('cuoi',this);">>> </a>
+    }
+    else
+    {
+        @: @label[2] >
+        @Html.Raw("&nbsp;")
+        @:>>
+	}
+    @*<span class="fa fa-search"></span>*@
+    <input type="image" src="@Url.Content("~/Content/themes/Admin/images/search.png")" alt="Tìm trang này" style="padding-left: 6px;position: relative;width: 16px;"/>
+
+</div>
+
+

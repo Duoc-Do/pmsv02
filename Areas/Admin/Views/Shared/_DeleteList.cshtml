@@ -1,0 +1,22 @@
+﻿@model object
+@using WebApp.Areas.Admin.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-danger">
+        @Html.Partial("_HeaderEdit")
+        <div class="box-header">
+            <h3 class="box-title">Bạn có muốn xóa không?</h3>
+        </div>
+
+        <div class="box-body">
+            @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+            {    
+                @Html.bsValidationSummary(false) 
+                @Html.AntiForgeryToken()    
+                @Html.Partial("_ToolbarListDelete", ajaxoption)        
+            }
+        </div>
+    </div>
+</section>

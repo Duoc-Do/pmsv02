@@ -1,0 +1,73 @@
+﻿@{
+    Dictionary<string, string> ajaxoption = WebApp.Services.GlobalAjax.GetAjaxOption(ViewBag.ajaxoption);
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+
+    string ajaxnoreturn = "";
+    if (ajaxoption["action-return"] != null)
+    { ajaxnoreturn = ajaxoption["action-return"]; }
+
+    string urlreturn = ajaxnoreturn;
+}
+
+<div class="box-header modal-header">
+    <div class="pull-right box-tools">
+        <button title="" data-toggle="tooltip" data-widget="collapse" class="btn btn-primary btn-sm" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+        <button title="" data-toggle="tooltip" data-widget="remove" class="btn btn-primary btn-sm" data-original-title="Remove"><i class="fa fa-times"></i></button>
+    </div>
+    <h3 class="box-title">@ViewBag.Title</h3>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var businesscode = "@(ajaxoption["businesscode"])";
+        /*     
+        * Add collapse and remove events to boxes
+        */
+
+        $("[data-widget='collapse']").click(function () {
+            //Find the box parent        
+            var box = $(this).parents(".box").first();
+
+            //Find the body and the footer
+            var bf = box.find(".box-body, .box-footer");
+            if (!box.hasClass("collapsed-box")) {
+                $(this).html("<i class='fa fa-plus'></i>");
+                bf.slideUp(300, function () {
+                    box.addClass("collapsed-box");
+                }
+                );
+            } else {
+                $(this).html("<i class='fa fa-minus'></i>");
+                bf.slideDown(300, function () {
+                    box.removeClass("collapsed-box");
+                });
+            }
+        });
+
+        /*     
+         * Add collapse and remove events to boxes
+         */
+
+            $("[data-widget='remove']").click(function (e) {
+
+                //Find the box parent        
+                var box = $(this).parents(".box").first();
+                box.slideUp();
+
+                if ("@(ajaxnoreturn)" == "noaction") {
+                    $("#@(ajaxoption["ajaxupdateid"])").html("...")
+                }
+                else {
+                    $.ajax({
+                        url: "@(urlreturn)",
+                        success: function (data) {
+                            $("#page-body-contain-id").html(data);
+                        }
+                    });
+                }
+            });
+    })
+
+
+</script>

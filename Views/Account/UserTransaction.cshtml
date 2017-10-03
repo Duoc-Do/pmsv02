@@ -1,0 +1,181 @@
+﻿@model IEnumerable<object>
+@using WebApp.Services.Helpers
+@{
+    ViewBag.Title = "Lịch sử giao dịch";
+    Dictionary<string, string> ajaxoption = WebApp.Services.GlobalAjax.GetAjaxOption(ViewBag.ajaxoption);
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+    string action_return = Url.Action("UserTransaction", "Account", new { area = "" });
+
+    var metaobject = WebApp.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+
+    var lastinfo = (WebApp.Models.SenUserTransaction)ViewBag.LastInfo;
+
+    var datefrom = (DateTime)ViewBag.datefrom;
+    var dateto = (DateTime)ViewBag.dateto;
+    decimal balance = 0;
+    decimal credit = 0;
+    decimal debit = 0;
+    string voucherdate = "";
+    if (lastinfo != null)
+    {
+        balance = lastinfo.Balance;
+        credit = lastinfo.Credit;
+        debit = lastinfo.Debit;
+        voucherdate = lastinfo.VoucherDate.ToString("dd/MM/yyyy") + " cho ";
+    }
+    
+}
+
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+
+    <div class="box box-primary">
+        @Html.Partial("_HeaderList", ajaxoption)
+        @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- /.box-header -->
+            <div class="box-header">
+
+                <div class="col-md-6">
+                    <div>
+                        <div>Số dư hiện tại: </div>
+                        <h3>@WebApp.Services.ExConvert.Data2String(balance, "Numeric", "n", "")</h3>
+                        <div>Giao dịch mới nhất: </div>
+                        <div>@voucherdate
+                            @WebApp.Services.ExConvert.Data2String(credit + debit, "Numeric", "n", "")
+                        </div>
+
+                        @*<a id="PrivateMessageRead" href="javascript:;" class="btn btn-default">Đánh dấu đã đọc</a>
+                        <a id="PrivateMessageDelete" href="javascript:;" class="btn btn-default">Đánh dấu xóa</a>*@
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+            
+            <div class="box-body">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" placeholder="Tìm kiếm" value="@(metaobject.Paging.Search)" class="form-control pull-right" name="Paging.Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Hidden("DateFrom",datefrom.ToString("dd/MM/yyyy"))
+                        @Html.Hidden("DateTo",dateto.ToString("dd/MM/yyyy"))
+                        <div class="input-group">
+                            <button id="daterange-btn" class="btn btn-default pull-right">
+                                <i class="fa fa-calendar"></i>&nbsp;<span>@datefrom.ToString("dd/MM/yyyy") - @dateto.ToString("dd/MM/yyyy")</span>
+
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
+
+                        <tr>
+                            @*<th style="width: 10px;">
+                                <input type="checkbox" class="check-box checkall">
+                            </th>*@
+                            <th style="width: 120px;">Ngày chứng từ</th>
+                            <th>Nội dung</th>
+                            <th style="width: 180px;">Khoản nợ</th>
+                            <th style="width: 180px;">Khoản có</th>
+                            <th style="width: 180px;">Số dư</th>
+
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+
+                            var usertransaction = (WebApp.Models.SenUserTransaction)item;
+                            //var linkview = Url.Action("PrivateMessageView", "Account", new { area = "", messageid = privatemessage.PrivateMessageId });
+                        
+                            <tr>
+                                @*                                <td>
+                                    <input type="checkbox" value="@(privatemessage.PrivateMessageId)" name="RowSelected" class="check-box">
+                                </td>*@
+                                <td>@usertransaction.VoucherDate.ToString("dd/MM/yyyy") </td>
+                                <td>@usertransaction.Description</td>
+                                <td>@WebApp.Areas.Admin.Services.ExConvert.Data2String(usertransaction.Debit, "Numeric", "n", "")</td>
+                                <td>@WebApp.Services.ExConvert.Data2String(usertransaction.Credit, "Numeric", "n", "")</td>
+                                <td>@WebApp.Areas.Admin.Services.ExConvert.Data2String(usertransaction.Balance, "Numeric", "n", "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                @Html.Partial("_PagingPartial", metaobject.Paging)
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+@Scripts.Render("~/bundles/adminapp")
+
+<script>
+    $(function () {
+        var _datefrom = "@(datefrom.ToString("yyyy-MM-dd"))";
+        var _dateto = "@(dateto.ToString("yyyy-MM-dd"))";
+
+        var _datefrom2 = "@(datefrom.ToString("dd/MM/yyyy"))";
+        var _dateto2 = "@(dateto.ToString("dd/MM/yyyy"))";
+
+        $('#daterange-btn').daterangepicker(
+                  {
+                      ranges: {
+                          'Hôm nay': [moment(), moment()],
+                          'Hôm qua': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                          '7 ngày qua': [moment().subtract('days', 6), moment()],
+                          '30 ngày qua': [moment().subtract('days', 29), moment()],
+                          'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                          'Tháng trước': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                      },
+                      format: 'DD/MM/YYYY',//'YYYY-MM-DD',
+                      startDate: _datefrom2,// moment().subtract('days', 29),
+                      endDate: _dateto2,//moment(),
+                      separator: ' tới ',
+                      locale: {
+                          applyLabel: 'Áp dụng',
+                          cancelLabel: 'Trở lại',
+                          fromLabel: 'Từ',
+                          toLabel: 'Tới',
+                          customRangeLabel: 'Tùy chọn',
+                          daysOfWeek: ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'],
+                          monthNames: ['Tháng giêng', 'Tháng hai', 'Tháng ba', 'Tháng tư', 'Tháng năm', 'Tháng sáu', 'Tháng bảy', 'Tháng tám', 'Tháng chín', 'Tháng mười', 'Tháng mười một', 'Tháng mười hai'],
+                          firstDay: 1
+                      }
+                  },
+          function (start, end) {
+              // parse JSON formatted date to javascript date object
+              //alert(start);
+              var datestart = new Date(start);
+              var _start = datestart.getDate().toString() + "-" + (datestart.getMonth() + 1).toString() + "-" + datestart.getFullYear().toString();
+
+              var dateend = new Date(end);
+              var _end = dateend.getDate().toString() + "-" + (dateend.getMonth() + 1).toString() + "-" + dateend.getFullYear().toString();
+
+              $("#DateFrom").val(_start);
+              $("#DateTo").val(_end);
+              $('#daterange-btn').closest('form').submit();
+          }
+          );
+    });
+</script>

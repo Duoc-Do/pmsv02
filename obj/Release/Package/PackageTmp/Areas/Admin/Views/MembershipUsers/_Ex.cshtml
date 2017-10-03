@@ -1,0 +1,61 @@
+﻿
+
+<div class="btn-group">
+
+    <button class="btn btn-default" id="sendpm">
+        Nhắn tin
+    </button>
+
+    <button class="btn btn-default" id="addcash">
+        Nap tiền
+    </button>
+
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+
+@*<div class="modal fade bs-sendpm-modal" id="senvietformaddcash" tabindex="-1" role="dialog" aria-labelledby="senvietformaddcash" aria-hidden="true">
+    <div class="modal-dialog" id="modal_dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>*@
+
+
+@*<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div id="excontent">
+        </div>
+
+    </div>
+</div>*@
+
+
+
+
+<script>
+    $("#sendpm").click(function () {
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-key");
+        //var para = $(".sv-gv-datarow-focused:eq(0)").find("td[sv-fieldname='UserId']").text();
+        if (para != "") {
+           appcommon.sendpm(para);
+        }
+        else {
+            alert("Phải chọn người dùng");
+        }
+    });
+
+
+    $("#addcash").click(function () {
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-para");
+         //var para = $(".sv-gv-datarow-focused:eq(0)").find("td[sv-fieldname='UserId']").text();
+         if (para != "") {
+             addcash(para);
+         }
+         else {
+             alert("Phải chọn người dùng");
+         }
+    });
+</script>

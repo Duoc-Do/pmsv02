@@ -1,0 +1,58 @@
+﻿@model IEnumerable<WebApp.Areas.Accounting.Models.RpSalesLinePrice>
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var ItemGroupCode = reportparams["ItemGroupCode"].ToString();
+
+
+}
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderList", ajaxoption)
+
+
+        @using (@Ajax.BeginForm("Index", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ItemGroupCode" class="control-label">Mã nhóm hàng</label>
+                            @*<input fieldname="ItemGroupCode" isautocomplete="isautocomplete" class="form-control text-box single-line" id="ItemGroupCode" name="ItemGroupCode" type="text" value="@(ItemGroupCode)" />*@
+                            <select data-selectontab="false" fieldname="ItemGroupCode" isautocomplete="isautocomplete" class="form-control" id="ItemGroupCode" name="ItemGroupCode">
+                                <option value="@ItemGroupCode">@ItemGroupCode</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div style="padding-top: 1.7em;">
+                                <button type="submit" class="btn btn-primary">Áp dụng</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="box-body">
+                @Html.Partial("_PrintReport4", ajaxoption["businesscode"])
+            </div>            
+            <div class="box-body">
+                @Html.svGridReport(Model, ajaxoption["metaname"], false)
+            </div>
+        }
+
+        <div class="box-footer">
+        </div>
+    </div>
+
+</div>
+
+@Scripts.Render("~/bundles/accapp")
+
+

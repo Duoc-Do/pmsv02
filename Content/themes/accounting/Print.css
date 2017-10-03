@@ -1,0 +1,29 @@
+﻿@media print {
+    body {
+        font-size:11px;
+    }
+     table td, table th {
+          border: 1px solid #808080;
+        }
+
+    table {
+        width: 100%;
+    }
+
+    table th {
+        text-align: left;
+    }
+
+table, th, td {
+    /*border: 1px solid none;*/
+    border-collapse: collapse;
+}
+th, td {
+    padding: 4px;
+}
+    td.numeric,th.numeric{
+        text-align:right;
+    }
+
+}
+

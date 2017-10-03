@@ -1,0 +1,92 @@
+﻿@model WebApp.Areas.Admin.Models.SysTableDetail
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+@Html.bsEditorFor(model => model.TableName)@Html.bsEditorFor(model => model.ColumnName)@Html.bsEditorFor(model => model.Des)@Html.bsEditorFor(model => model.OrderExpression)@Html.bsEditorFor(model => model.GridViewWidth)@Html.bsEditorFor(model => model.GridViewShow)@Html.bsEditorFor(model => model.GridViewOrder)@Html.bsEditorFor(model => model.FormatValue)@Html.bsEditorFor(model => model.FormatType)@Html.bsEditorFor(model => model.FilterExpression)@Html.bsEditorFor(model => model.DefaultValue)@Html.bsEditorFor(model => model.CultureInfo)@Html.bsEditorFor(model => model.TableNameValid)@Html.bsEditorFor(model => model.IsValid)@Html.bsEditorFor(model => model.AllowDBNull)
+@Html.bsEditorFor(model => model.UType)@Html.bsEditorFor(model => model.ReadOnly)
+@Html.bsEditorFor(model => model.IsCarryDown)
+
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").off(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            fieldchange(this);
+        });
+    });
+
+    function fieldchange(a) {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("fieldname");
+        
+        var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "ColumnName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#Des').val(data.rows.Des);
+                                    $(sectionid + '#UType').attr('checked',data.rows.UType);
+                                    $(sectionid + '#FormatValue').val(data.rows.FormatValue);
+                                    $(sectionid + '#FormatType').val(data.rows.FormatType);
+
+                                    $(sectionid + '#AllowDBNull').attr('checked', data.rows.AllowDBNull);
+                                    $(sectionid + '#CultureInfo').val(data.rows.CultureInfo);
+                                    $(sectionid + '#DefaultValue').val(data.rows.DefaultValue);
+
+                                    $(sectionid + '#ReadOnly').attr('checked', data.rows.ReadOnly);
+                                    $(sectionid + '#GridViewWidth').val(data.rows.WidthDefault);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                default:
+            }
+    }
+</script>
+
+

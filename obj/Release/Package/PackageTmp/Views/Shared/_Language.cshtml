@@ -1,0 +1,35 @@
+﻿@using WebApp.Models;
+@using WebApp.Services;
+    @{
+        var LanguageId = GlobalVariant.LanguageId;
+
+        SenContext db = new SenContext();
+        var langs = from value in db.Languages
+                    where value.Published == true
+                    orderby value.DisplayOrder
+                    select value;
+    }
+
+    @*@Html.Partial("_AddNew")*@
+
+    <div class="form-group">
+        <select class="form-control" id="changelanguageid" name="@(LanguageId)" onChange="changelanguage(this);">
+            @foreach (var item in langs)
+            {
+                <option value="@(item.Id)" @(LanguageId == item.Id ? "selected='selected'" : "")>@item.Name</option>
+            }
+        </select>
+    </div>
+
+<script>
+    function changelanguage(a)
+    {
+        @{
+            var wh = new WebApp.Services.Helpers.WebHelper();
+            string urllang = string.Format("{0}changelang?lang=", wh.GetStoreHost(false));
+        }
+        _urllang = "@(urllang)" + a.value;
+        alert(_urllang);
+        window.location = _urllang;
+    }
+</script>

@@ -1,0 +1,69 @@
+﻿@model WebApp.Areas.Accounting.Models.ResOrderView
+@using WebApp.Areas.Accounting.Services
+@{
+    ViewBag.Title = "PrintOrder";
+    Layout = "~/Areas/Accounting/Views/Shared/_Print.cshtml";
+
+    List<WebApp.Areas.Accounting.Models.ResOrderItemView> linesum = ViewBag.linesum;
+}
+@if (Model!=null)
+{
+
+<div style="text-align: center;">
+    <div style="font-size: 18px; margin-top: 4px; font-weight: bold;">@Model.TableName : #@Model.OrderId : @linesum.FirstOrDefault().CreateDate.Value.ToString("d MMM yyyy HH:mm:ss") <span> | Order : @GlobalVariant.GetAppUser().FullName </span></div>
+</div>
+
+<div id="section-to-print">
+    <table>
+        <tbody>
+            @foreach (var item in linesum)
+            {
+                <tr>
+                    <td>@Html.Raw(string.Format("{0}x{1} <span class='label text-red'>{2}</span>", WebApp.Areas.Accounting.Services.ExConvert.Data2String(item.Quantity, "Numeric", "n", ""), item.ItemName, item.ItemNote))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+}
+    
+<script>
+
+    var isnull = "@(Model==null)";
+    if (isnull!="True") {
+
+
+    (function () {
+        var afterPrint = function () {
+            // Here you would send an AJAX request to the server to track that a page
+            // has been printed.  You could additionally pass the URL if you wanted to
+            // track printing across an entire site or application.
+            window.close();
+        };
+
+        if (window.matchMedia) {
+            var mediaQueryList = window.matchMedia('print');
+            mediaQueryList.addListener(function (mql) {
+                if (!mql.matches) {
+                    afterPrint();
+                }
+            });
+        }
+
+        window.onafterprint = afterPrint;
+    }());
+
+
+    window.focus();
+
+    window.print();
+    }
+    else {
+        window.close();
+    }
+
+    //window.close();
+</script>
+

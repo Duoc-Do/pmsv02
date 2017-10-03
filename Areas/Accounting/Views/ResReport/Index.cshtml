@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Báo cáo";
+    //Layout = "~/Areas/POS/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-solid">
+    <div class="box box-body">
+        @Html.Action("GetChart", "ResOrder", new { datefrom = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"), dateto = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"),userid=0 })
+    </div>
+</div>

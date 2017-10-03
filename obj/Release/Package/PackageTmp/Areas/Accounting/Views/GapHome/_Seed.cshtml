@@ -1,0 +1,41 @@
+﻿@model WebApp.Areas.Accounting.Models.GapSeed
+    @{
+        string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+        ajaxstring += "data-ajax-mode=replace ";
+        ajaxstring += "data-ajax-method=GET ";
+        ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+        ajaxstring += "data-ajax=true ";
+
+        string urledit = Url.Action("Edit", "GapSeed", new { area = "Accounting", id = Model.SeedId, action_return = "noaction" });
+
+        string urldelete = Url.Action("Delete", "GapSeed", new { area = "Accounting", id = Model.SeedId, action_return = "noaction" });
+
+        //string urlfarmview = Url.Action("GetField", "GapHome", new { area = "Accounting", farmid = Model.SeedId });
+
+    }
+
+
+    <div class="small-box bg-green" id="@(string.Format("dashboardtable_{0}", Model.TreeId))" data-treeid="@(Model.TreeId)" data-Name="@(Model.Name)">
+        <div class="inner">
+            <div class="btn-group">
+                <div class="btn-group">
+
+                </div>
+
+                <a style="color:#fff;" href="#" @(ajaxstring)>
+                    <h3 style="font-size: 24px;">&nbsp;&nbsp;@Model.Name</h3>
+                </a>
+            </div>
+            <div>
+                <strong>@Model.Note </strong>
+            </div>
+        </div>
+
+        @*<div class="icon">
+                <i class="ion ion-leaf"></i>
+            </div>*@
+        <a class="small-box-footer" href="javascript:;" data-url="@(urledit)" onclick="appcommon.popup(this,1)">Sửa <i class="fa fa-edit"></i></a>
+        <a class="small-box-footer" href="javascript:;" data-url="@(urldelete)" onclick="appcommon.popup(this,1)">Xóa <i class="fa fa-trash-o"></i></a>
+
+    </div>
+

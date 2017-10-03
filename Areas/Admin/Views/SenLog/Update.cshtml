@@ -1,0 +1,34 @@
+﻿
+@model WebApp.Areas.Admin.Models.SenLog
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                
+                <div class="panel panel-default">
+                    <div class="panel-body">                
+@Html.svHiddenFor(model => model.UserId)@Html.svHiddenFor(model => model.LogLevelId)@Html.svHiddenFor(model => model.LogId)@Html.bsEditorFor(model => model.ShortMessage)@Html.bsEditorFor(model => model.ReferrerUrl)@Html.bsEditorFor(model => model.PageUrl)@Html.bsEditorFor(model => model.IpAddress)@Html.bsTextAreaFor(model => model.FullMessage)@Html.bsEditorFor(model => model.CreatedOnUtc)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@

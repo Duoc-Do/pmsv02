@@ -1,0 +1,68 @@
+﻿@model WebApp.Models.LoginModel
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "_LayoutAccount.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <h3 class="form-signin-heading">Truy cập ứng dụng LotusViet</h3>
+                        <br />
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope fa-fw"></i></span>
+                            <input name="UserName" type="text" class="form-control" placeholder="Email" required autofocus>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.UserName)
+                        <div style="padding-top: 2px;"></div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                            <input name="Password" type="password" class="form-control" placeholder="Mật khẩu" required>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Password)
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="RememberMe">
+                                <input type="hidden" value="false" name="RememberMe">
+                                Duy trì đăng nhập
+                            </label>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng nhập</button>
+                    }
+
+                    <section class="social" id="socialLoginForm" style="margin-top: 8px;">
+                        @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+                    </section>
+                </div>
+            </div>
+
+            <br />
+            <p>
+                @Html.ActionLink("Đăng ký", "Register") nếu bạn không có tài khoản.
+            </p>
+            <p>
+                @Html.ActionLink("Quên mật khẩu? ", "ForgotPassword")
+            </p>
+        </div>
+
+
+    </div>
+</div>
+<!-- /container -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 text-center">
+            @Html.Partial("_Language")
+        </div>
+    </div>
+</div>
+

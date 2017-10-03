@@ -1,0 +1,40 @@
+﻿@model WebApp.Areas.Accounting.Models.GapFarm
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string urlfarmedit = Url.Action("Edit", "GapFarm", new { area = "Accounting", id = Model.FarmId, action_return = "noaction" });
+
+    string urlfarmdelete = Url.Action("Delete", "GapFarm", new { area = "Accounting", id = Model.FarmId, action_return = "noaction" });
+
+    string urlfarmview = Url.Action("GetField", "GapHome", new { area = "Accounting", farmid = Model.FarmId });
+
+}
+
+
+<div class="small-box bg-green" id="@(string.Format("dashboardtable_{0}", Model.FarmId))" data-farmid="@(Model.FarmId)" data-Name="@(Model.Name)">
+    <div class="inner">
+        <div class="btn-group">
+            <div class="btn-group">
+
+            </div>
+
+            <a style="color:#fff;" href="@(urlfarmview)" @ajaxstring>
+                <h3 style="font-size: 24px;">@Model.Name</h3>
+            </a>
+        </div>
+        <div>
+            <strong>Số luống (@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.GapFields.Count, "Numeric", "c", "CICC"))</strong>
+        </div>
+    </div>
+
+    @*<div class="icon">
+            <i class="ion ion-leaf"></i>
+        </div>*@
+    <a class="small-box-footer" href="javascript:;" data-url="@(urlfarmedit)" onclick="appcommon.popup(this,1)">Sửa <i class="fa fa-edit"></i></a>
+    <a class="small-box-footer" href="javascript:;" data-url="@(urlfarmdelete)" onclick="appcommon.popup(this,1)">Xóa <i class="fa fa-trash-o"></i></a>
+
+</div>

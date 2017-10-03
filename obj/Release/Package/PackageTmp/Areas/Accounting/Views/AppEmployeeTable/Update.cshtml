@@ -1,0 +1,44 @@
+﻿@model WebApp.Areas.Accounting.Models.AppEmployeeView
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+
+                @Html.svHiddenFor(model => model.UserID)@Html.svHiddenFor(model => model.ReligionID)@Html.svHiddenFor(model => model.PositionID)@Html.svHiddenFor(model => model.NationalityID)@Html.svHiddenFor(model => model.EthnicID)@Html.svHiddenFor(model => model.EmployeeID)@Html.svHiddenFor(model => model.EducationLevelID)@Html.svHiddenFor(model => model.DepartmentID)@Html.svHiddenFor(model => model.CountryID)@Html.svHiddenFor(model => model.BankID)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+@Html.bsEditorFor(model => model.Name)@Html.bsEditorFor(model => model.Address)@Html.bsEditorFor(model => model.EmployeeCode)@Html.bsEditorFor(model => model.TelephoneNumber)@Html.bsEditorFor(model => model.IsActive)@*@Html.bsEditorFor(model => model.UserName)@Html.bsEditorFor(model => model.TaxPIType)@Html.bsEditorFor(model => model.TaxCode)@Html.bsEditorFor(model => model.StartDate)@Html.bsEditorFor(model => model.ReligionName)@Html.bsEditorFor(model => model.ReligionCode)@Html.bsEditorFor(model => model.ReleaseDate)@Html.bsEditorFor(model => model.PositionName)@Html.bsEditorFor(model => model.PositionCode)@Html.bsEditorFor(model => model.PINDate)@Html.bsEditorFor(model => model.PINAddress)@Html.bsEditorFor(model => model.PIN)@Html.bsEditorFor(model => model.NationalityName)@Html.bsEditorFor(model => model.NationalityCode)@Html.bsEditorFor(model => model.Mobilephone)@Html.bsEditorFor(model => model.LastReviewDate)@Html.bsEditorFor(model => model.JobTitle)@Html.bsEditorFor(model => model.Image)@Html.bsEditorFor(model => model.HireDate)@Html.bsEditorFor(model => model.GenderName)@Html.bsEditorFor(model => model.Gender)@Html.bsEditorFor(model => model.EthnicName)@Html.bsEditorFor(model => model.EthnicCode)@Html.bsEditorFor(model => model.EmailAddress)@Html.bsEditorFor(model => model.EducationLevelName)@Html.bsEditorFor(model => model.EducationLevelCode)@Html.bsEditorFor(model => model.DepartmentName)@Html.bsEditorFor(model => model.DepartmentCode)@Html.bsEditorFor(model => model.CountryName)@Html.bsEditorFor(model => model.CountryCode)@Html.bsEditorFor(model => model.Comments)@Html.bsEditorFor(model => model.BirthDate)@Html.bsEditorFor(model => model.BankName)@Html.bsEditorFor(model => model.BankCode)@Html.bsEditorFor(model => model.BankAccount)@Html.bsEditorFor(model => model.Address2)*@
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    $("#Name").change(function () {
+        $("#EmployeeCode").val(apputils.gencode($(this).val()));
+    });
+</script>

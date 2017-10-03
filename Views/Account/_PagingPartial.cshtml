@@ -1,0 +1,95 @@
+﻿@model WebApp.Models.Paging
+@{
+    string strshow = string.Format("<span>hiển thị từ {0} đến {1} trong số {2} </span>", Model.GetCurrentRowBegin(), Model.GetCurrentRowEnd(), Model.TotalRows);
+}
+<div class="row">
+    <input id="paging_page" name="paging.page" type="hidden"  value ="@Model.PageCurrent" />
+    <input id="paging_pagecount" name="paging.pagecount" type="hidden"  value ="@Model.PageCount" />
+    <div class="col-md-6">
+
+
+        <div class="btn-group">
+
+            <select name="paging.pagesize" onchange="PageSizeChange(this)" class="form-control input-sm">
+                <option value=10 @{if (@Model.PageSize == 10)
+                                   {@Html.Raw("selected='selected'")}}>10 </option>
+                <option value=20 @{if (@Model.PageSize == 20)
+                                   {@Html.Raw("selected='selected'")}}>20</option>
+                <option value=50 @{if (@Model.PageSize == 50)
+                                   {@Html.Raw("selected='selected'")}}>50</option>
+                <option value=100 @{if (@Model.PageSize == 100)
+                                    {@Html.Raw("selected='selected'")}}>100</option>
+            </select>
+        </div>
+        <span>dòng trên trang - </span>
+        @Html.Raw(strshow)
+
+    </div>
+    <div class="col-md-6">
+
+        <ul class="pagination no-margin pull-right">
+            <li><a href="javascript:;" onclick="PagingCick('dau', this)"><i class="fa fa-angle-double-left"></i></a></li>
+            <li><a href="javascript:;" onclick="PagingCick('truoc', this)"><i class="fa fa-angle-left"></i></a></li>
+            <li><a href="javascript:;" onclick="PagingCick('sau', this)"><i class="fa fa-angle-right"></i></a></li>
+            <li><a href="javascript:;" onclick="PagingCick('cuoi', this)"><i class="fa fa-angle-double-right"></i></a></li>
+        </ul>
+
+        <button name="refresh" type="submit" class="btn btn-default pull-right">
+            <i class="fa fa-refresh"></i>
+        </button>
+
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        function PagingCick2(trang, a) {
+            $('#paging_page').val(trang);
+            $(a).closest('form').submit();
+        };
+
+        function PagingCick(loai, a) {
+            var pagecur;
+            switch (loai) {
+                case "dau":
+                    $('#paging_page').val(1);
+                    break;
+                case "truoc":
+                    pagecur = parseInt($('#paging_page').val()) - 1;
+                    $('#paging_page').val(pagecur);
+                    break;
+                case "sau":
+                    pagecur = parseInt($('#paging_page').val()) + 1;
+                    $('#paging_page').val(pagecur);
+                    break;
+                case "cuoi":
+                    pagecur = parseInt($('#paging_pagecount').val());
+                    $('#paging_page').val(pagecur);
+                    break;
+                default:
+
+            }
+            //$('form').not('form[name|="searchform"]').submit();
+            $(a).closest('form').submit();
+
+        };
+
+        function SortClick(colSort, a) {
+            var curcolSort = $('#paging_currentsort').val();
+            if (curcolSort == colSort) {
+                colSort += " DESC";
+            }
+            $('#paging_sortorder').val(colSort)
+            //$('form').not('form[name|="searchform"]').submit();
+            $(a).closest('form').submit();
+        };
+
+        function PageSizeChange(a) {
+            //$('form').not('form[name|="searchform"]').submit();
+            $(a).closest('form').submit();
+        };
+
+    })
+</script>

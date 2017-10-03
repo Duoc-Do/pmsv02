@@ -1,0 +1,80 @@
+﻿@model WebApp.Areas.Accounting.Models.AppConstructionView
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@Html.Partial("_AddNew")
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                @*phần thay đổi*@
+                @Html.svHiddenFor(model => model.ParentID)                @Html.svHiddenFor(model => model.ConstructionID)                                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.ConstructionDateFrom)</div>
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.ConstructionDateTo)</div>
+                        </div>
+                        @Html.bsEditorFor(model => model.Name)                        @Html.bsEditorFor(model => model.ConstructionCode)@*                      @Html.bsEditorFor(model => model.ParentCode)                        @Html.bsEditorFor(model => model.ParentName)*@                        @Html.bsEditorFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    $("#Name").change(function () {
+        $("#ConstructionCode").val(apputils.gencode($(this).val()));
+    });
+
+    //Kiểm tra thay đổi tất cả các text
+    //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+    $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+        var $thisobject = $(this);
+        var val = $(this).val();
+        var fieldname = $(this).attr("fieldname");
+        var url = '@Url.Action("FieldChange")';
+        switch (fieldname) {
+            case "ParentCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+                $(sectionid + '#ParentID').val("");
+                $(sectionid + '#ParentName').val("");
+                if (val != "") {
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#ParentID').val(data.rows.ConstructionID);
+                                $(sectionid + '#ParentName').val(data.rows.Name);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            default:
+        }
+    })
+
+</script>

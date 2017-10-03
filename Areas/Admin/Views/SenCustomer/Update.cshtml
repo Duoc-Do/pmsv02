@@ -1,0 +1,142 @@
+﻿@model WebApp.Areas.Admin.Models.SenCustomer
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var leadsource = new WebApp.Areas.Admin.Models.LeadSource().selectlist;
+    
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.svHiddenFor(model => model.UserId)                        @Html.svHiddenFor(model => model.CustomerId)                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.Address)
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.CustomerCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.svHiddenFor(model => model.UserId)
+                                @Html.bsLabel("User_UserName", "Tài khoản")
+                                @Html.bsAutoComplete("User_UserName", "UserName", Model.User != null ? Model.User.UserName : "")
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.TaxCode)
+                                @Html.bsEditorFor(model => model.TelephoneNumber)                                @Html.bsEditorFor(model => model.FaxNumber)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Contact)
+                                @Html.bsEditorFor(model => model.EmailAddress)
+                                @Html.bsEditorFor(model => model.WebPage)
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                @Html.svHiddenFor(model => model.AssignedTo)
+                                @Html.bsLabel("Assign_UserName", "Giao cho")
+                                @Html.bsAutoComplete("Assign_UserName", "UserName", Model.Assign != null ? Model.Assign.UserName : "")
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsDropDownListFor(model => model.LeadSource, leadsource)
+                            </div>
+                        </div>
+                        @Html.bsTextAreaFor(model => model.Note)
+
+                        @Html.bsEditorFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")
+
+<script type="text/javascript">
+
+
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").off(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            fieldchange(this);
+        });
+
+        $("#Name").change(function () {
+            $("#CustomerCode").val(apputils.gencode($(this).val()));
+        });
+
+    });
+
+    function fieldchange(a) {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("id");
+
+        var url = '@Url.Action("FieldChange")';
+        switch (fieldname) {
+            case "User_UserName":
+                //lấy dòng du lieu ve gan cho may cai khac
+                $(sectionid + '#UserId').val("");
+                if (val != "") {
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: "UserName", keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#UserId').val(data.rows.UserId);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "Assign_UserName":
+                //lấy dòng du lieu ve gan cho may cai khac
+                $(sectionid + '#AssignedTo').val("");
+                if (val != "") {
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: "UserName", keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#AssignedTo').val(data.rows.UserId);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            default:
+        }
+    }
+</script>

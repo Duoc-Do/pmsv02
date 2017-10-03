@@ -1,0 +1,38 @@
+﻿@{string action_create1 = Url.Action("Notification", new { area = "Admin" });}
+
+<div class="btn-group">
+  <button type="button" class="btn btn-default">Công cụ</button>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a id="emailthongbao" href="javascript:;">Email thông báo</a></li>
+  </ul>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#emailthongbao").click(function () {
+            var para = $(".datarow.active:eq(0)").attr("data-datarow-key");
+            if (para != "") {
+                var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+                $.post("@(action_create1)",
+            {
+                __RequestVerificationToken: tokenxacthuc,
+                Id: para
+            },
+            function (data, status) {
+                $("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                //alert("Data: " + data.ketqua + "\nStatus: " + status);
+            });
+        }
+        else {
+            alert("Phải chọn thẻ");
+            //return false;
+        }
+        });
+    });
+
+</script>

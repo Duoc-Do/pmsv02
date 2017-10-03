@@ -1,0 +1,277 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+
+    ViewBag.Title = "SenPos";
+    Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";
+    DateTime datefrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+    DateTime dateto = datefrom.AddMonths(1).AddDays(-1).EndOfDay();
+
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+
+    int _totalordercount = db.ResOrders.Where(m => m.OrderStatusId == 0 && m.OrderDate >= datefrom && m.OrderDate <= dateto).Count();
+    int _totalorderremovecount = db.ResOrders.Where(m => m.OrderStatusId == -1 && m.OrderDate >= datefrom && m.OrderDate <= dateto).Count();
+
+    decimal _totalorderamount = db.ResOrders.Where(m => m.OrderStatusId == 0 && m.OrderDate >= datefrom && m.OrderDate <= dateto).Select(m => m.OrderTotal).DefaultIfEmpty(0).Sum();
+    decimal _totalorderdiscount = db.ResOrders.Where(m => m.OrderStatusId == 0 && m.OrderDate >= datefrom && m.OrderDate <= dateto).Select(m => m.OrderDiscount).DefaultIfEmpty(0).Sum();
+    decimal _totalincomesummary = db.Database.SqlQuery<decimal>(string.Format("sp_FcResImcomeSummary '{0}','{1}'", datefrom.ToString("yyyy-MM-dd HH:mm:ss"), dateto.ToString("yyyy-MM-dd HH:mm:ss"))).SingleOrDefault();
+
+
+    var totalordercount = ExConvert.Data2String(_totalordercount, "numeric", "n0", "");
+    var totalorderamount = ExConvert.Data2String(_totalorderamount, "numeric", "n0", "");
+
+    var totalorderremovecount = ExConvert.Data2String(_totalorderremovecount, "numeric", "n0", "");
+    var totalorderdiscount = ExConvert.Data2String(_totalorderdiscount, "numeric", "n0", "");
+
+    var totalincomesummary = ExConvert.Data2String(_totalincomesummary, "numeric", "n0", "");
+
+    string colorincome = _totalincomesummary < 0 ? "text-red" : "text-green";
+    var approle = WebApp.Areas.Accounting.Services.GlobalVariant.GetAppUser().SysRole;
+    bool isview = "posadmin.posview.systems.administrators".Contains(approle.Name.ToLower());
+    bool iskitchen = "poskitchen".Contains(approle.Name.ToLower());
+
+    string linkorder = Url.Action("Index2", "ResOrder",new { area = "Accounting"});
+
+    string linkordercancel = Url.Action("Index2", "ResOrder", new { area = "Accounting" });
+    linkordercancel = string.Format("{0}?OrderStatusId={1}", linkordercancel, "-1");
+}
+
+@section leftsidesidebarsection
+{
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img class="img-circle" src="@(WebApp.Services.Media.PictureService.GetPictureUrl(WebApp.Services.GlobalUserContext.GetContext().SenUser.Avatar, 160, 160))" alt="User Image" />
+                </div>
+                <div class="pull-left info">
+                    <p>@(WebApp.Areas.Accounting.Services.GlobalVariant.GetAppUser().FullName)</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i>Online</a>
+                </div>
+            </div>
+
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            @Html.Partial("_AppMenu")
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+}
+
+@if (isview)
+{
+
+
+    <section class="content-header" @isview>
+        <h1>Tháng này</h1>
+    </section>
+
+    <!-- Main content -->
+
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Order</span>
+                        <a href="@(linkorder)" @(ajaxstring)>
+                            <span class="info-box-number">@totalordercount</span>
+                        </a>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="fa fa-trash-o"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Order hủy</span>
+                        <a href="@(linkordercancel)" @(ajaxstring)>
+                            <span class="info-box-number">@totalorderremovecount</span>
+                        </a>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Doanh thu</span>
+                        <span class="info-box-number">@totalorderamount</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-dollar"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Lợi nhuận</span>
+                        <span class="info-box-number @(colorincome)">@totalincomesummary</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Doanh số cao nhất</h3>
+                        <div class="box-tools pull-right">
+                            <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                            <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <canvas id="chart-area"></canvas>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Bán chạy nhất</h3>
+                        <div class="box-tools pull-right">
+                            <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                            <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <canvas id="chart-area2"></canvas>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+
+
+            <!-- /.col -->
+        </div>
+
+    </section>
+
+    <!-- /.content -->
+    <!-- /.right-side -->
+
+    @Scripts.Render("~/bundles/accapp")
+
+    <script>
+        var PosAppHome = {
+            color: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+            highlight: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"],
+            doughnutData: [],
+            doughnutData2: []
+        };
+
+
+
+        @{
+            int topproduct = 10;
+            var json2 =
+                         (
+                           from row in db.ResOrderItemViews
+                           join master in db.ResOrders on row.OrderId equals master.OrderId
+                           where master.OrderDate >= datefrom && master.OrderDate <= dateto && master.OrderStatusId == 0
+                           group row by new
+                           {
+                               row.ItemId,
+                               row.ItemName
+                           } into g
+                           select new DoughNutChart()
+                           {
+                               label = g.Key.ItemName,
+                               value = g.Sum(x => x.Amount)
+                           }
+                         ).OrderByDescending(m => m.value).Take(topproduct).ToList();
+
+            var json3 =
+               (
+                 from row in db.ResOrderItemViews
+                 join master in db.ResOrders on row.OrderId equals master.OrderId
+                 where master.OrderDate >= datefrom && master.OrderDate <= dateto && master.OrderStatusId == 0
+                 group row by new
+                 {
+                     row.ItemId,
+                     row.ItemName
+                 } into g
+                 select new DoughNutChart()
+                 {
+                     label = g.Key.ItemName,
+                     value = g.Sum(x => x.Quantity)
+                 }
+               ).OrderByDescending(m => m.value).Take(topproduct).ToList();
+
+            for (int i = 0; i < json2.Count; i++)
+            {
+                var item = json2[i];
+            <text>
+        PosAppHome.doughnutData.push({ label: "@(Html.Raw(item.label))", color: PosAppHome.color[parseInt("@(i)")], highlight: PosAppHome.highlight[parseInt("@(i)")], value: parseFloat("@(item.value)") });
+    </text>
+            };
+
+            for (int i = 0; i < json3.Count; i++)
+            {
+                var item = json3[i];
+            <text>
+        PosAppHome.doughnutData2.push({ label: "@(Html.Raw(item.label))", color: PosAppHome.color[parseInt("@(i)")], highlight: PosAppHome.highlight[parseInt("@(i)")], value: parseFloat("@(item.value)") });
+        </text>
+            };
+
+                    }
+
+
+        $(document).ready(function () {
+
+
+            var ctx2 = document.getElementById("chart-area").getContext("2d");
+            window.myDoughnut = new Chart(ctx2).Doughnut(PosAppHome.doughnutData, { responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= addCommas(value) %>" });
+
+            var ctx3 = document.getElementById("chart-area2").getContext("2d");
+            window.myDoughnut2 = new Chart(ctx3).Doughnut(PosAppHome.doughnutData2, { responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= addCommas(value) %>" });
+        });
+    </script>
+
+    }
+    else
+    {
+        if (iskitchen)
+        {
+            Html.RenderAction("Kitchen", "ResHome", new { area = "Accounting" });
+
+        }
+        else
+        {
+            Html.RenderAction("Index", "ResHome", new { area = "Accounting" });
+
+        }
+    }    

@@ -1,0 +1,181 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+
+    @Html.Partial("_FormContact")
+    @Html.Partial("_Popup")
+
+}
+    @*<button class="btn btn-primary" type="button" onclick="appcommon.notification('Thông báo','<a>chào kỳ</a>')">notification </button>*@
+    <style>
+        .notification {
+            max-width: 100%;
+            white-space: nowrap;
+            position: fixed;
+            right: -400px;
+            top: 0;
+            z-index: 999999;
+            width: 400px;
+            -webkit-transition: right 2s; /* Safari */
+            transition: right 2s;
+        }
+
+        .alert-success .direct-chat-timestamp {
+            color: #fff;
+        }
+    </style>
+    <div class="notification">
+    </div>
+
+    <script>
+
+        apputils = {};
+        apputils.removeunicode = function (str) {
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/!|@@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g, "-");
+
+            str = str.replace(/-+-/g, "-");
+            str = str.replace(/^\-+|\-+$/g, "");
+
+            return str;
+        }
+        apputils.gencode = function (str) {
+            var matches = apputils.removeunicode(str).match(/\b(\w)/g);
+            var acronym = matches.join('');                  // JSON
+            return acronym.substring(0, 15).toLocaleUpperCase();
+        }
+
+        appcommon = {
+            classNotification: ".notification"
+        };
+        appcommon.notificationclose = function () {
+            $(appcommon.classNotification).fadeOut(1600);
+            $(appcommon.classNotification).css('right', '-400px');
+        };
+        appcommon.notification = function (a, b, c) {
+            var time = 10000;
+            if (c != null) {
+                time = c;
+            }
+            stopAllTimeouts();
+            var _divcontainer = $('<div class="alert alert-success alert-dismissable"></div>');
+            $(_divcontainer).append('<button class="close" type="button" onclick="appcommon.notificationclose()">×</button>');
+            $(_divcontainer).append('<h4>' + a + '</h4>');
+            $(_divcontainer).append(b);
+            $(appcommon.classNotification).html(_divcontainer);
+            $(appcommon.classNotification).fadeIn(1600);
+            $(appcommon.classNotification).css('right', '0');
+            setTimeout(appcommon.notificationclose, time);
+        };
+
+        function stopAllTimeouts() {
+            var id = window.setTimeout(null, 0);
+            while (id--) {
+                window.clearTimeout(id);
+            }
+        }
+
+        appcommon.printelem = function (elem, isbootstrap) {
+            appcommon.printpopup($(elem).html(), isbootstrap);
+        };
+
+        appcommon.printpopup = function (data, isbootstrap) {
+            var mywindow = window.open('', 'Print order', 'height=400,width=600');
+            mywindow.document.write('<html><head><title>Print order</title><style>.no-print {display:none;}</style>');
+            /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+            if (isbootstrap == 1) {
+                mywindow.document.write('<link href="/Content/themes/Accounting/AdminLTE2/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+            }
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(data);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+
+        appcommon.sendpm = function (para) {
+            var url = "@(Url.RouteUrl("sendpm"))";
+            if (para != "") {
+                url = url + "/" + para;
+                var mydiv = $("#senvietformcontact").find(".modal-content");
+                // Load the content using AJAX
+                mydiv.load(url);
+                // Open the dialog
+                $('#senvietformcontact').modal('show');
+                return false;
+            }
+            else {
+                alert("Phải chọn người dùng");
+            }
+        };
+
+        appcommon.popup = function (a, b) {
+            var url = $(a).attr('data-url');
+            appcommon.popuplink(url, a, b);
+        }
+
+        appcommon.popuplink = function (url, a, b) {
+            //url: link gọi
+            //a: đối tượng chứa link
+            //b: có submit khi đóng không
+            if (url != "") {
+                var mypopup = $("#senvietpopup").find(".modal-content");
+                // Load the content using AJAX
+                $(mypopup).html('');
+                $("#ajaxloadingelementid").show();
+                mypopup.load(url, function () {
+                    $("#ajaxloadingelementid").hide();
+                    $('#senvietpopup').modal('show');
+                    // Open the dialog
+                    $('#senvietpopup').off('hidden.bs.modal');
+                    $('#senvietpopup').on('hidden.bs.modal', function (e) {
+                        // do something...
+                        if (b != null) {
+                            if (b == 1) {
+                                $(a).closest('form').submit();
+                            }
+                            else {
+                                appcommon.popupcallback(a);
+                            }
+                        }
+                    })
+                });
+
+                return false;
+            }
+            else {
+                //alert("Phải chọn người dùng");
+            }
+        }
+
+        appcommon.popupcallback = function (a) {
+        }
+
+
+
+    </script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-35673136-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>

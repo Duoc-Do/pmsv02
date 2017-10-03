@@ -1,0 +1,20 @@
+﻿@model Dictionary<string, WebApp.Areas.Admin.Models.SysTableDetailView>
+@using WebApp.Areas.Admin.Services;
+@{
+    
+    foreach (var column in Model)
+    {
+        if (!column.Value.GridViewShow == true) { continue; }
+        if (column.Value.DATA_TYPE == "decimal")
+        {
+
+            <th class="footer text-right">@ExConvert.Data2String(column.Value.Summary,column.Value.DATA_TYPE,column.Value.FormatValue,column.Value.CultureInfo) </th>
+        }
+        else
+        {
+            @Html.Partial("_bsTableFooterCell", column.Value)
+        }
+
+    }
+}
+

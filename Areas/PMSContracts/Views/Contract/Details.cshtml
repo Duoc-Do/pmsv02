@@ -1,0 +1,122 @@
+﻿@model  WebApp.Areas.PMSContracts.Models.ContractModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+
+<div class="box box-solid  box-primary">
+    <div class="box-header with-border">
+
+        <h3 class="box-title">Contract Detail - @Model.ContractCode</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#ContractTab" aria-controls="ContractTab" role="tab" data-toggle="tab">Contract: @Html.DisplayFor(model => model.ContractIDERP)</a></li>
+            <li role="presentation"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab">General</a></li>
+            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab">Particular</a></li>
+            <li role="presentation"><a href="#TechTab" aria-controls="TechTab" role="tab" data-toggle="tab">Tech File</a></li>
+            <li role="presentation"><a href="#TechSpecsTab" aria-controls="TechSpecsTab" role="tab" data-toggle="tab">Tech Specs</a></li>
+        </ul>
+        <div class="tab-content contract-dt-tab">
+            <div role="tabpanel" class="tab-pane active" id="ContractTab">
+                <dl class="dl-horizontal">
+
+                    <dt>@Html.DisplayNameFor(model => model.ContractIDERP)</dt>
+                    <dd>@Html.DisplayFor(model => model.ContractIDERP)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.CCE_ID)</dt>
+                    <dd>@Html.DisplayFor(model => model.CCE_ID)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.ContractCode)</dt>
+                    <dd>@Html.DisplayFor(model => model.ContractCode)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.ContractDate)</dt>
+                    <dd>@Html.DisplayFor(model => model.ContractDate)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.CommencementDate)</dt>
+                    <dd>@Html.DisplayFor(model => model.CommencementDate)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.Description_VN)</dt>
+                    <dd>@Html.DisplayFor(model => model.Description_VN)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.ContractFormat)</dt>
+                    <dd>@Html.DisplayFor(model => model.ContractFormat)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.FCAmount)</dt>
+                    <dd>@Html.DisplayFor(model => model.FCAmount)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.LCAmount)</dt>
+                    <dd>@Html.DisplayFor(model => model.LCAmount)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.FCAmountExtension)</dt>
+                    <dd>@Html.DisplayFor(model => model.FCAmountExtension)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.LCAmountExtension)</dt>
+                    <dd>@Html.DisplayFor(model => model.LCAmountExtension)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.ClientID)</dt>
+                    <dd>@Html.DisplayFor(model => model.ClientID)</dd>
+                    <dt>@Html.DisplayNameFor(model => model.ContractorID)</dt>
+                    <dd>@Html.DisplayFor(model => model.ContractorID)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.DurationInDays)</dt>
+                    <dd>@Html.DisplayFor(model => model.DurationInDays)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.ExtensionInDays)</dt>
+                    <dd>@Html.DisplayFor(model => model.ExtensionInDays)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.ModifyDate)</dt>
+                    <dd>@Html.DisplayFor(model => model.ModifyDate)</dd>
+
+
+                    <dt>@Html.DisplayNameFor(model => model.CurrencyCode)</dt>
+                    <dd>@Html.DisplayFor(model => model.CurrencyCode)</dd>
+
+
+                    <dt>@Html.DisplayNameFor(model => model.Status)</dt>
+                    <dd>@Html.DisplayFor(model => model.Status)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.ForOrdering)</dt>
+                    <dd>@Html.DisplayFor(model => model.ForOrdering)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Type)</dt>
+                    <dd>@Html.DisplayFor(model => model.Type)</dd>
+
+
+                    <dt>@Html.DisplayNameFor(model => model.proj_id)</dt>
+                    <dd>@Html.DisplayFor(model => model.proj_id)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.proj_status)</dt>
+                    <dd>@Html.DisplayFor(model => model.proj_status)</dd>
+                </dl>
+                <p>
+                    @Html.ActionLink("Back to List", "Index", "Contract", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ContractID }, new { @class = "btn btn-info" })
+
+                </p>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="GeneralTab">
+                <dl class="dl-horizontal">
+                Code....General
+                </dl>
+                <p>
+                    @Html.ActionLink("Back to List", "Index", "Contract", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ContractID }, new { @class = "btn btn-info" })
+
+                </p>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="ParticularTab">
+            Code Particular
+                <p>
+                    @Html.ActionLink("Back to List", "Index", "Contract", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ContractID }, new { @class = "btn btn-info" })
+
+                </p>
+            </div>
+            @*<ul>
+                @foreach (var item in Model)
+                {
+                    <li>@item.ResName</li>
+                }
+            </ul>*@
+            <div role="tabpanel" class="tab-pane" id="TechTab">...</div>
+            <div role="tabpanel" class="tab-pane" id="TechSpecsTab">...</div>
+        </div>
+    </div>
+    <!-- end tab-content-->
+</div>
+
+</div>
+<!-- /.box -->

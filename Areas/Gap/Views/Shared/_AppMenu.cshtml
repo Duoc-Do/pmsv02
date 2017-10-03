@@ -1,0 +1,80 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+
+    //string POSView = "Nhà đầu tư";
+    //string POSAdmin = "Quản lí quán";
+    //string POSCash = "Thu ngân quán";
+    //string POSOrder = "Order quán";
+
+    string RoleName = GlobalVariant.GetAppUser().SysRole.Name;
+    
+}
+@Html.Partial("_AppMenuGAPAdmin")
+
+@*@switch (RoleName.ToLower())
+{
+    case "systems":
+    case "administrators":        
+    case "posadmin":
+        @Html.Partial("_AppMenuPOSAdmin")
+        break;
+    case "poscash":
+        @Html.Partial("_AppMenuPOSCash")
+        break;
+    case "posorder":
+        @Html.Partial("_AppMenuPOSOrder")
+        break;
+    case "poskitchen":
+        @Html.Partial("_AppMenuPOSKitchen")
+        break;        
+        default:
+        @Html.Partial("_AppMenuPOSView")
+        break;
+}*@
+
+
+
+<script>
+
+    // Run on document ready
+    $(function () {
+        @*var IsAuthenticated="@User.Identity.IsAuthenticated";*@
+        $('.sidebar-menu a').click(function () {
+            $('ul.sidebar-menu > li').removeClass('active');
+            $(this).closest('ul.sidebar-menu > li').addClass('active');
+            if ($(this).attr("id") == null) { return; }
+            location.hash = $(this).attr("id");
+            $(document).scrollTop(0);
+        });
+    });
+
+
+
+    var globalvariant = {
+        syscompany: {},
+        sysoption: {}
+    }
+    $(document).ready(function () {
+        @{
+            var sysoption = GlobalVariant.GetSysOption();
+            var syscompany = GlobalVariant.GetSysCompany();
+          <text>
+        globalvariant.syscompany.CompanyName = "@(syscompany["CompanyName"].ToString())";
+        globalvariant.syscompany.CompanyAddress = "@(syscompany["CompanyAddress"].ToString())";
+        globalvariant.syscompany.CompanyPhone = "@(syscompany["CompanyPhone"].ToString())";
+        globalvariant.syscompany.CompanyHomePage = "@(syscompany["CompanyHomePage"].ToString())";
+
+        globalvariant.sysoption.RoundQuantity = "@(sysoption["RoundQuantity"].ToString())";
+        globalvariant.sysoption.RoundAmount = "@(sysoption["RoundAmount"].ToString())";
+        globalvariant.sysoption.RoundAmountFC = "@(sysoption["RoundAmountFC"].ToString())";
+
+        globalvariant.sysoption.RoundUnitPrice = "@(sysoption["RoundUnitPrice"].ToString())";
+        globalvariant.sysoption.RoundUnitPriceFC = "@(sysoption["RoundUnitPriceFC"].ToString())";
+
+        </text>
+            }
+    });
+
+
+</script>

@@ -1,0 +1,87 @@
+﻿@model WebApp.Areas.Admin.Models.SenCommission
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    Model.Description = "Chi hoa hồng";
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.svHiddenFor(model => model.ContractId)                        @Html.svHiddenFor(model => model.CommissionId)                        @Html.svHiddenFor(model => model.CreateDate)                        @Html.svHiddenFor(model => model.CreateBy)
+
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.VoucherDate)</div>
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.Amount)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.bsTextAreaFor(model => model.Description)
+                            </div>
+                        </div>
+
+                        @*                        <blockquote>
+                            <p>0: chi tiền</p>
+                        </blockquote>*@
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+            var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "UserName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#UserId').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#UserId').val(data.rows.UserId);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+
+                default:
+            }
+        });
+    });
+</script>

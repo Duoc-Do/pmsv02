@@ -1,0 +1,83 @@
+﻿@model WebApp.Areas.Admin.Models.SysTableDetailView
+@{
+    string datatype = WebApp.Areas.Admin.Services.ExConvert.Sqltype2Systemtype(Model.DATA_TYPE);
+
+    <td class="filter" data-datatype="@(datatype)">
+
+
+        @if ("numeric.datetime".Contains(datatype))
+        {
+
+            char[] delimiterChars = { ';' };
+            string[] arrexpression = Model.FilterExpression == null ? null : Model.FilterExpression.Split(delimiterChars);
+
+            for (int i = 0; i < 3; i++)
+            {
+
+                string name = "";
+                switch (i)
+                {
+                    case 0:
+                        name = string.Format("{0}.filter.{1}.eq", Model.TableName, Model.ColumnName);
+                        break;
+                    case 1:
+                        name = string.Format("{0}.filter.{1}.gt", Model.TableName, Model.ColumnName);
+                        break;
+                    case 2:
+                        name = string.Format("{0}.filter.{1}.lt", Model.TableName, Model.ColumnName);
+                        break;
+                    default:
+                        break;
+                }
+
+                string attemptedValue = WebApp.Areas.Admin.Services.ExConvert.Data2String(arrexpression == null ? "" : arrexpression[i] == null ? "" : arrexpression[i], datatype, Model.FormatValue, Model.CultureInfo);
+                //
+                if (datatype == "numeric")
+                {
+            <input decimaldigits="@(WebApp.Areas.Admin.Services.ExConvert.SetDecimalDigits(Model.FormatValue, Model.CultureInfo).ToString())"  style="text-align:right;" class="@(WebApp.Areas.Admin.Services.Uti.GetClassNameByType(datatype, Model.FormatValue)) form-control input-sm" placeholder="@(i == 0 ? "=" : i == 1 ? ">" : "<")" data-fieldname="@(name)" name="@(name)" value="@(attemptedValue)" />
+                }
+                else
+                {
+            <input class="@(WebApp.Areas.Admin.Services.Uti.GetClassNameByType(datatype, Model.FormatValue)) form-control input-sm" placeholder="@(i == 0 ? "=" : i == 1 ? ">" : "<")" data-fieldname="@(name)" name="@(name)" value="@(attemptedValue)" />
+                }
+            }
+
+        }
+        else
+        {
+            if (datatype == "boolean")
+            {
+                @*string name = string.Format("{0}.filter.{1}", Model.TableName, Model.ColumnName);
+                string check = "";
+                if (!string.IsNullOrEmpty(Model.FilterExpression))
+                {
+                    if (Convert.ToBoolean(Model.FilterExpression))
+                    {
+                        check = "checked=\"checked\"";
+                    }
+                }
+                
+                <div class="checkbox form-group">
+                <input value="true" data-fieldname="@(name)" name="@(name)" type="checkbox" @(check) class="check-box">Chọn
+                <input type="hidden"data-fieldname="@(name)" name="@(name)" value="false">
+            </div>*@
+                            
+            string name = string.Format("{0}.filter.{1}", Model.TableName, Model.ColumnName);
+            
+                     <select class="form-control input-sm" data-fieldname="@(name)" name="@(name)" onchange="$(this).closest('form').submit();">
+                        <option value="">-- Tất cả --</option>
+                        <option value="true" @(Model.FilterExpression=="true"?"selected":"")>Chọn</option>
+                        <option value="false" @(Model.FilterExpression=="false"?"selected":"")>Không chọn</option>
+                      </select>
+            
+              
+            }
+            else
+            {
+                string name = string.Format("{0}.filter.{1}", Model.TableName, Model.ColumnName);
+            <input class="form-control input-sm" data-fieldname="@(name)" name="@(name)" type="text" value="@(Model.FilterExpression)" />                
+            }
+
+        }
+    </td>
+}

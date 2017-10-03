@@ -1,0 +1,116 @@
+﻿@model IEnumerable<object>
+@using WebApp.Services.Helpers
+@{
+    ViewBag.Title = "Tin nhắn";
+    Dictionary<string, string> ajaxoption = WebApp.Services.GlobalAjax.GetAjaxOption(ViewBag.ajaxoption);
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+    string action_return = Url.Action("PrivateMessage", "Account", new { area = "" });
+
+    var metaobject = WebApp.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+}
+
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+
+    <div class="box box-primary">
+        @Html.Partial("_HeaderList", ajaxoption)
+        @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- /.box-header -->
+            <div class="box-header">
+
+                <div class="col-md-6">
+                    <div>
+                        <a id="PrivateMessageRead" href="javascript:;" class="btn btn-default">Đánh dấu đã đọc</a>
+
+                        <a id="PrivateMessageDelete" href="javascript:;" class="btn btn-default">Đánh dấu xóa</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" placeholder="Tìm kiếm" value="@(metaobject.Paging.Search)" class="form-control pull-right" name="Paging.Search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
+
+                        <tr>
+                            <th style="width: 10px;">
+                                <input type="checkbox" class="check-box checkall">
+                            </th>
+                            <th style="width: 180px;">Người gửi</th>
+                            <th>Tiêu đề</th>
+                            <th style="width: 180px;">Thời gian</th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            string isread = "";
+                            var privatemessage = (WebApp.Models.SenPrivateMessage)item;
+                            if (privatemessage.IsRead != true) { isread = "style = font-weight:bold;"; }
+                            var linkview = Url.Action("PrivateMessageView", "Account", new { area = "", messageid = privatemessage.PrivateMessageId });
+                        
+                            <tr @(isread)>
+                                <td>
+                                    <input type="checkbox" value="@(privatemessage.PrivateMessageId)" name="RowSelected" class="check-box">
+                                </td>
+                                <td>@privatemessage.FromUser.UserName </td>
+                                <td>
+                                    <a href="@(linkview)" @(ajaxstring)>
+                                        @privatemessage.Subject
+                                    </a>
+                                </td>
+                                <td>@privatemessage.CreatedOnUtc.ToString("dd/MM/yyyy h:mm:ss tt") </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                @Html.Partial("_PagingPartial", metaobject.Paging)
+            </div>
+        }
+
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles/accapp")
+<script>
+    // Run on document ready
+    $(function () {
+        $('.checkall').click(function () {
+            var $table = $(this).closest('table');
+            if ($(this).is(':checked')) {
+                $table.find(".check-box").attr('checked', 'checked');
+                $table.find(".check-box").prop('checked', true);
+            }
+            else {
+                $table.find(".check-box").attr('checked', false);
+            }
+        });
+
+        $('#PrivateMessageRead').click(function (e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            $(form).attr("action", "/Account/PrivateMessageReads");
+            $(form).submit();
+        });
+
+        $('#PrivateMessageDelete').click(function (e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            $(form).attr("action", "/Account/PrivateMessageDeleteByRecipients");
+            $(form).submit();
+        });
+    });
+</script>

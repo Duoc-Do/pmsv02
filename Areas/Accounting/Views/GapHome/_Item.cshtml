@@ -1,0 +1,50 @@
+﻿@model WebApp.Areas.Accounting.Models.AppItemView
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "gaphome_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string urledit = Url.Action("Edit", "AppItemTable", new { area = "Accounting", id = Model.ItemID, action_return = "noaction" });
+
+    string urldelete = Url.Action("Delete", "AppItemTable", new { area = "Accounting", id = Model.ItemID, action_return = "noaction" });
+
+    //string urlfarmview = Url.Action("GetField", "GapHome", new { area = "Accounting", farmid = Model.ItemID });
+
+    //string urlgapjournalqrcode = Url.Action("JournalQRCode", "GapJournal", new { area = "Accounting", id = Model.RefJournalId, action_return = "noaction" });
+
+}
+
+
+<div class="small-box bg-green" id="@(string.Format("dashboardtable_{0}", Model.ItemGroupID))" data-ItemGroupID="@(Model.ItemGroupID)" data-Name="@(Model.Name)">
+    <div class="inner">
+        <div class="btn-group">
+            <div class="btn-group">
+                <input type="checkbox" value="@(Model.ItemID)" name="RowSelected" class="check-box">
+            </div>
+            <h3 style="font-size: 18px;" title="@Model.Name">&nbsp;&nbsp;@Model.Name</h3>
+        </div>
+
+        <div class="text-center">
+            <a style="color:#fff;" href="#">
+                <img src="@(WebApp.Services.Media.PictureService.GetPictureUrl(Model.GetExProperty("ItemPicture"), 125, 125))">
+            </a>
+        </div>
+        @*<div class="product-title" title="@Model.Name">
+            <strong>@Model.Name </strong>
+        </div>*@
+    </div>
+
+    @*<div class="icon">
+            <i class="ion ion-leaf"></i>
+        </div>*@
+
+        <a  class="small-box-footer"  href="javascript:;" data-url="@(urledit)" onclick="appcommon.popup(this,1)">Sửa <i class="fa fa-edit"></i></a>
+        <a  class="small-box-footer" href="javascript:;" data-url="@(urldelete)" onclick="appcommon.popup(this,1)">Xóa <i class="fa fa-trash-o"></i></a>
+    
+
+
+
+</div>
+

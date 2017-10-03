@@ -1,0 +1,59 @@
+﻿@{
+    string action_create1 = Url.Action("UserPromotion", new { area = "" });
+}
+
+<h2>Mã khuyến mại</h2>
+<p>
+    Mã khuyến mãi của bạn sau khi nạp sẽ được cộng thêm vào phần giá trị ứng trước trong tài khoản của bạn.
+</p>
+<p>
+    Bạn có thể sử dụng để thanh toán cho các dịch vụ của LotusViet.
+</p>
+<p>
+    Bạn không được hoàn lại bằng tiền mặt dưới mọi hình thức.
+</p>
+<p style="display: none;">
+    Xin chúc mừng! Mã khuyến mại của bạn đã cập nhật thành công.
+    Xin vui lòng vào phần lịch sử thanh toán để kiểm tra lại.
+</p>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="input-group input-group">
+            @Html.AntiForgeryToken()
+            <input id="couponcode" type="text" class="form-control">
+            <span class="input-group-btn">
+                <button id="applycouponcode" class="btn btn-primary btn-flat" type="button">Áp dụng</button>
+
+            </span>
+        </div>
+
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/adminapp")
+<script>
+    $(document).ready(function () {
+        $("#applycouponcode").click(function () {
+            var couponcode = $("#couponcode").val();
+
+            if (couponcode != "") {
+                var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+                $.post("@(action_create1)",
+            {
+                __RequestVerificationToken: tokenxacthuc,
+                couponcode: couponcode
+            },
+            function (data, status) {
+                $("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(10000);
+            });
+            }
+            else {
+                alert("Phải nhập mã khuyến mại");
+
+            }
+
+        });
+    });
+</script>

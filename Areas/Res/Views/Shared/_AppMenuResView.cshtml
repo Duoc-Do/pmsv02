@@ -1,0 +1,26 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+    
+}
+
+<ul class="sidebar-menu">
+
+    <li class="active">
+        <a href="@Url.Action("Index", "AppHome", new { area = "Res" })" >
+            <i class="fa fa-dashboard"></i><span>Tổng quan</span>
+        </a>
+    </li>
+    <li>
+        <a id="ResReport" href="@Url.Action("Index", "ResReport", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-bar-chart"></i><span>Báo cáo</span></a>
+    </li>
+
+</ul>
+

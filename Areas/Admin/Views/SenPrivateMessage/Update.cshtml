@@ -1,0 +1,45 @@
+﻿@model WebApp.Areas.Admin.Models.SenPrivateMessage
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+    IEnumerable<SelectListItem> lists =
+    from value in db.aspnet_Users
+    orderby value.UserName
+    select new SelectListItem
+    {
+        Text = value.UserName,
+        Value = value.UserId.ToString()
+    };
+    
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+
+                @Html.bsValidationSummary(false)
+
+                @Html.svHiddenFor(model => model.PrivateMessageId)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsDropDownListFor(model => model.FromUserId,lists)                        @Html.bsDropDownListFor(model => model.ToUserId,lists)                        @Html.bsEditorFor(model => model.Subject)                        @Html.bsTextAreaFor(model => model.Text)                        @Html.bsEditorFor(model => model.IsRead)                        @Html.bsEditorFor(model => model.IsDeletedByRecipient)                        @Html.bsEditorFor(model => model.IsDeletedByAuthor)                        @Html.bsEditorFor(model => model.CreatedOnUtc)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@

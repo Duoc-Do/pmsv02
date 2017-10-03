@@ -1,0 +1,336 @@
+﻿@{
+    ViewBag.Title = "Pos online";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Areas/Accounting/Views/Shared/_Layout.cshtml";    
+
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    var itemgroups = db.AppItemGroupTables.OrderBy(m => m.ItemGroupCode).ToList();
+
+    List<WebApp.Areas.Accounting.Models.AppWarehouseTable> warehouses = (from value in db.AppWarehouseTables
+                                                                         where value.IsActive
+                                                                         orderby value.Name
+                                                                         select value).ToList();
+
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "resorderview_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    //string action_return = "Index";
+    string action_create = Url.Action("Create", "ResOrder");
+    string action_edit = Url.Action("Edit");
+    string action_delete = Url.Action("Delete");
+    
+}
+
+@using WebApp.Services.Media
+@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+<style>
+    .inner img {
+        max-width:100%;
+    }
+</style>
+
+<div class="box box-solid">
+    <div class="box box-body">
+
+        <!-- Right side column. Contains the navbar and content of the page -->
+        @*<aside class="right-side">*@
+
+        <!-- Main content -->
+
+        @*<section class="content">*@
+        <section>
+
+            @foreach (var item in warehouses)
+            {
+
+                if (item.ResTables.Count() > 0)
+                {
+                    var item2s = item.ResTables.ToList().OrderBy(m => m.Name);
+
+
+                <div class="nav-tabs-custom" id="dashboardtabcontainer">
+                    <ul class="nav nav-tabs pull-right">
+
+
+
+                        <li class="active">
+                            <a data-toggle="tab" href="@String.Format("#tab_{0}", "tablelist")">Bàn</a>
+                        </li>
+                        <li><a data-toggle="tab" href="@String.Format("#tab_{0}", "resorderview")">Order</a></li>
+
+                        <li class="pull-left header"><i class="fa fa-th"></i>
+                            @item.Name
+                        </li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab_tablelist" class="tab-pane active">
+                            <div class="row">
+                                @foreach (var item2 in item2s)
+                                {
+                    
+                                    <div class="col-lg-2 col-xs-6">
+                                        <!-- small box -->
+                                        @Html.Action("GetTable", "ResOrder", new { TableId = item2.TableId })
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div id="tab_resorderview" class="tab-pane">
+                            <div class="row">
+                                <div id="resorderview_container"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                }
+
+            }
+
+        </section>
+        <!-- /.content -->
+        @*</aside>*@
+        <!-- /.right-side -->
+
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles/accapp")
+
+
+
+<script type="text/javascript">
+
+    //var dmvt = "dmvt";
+    var tabdashboard = {
+        id: "#dashboardtabcontainer",
+        tableactive: function () { $('#dashboardtabcontainer li:eq(0) a').tab('show'); },
+        orderactive: function () { $('#dashboardtabcontainer li:eq(1) a').tab('show'); }
+
+    }
+
+
+    var itemgroups = []; //danh muc nhom vat tu va chi tiet vat tu
+    var selectitemlist = document.createElement("select");
+    selectitemlist.id = "selectitemlistid";
+    var inputbygroup = document.createElement("div");
+    $(document).ready(function () {
+
+
+        var i = 0;
+        @foreach (var itemgroup in itemgroups)
+        {
+            <text>
+        additemgrouplist(itemgroups, "@(itemgroup.ItemGroupID)", "@(itemgroup.Name)");
+            </text>
+            var items = itemgroup.AppItemTables.Where(m => m.IsActive && (m.ItemType == 2 || m.ItemType == 3)).OrderBy(m => m.Name).ToList();
+            foreach (var item in items)
+            {
+                <text>
+        additemlist(itemgroups[i].items, "@(item.ItemID)", "@(item.Name)","@(PictureService.GetPictureUrl(item.GetExProperty("ItemPicture"), 125,125))", "@(item.Price)");
+                </text>
+            }            
+            <text>
+        i++;
+        </text>
+        }
+
+        for (var j = 0; j < itemgroups.length; j++) {
+            var optgroup = $("<optgroup label='" + itemgroups[j].name + "'></optgroup>");
+            for (var i = 0; i < itemgroups[j].items.length; i++) {
+                var item = itemgroups[j].items[i];
+                $(optgroup).append("<option value=" + item.id
+                    + " data-price='" + item.price + "'"
+                    + " data-itemid='" + item.id + "'"
+                    + " data-itemname='" + item.name + "'"
+                    + " data-quantity='1'>" + item.name + "</option>");
+            }
+            $(selectitemlist).append(optgroup);
+        }
+
+        createinputbygroup(itemgroups);
+
+
+    });
+
+    function createinputbygroup(item) {
+
+        $(inputbygroup).append('<div class="form-horizontal form-group has-feedback"><input autocomplete="off" id="filteritem" type="text" placeholder="Tìm kiếm" value="" class="form-control hasclear"> <span class="clearer glyphicon glyphicon-remove text-danger form-control-feedback" style="top:0;"></span></div>');
+        var divcontainer = $('<div class="nav-tabs-custom" id="itemselectcontainer"></div>');
+        var tabheader = $('<ul class="nav nav-tabs"></ul>');
+        var tabcontent = $('<div class="tab-content"></div>');
+
+        var allliheader = $('<li class=""><a data-toggle="tab" href="#tab_all"><b>Tất cả</b></a></li>');
+        var alldiv1 = $('<div id="tab_all" class="tab-pane"></div>');
+        var alldiv1row = $('<div class="row"></div>');
+
+        for (var i = 0; i < item.length; i++) {
+            var li = '<li class="' + (i == 0 ? "active" : "") + '"><a data-toggle="tab" href="#tab_' + item[i].id + '">' + item[i].name + '</a></li>';
+            $(tabheader).append(li);
+
+            var div1 = $('<div id="tab_' + item[i].id + '" class="tab-pane ' + (i == 0 ? " active" : "") + '"></div>');
+            var div1row = $('<div class="row"></div>');
+            var items = item[i].items;
+            for (var j = 0; j < items.length; j++) {
+                var div1rowbox = $('<div class="col-lg-3 col-xs-6 itemselect" data-filter="' + items[j].name.toLocaleLowerCase() + '"></div>');
+                var div1rowbox2 = $('<div class="small-box bg-green"></div>');
+                $(div1rowbox).append(div1rowbox2);
+
+                var div1rowboxiner = $('<div class="inner"></div>');
+                $(div1rowboxiner).append('<img src="' + items[j].picture + '"></img>');
+                $(div1rowboxiner).append('<h3 style="font-size: 18px;">' + items[j].name + '</h3>');
+
+                var boxproduct = createproductbox(items[j]);
+                $(div1rowboxiner).append(boxproduct);
+
+
+                $(div1rowbox2).append(div1rowboxiner);
+                $(div1row).append(div1rowbox);
+
+                $(alldiv1row).append($(div1rowbox).clone());
+
+            }
+
+
+            $(div1).append(div1row);
+            $(tabcontent).append(div1);
+        }
+        $(tabheader).append(allliheader);
+        $(alldiv1).append(alldiv1row);
+        $(tabcontent).append(alldiv1);
+
+
+        $(divcontainer).append(tabheader);
+        $(divcontainer).append(tabcontent);
+        $(inputbygroup).append(divcontainer);
+
+    }
+
+    function createproductbox(item) {
+        var div = $('<div></div>');
+        var divdiv = $('<div class="input-group input-group-sm"></div>');
+
+        $(divdiv).append('<input data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="1" decimaldigits=' + globalvariant.sysoption.RoundQuantity + ' type="text" placeholder="" class="form-control numeric enter-quantity" />');
+        $(divdiv).append('<span class="input-group-btn"><button onclick="AddItem3(this);" type="button" class="btn btn-default btn-flat btn-add-quantity"><i class="fa fa-cutlery"></i></button></span>');
+
+        var divdivdiv = $('<div class="input-group-btn"></div>');
+        $(divdivdiv).append('<button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"><span class="caret"></span></button>');
+        var divdivdivul = $('<ul role="menu" class="dropdown-menu dropdown-menu-right"></ul>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="1"  href="javascript:;" onclick="AddItem(this);">1</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="2"  href="javascript:;" onclick="AddItem(this);">2</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="3"  href="javascript:;" onclick="AddItem(this);">3</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="4"  href="javascript:;" onclick="AddItem(this);">4</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="5"  href="javascript:;" onclick="AddItem(this);">5</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="6"  href="javascript:;" onclick="AddItem(this);">6</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="7"  href="javascript:;" onclick="AddItem(this);">7</a></li>');
+
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="8"  href="javascript:;" onclick="AddItem(this);">8</a></li>');
+        $(divdivdivul).append('<li><a data-price="' + item.price + '" data-itemid="' + item.id + '" data-itemname="' + item.name + '" data-quantity="9"  href="javascript:;" onclick="AddItem(this);">9</a></li>');
+
+        $(divdivdiv).append(divdivdivul);
+
+        $(divdiv).append(divdivdiv);
+        $(div).append(divdiv);
+
+        return div;
+
+    }
+
+    function additemlist(items, id, name,picture,price) {
+        items.push({ id: id, name: name,picture:picture, price: price });
+    }
+
+    function additemgrouplist(itemgroups, id, name) {
+        itemgroups.push({ id: id, name: name, items: [] });
+    }
+
+    function tablerefresh(a) {
+
+        var tableid = $("#" + a).attr("data-tableid");
+        var url = "@(Url.Action("GetTable", "ResOrder"))";
+        if (tableid != "") {
+            url = url + "/?TableId=" + tableid;
+            var mytable = "#" + a;
+            // Load the content using AJAX
+            $.get(url, function (data) {
+                $(mytable).replaceWith(data);
+            });
+            return false;
+        }
+        else {
+        }
+    }
+
+    function printorder(voucherid) {
+        if (voucherid != 0) {
+            var url = "@(Url.Action("PrintOrder", "ResOrder"))";
+            url = url + "/" + voucherid;
+            window.open(url, "_blank"); // <- This is what makes it open in a new window.
+        }
+        return false;
+    }
+
+    function printorder2(voucherid, tableid) {
+        //if (voucherid != 0) {
+        var url = "@(Url.Action("PrintOrder2", "ResOrder"))";
+        url = url + "/?Id=" + voucherid + "&TableId=" + tableid;
+        window.open(url, "_blank"); // <- This is what makes it open in a new window.
+        //}
+        return false;
+    }
+
+    function payorder(a, voucherid, status) {
+        var url = "@(Url.Action("PayOrder", "ResOrder"))";
+        if (voucherid != "") {
+            url = url + "/?Id=" + voucherid + "&status=" + status;
+            var jqxhr = $.post(url, function (data) {
+                //alert("success");
+                if (data.ketqua != 0) {
+                    tablerefresh(a);
+                    if (status == '2') {
+                        printorder(voucherid);
+                    }
+                }
+            })
+    .done(function () {
+        //alert("second success");
+    })
+    .fail(function () {
+        //alert("error");
+    })
+    .always(function () {
+        //alert("finished");
+    });
+        };
+    }
+
+
+
+    function hideobject(a) {
+        var b = $(a).val().toLowerCase();
+        //alert("Chuoi");
+
+        if (b != "") {
+            $("#itemselectcontainer .itemselect[data-filter]").hide();
+            $("#itemselectcontainer .itemselect[data-filter*='" + b + "']").show();
+        }
+        else {
+            $("#itemselectcontainer .itemselect[data-filter]").show();
+        }
+
+    }
+
+
+</script>

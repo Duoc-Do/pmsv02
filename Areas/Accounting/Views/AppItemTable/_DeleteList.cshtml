@@ -1,0 +1,38 @@
+﻿@model object
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    if (Request.UrlReferrer.LocalPath == "/Pos/AppHome")
+    {
+        if (!ajaxoption.ContainsKey("cancel-close-action"))
+        {
+            ajaxoption.Add("cancel-close-action", "Index2");
+        }
+        else
+        {
+            ajaxoption["cancel-close-action"]= "Index2";
+        }
+        if (!ajaxoption.ContainsKey("delete-close-action"))
+        {
+            ajaxoption.Add("delete-close-action", "Index2");
+        }
+    }
+    ajaxoption["action-return"] = "Index2";
+}
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-danger">
+        @Html.Partial("_HeaderEdit")
+        <div class="box-header">
+            <h3 class="box-title">Bạn có muốn xóa không?</h3>
+        </div>
+
+        <div class="box-body">
+            @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+            {    
+                @Html.bsValidationSummary(false) 
+                @Html.AntiForgeryToken()    
+                @Html.Partial("_ToolbarListDelete", ajaxoption)        
+            }
+        </div>
+    </div>
+</section>

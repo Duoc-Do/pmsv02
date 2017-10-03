@@ -1,0 +1,134 @@
+﻿<!-- Split button -->
+@{
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var datefrom = (DateTime)reportparams["DateFrom"];
+    var dateto = (DateTime)reportparams["DateTo"];
+}
+
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label for="DateFrom" class="control-label">Từ ngày</label>
+        <input class="form-control text-date" id="DateFrom" name="DateFrom" type="text" value="@(datefrom.ToShortDateString())" />
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="form-group">
+        <label for="DateTo" class="control-label">Đến ngày</label>
+        <input class="form-control text-date" id="DateTo" name="DateTo" type="text" value="@(dateto.ToShortDateString())" />
+    </div>
+</div>
+<div class="col-md-2">
+    <div style="padding-top: 26px;">
+        <div class="btn-group pull-right">
+            <a class="btn btn-primary" href="javascript:void(0)" onclick="$(this).closest('form').submit();">&nbsp;Áp dụng</a>
+            @*<button type="submit" class="btn btn-primary">Áp dụng</button>*@
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="javascript:void(0)" onclick="senvietdaterange(this,1);">&nbsp;Hôm nay</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="senvietdaterange(this,7);">&nbsp;7 ngày</a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0)" onclick="senvietdaterange(this,30);">&nbsp;30 ngày</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="senvietdaterange(this,365);">&nbsp;1 Năm</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+
+@*<div class="col-md-1">
+    <div class="form-group">
+        <label for="DateRangeType" class="control-label">Thời gian</label>
+        <select id="DateRangeType" name="DateRangeType" class="form-control">
+            <option value="day" @{if (@ViewBag.DateRangeType == "day")
+                                  {@Html.Raw("selected='selected'")}} >Ngày</option>
+            <option value="week"  @{if (@ViewBag.DateRangeType == "week")
+                                    {@Html.Raw("selected='selected'")}}>Tuần</option>
+            <option value="month" @{if (@ViewBag.DateRangeType == "month")
+                                    {@Html.Raw("selected='selected'")}}>Tháng</option>
+            <option value="year" @{if (@ViewBag.DateRangeType == "year")
+                                   {@Html.Raw("selected='selected'")}} >Năm</option>
+        </select>
+    </div>
+</div>
+<div class="col-md-1">
+    <div class="form-group">
+    <button type="submit" class="btn btn-default">Áp dụng</button>
+        </div>
+</div>*@
+
+
+<script type="text/javascript">
+    $(function () {
+        $.datepicker.setDefaults($.datepicker.regional["vi"]);
+        $("#DateFrom").datepicker($.datepicker.regional["vi"]);
+        $("#DateTo").datepicker($.datepicker.regional["vi"]);
+    })
+    //$("#DateFrom").change(function () {
+    //    $(this).closest('form').submit();
+    //});
+    //$("#DateTo").change(function () {
+    //    $(this).closest('form').submit();
+    //});
+
+    //$("#DateRangeType").change(function () {
+
+    //    var daterange = $("#DateRangeType").val();
+    //    var datefrom = new Date();
+    //    var dateto = new Date();
+    //    switch (daterange.toLowerCase()) {
+    //        case "week":
+    //            datefrom.setDate(datefrom.getDate() - 7);
+    //            break;
+    //        case "month":
+    //            datefrom.setDate(datefrom.getDate() - 30);
+    //            break;
+    //        case "year":
+    //            datefrom.setDate(datefrom.getDate() - 365);
+    //            break;
+    //        default:
+    //    }
+    //    $("#DateFrom").datepicker("setDate", datefrom);
+    //    $("#DateTo").datepicker("setDate", dateto);
+    //    // $(this).closest('form').submit();
+    //});
+
+    function senvietdaterange(a, datetype) {
+        var datefrom = new Date();
+        var dateto = new Date();
+        switch (datetype) {
+            case 7:
+                datefrom.setDate(datefrom.getDate() - 7);
+                break;
+            case 30:
+                datefrom.setDate(datefrom.getDate() - 30);
+                break;
+            case 365:
+                datefrom.setDate(datefrom.getDate() - 365);
+                break;
+            default:
+        }
+        $("#DateFrom").datepicker("setDate", datefrom);
+        $("#DateTo").datepicker("setDate", dateto);
+
+        $(a).closest('form').submit();
+
+        //alert(datetype);
+
+
+    };
+
+
+</script>

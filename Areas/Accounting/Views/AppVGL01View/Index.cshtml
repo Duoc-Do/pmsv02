@@ -1,0 +1,43 @@
+﻿@model IEnumerable<object>
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", ajaxoption["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", ajaxoption["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+
+    string action_return = "Index";
+    string action_create1 = Url.Action("CreateBy", new {createtype=1 });
+    string action_create2 = Url.Action("CreateBy", new { createtype = 2 });
+    string action_create3 = Url.Action("CreateBy", new { createtype = 3 });
+    string action_create4 = Url.Action("CreateBy", new { createtype = 4 });
+    
+    //ajaxstring
+    
+    var builderdiv = new TagBuilder("div");
+    builderdiv.AddCssClass("btn-group");
+    var builderbtn = new TagBuilder("button");
+    builderbtn.AddCssClass("btn btn-primary dropdown-toggle");
+    builderbtn.MergeAttribute("data-toggle", "dropdown");
+    builderbtn.InnerHtml = "Bút toán cuối kỳ <span class=\"caret\"></span>";
+    builderdiv.InnerHtml = builderbtn.ToString();
+
+    var builderul = new TagBuilder("ul");
+    builderul.AddCssClass("dropdown-menu");
+    builderul.MergeAttribute("role", "menu");
+    builderul.InnerHtml = string.Format("<li><a href=\"{0}\" {1}>Bút toán khấu hao</a></li>", action_create1, ajaxstring);
+    //builderul.InnerHtml += "<li><a href=\"#\" onclick=\"createex(2)\">Bút toán giá thành</a></li>";
+    builderul.InnerHtml += string.Format("<li><a href=\"{0}\" {1}>Bút toán kết chuyển</a></li>",action_create3,ajaxstring);
+    //builderul.InnerHtml += "<li><a href=\"#\" onclick=\"createex(4)\">Bút toán kết chuyển theo công trình</a></li>";
+
+    builderdiv.InnerHtml += builderul.ToString();
+    
+    ViewBag._ToolbarVoucherEx = builderdiv.ToString();
+
+}
+
+
+@Html.Partial("_IndexVoucher")
+

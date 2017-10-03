@@ -1,0 +1,130 @@
+﻿@model WebApp.Areas.Accounting.Models.GapJournal
+@{
+
+    Layout = "_LayoutPub.cshtml";
+
+    var sencompany = (WebApp.Models.SenCompany)ViewBag.sencompany;
+
+    sencompany.Website = sencompany.Website ?? "/";
+    string urllogo = Url.Content("~/Content/themes/Accounting/images/logo.png");
+    if (!string.IsNullOrEmpty(sencompany.Logo))
+    {
+        urllogo = WebApp.Services.Media.PictureService.GetPictureUrl(sencompany.Logo, 125);
+    }
+
+
+}
+
+<div class="box box-primary">
+    <div class="row-fluid text-center">
+        <div style="margin-bottom: 8px;" id="ImagePathimage">
+            <a class="" href="@(sencompany.Website)">
+                <img src="@urllogo" style="max-height:125px;max-width:100%;">
+            </a>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3> Nhật ký gieo số: #@Model.JournalId </h3></div>
+            <div class="panel-body">
+                <div>
+                    Ngày gieo:  @Html.DisplayFor(model => model.JournalDate)
+                </div>
+                <div>
+                    Cây trồng:  @Html.DisplayFor(model => model.GapTree.Name)
+                </div>
+                <div>
+                    Giống:   @Html.DisplayFor(model => model.GapSeed.Name)
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3> Chăm sóc</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead> <tr> <th>Ngày</th> <th>Công việc</th> </tr> </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.GapJournalCares)
+                        {
+                            <tr>
+                                <td>
+                                    @item.JournalCareDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @item.JobName
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3> Thu hoạch</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead> <tr> <th>Ngày</th> <th>Số lượng</th> </tr> </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.GapJournalHarvests)
+                        {
+                            <tr>
+                                <td>
+                                    @item.JournalHarvestDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @item.Quantity.ToString("n0")
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*
+        Mau xu ly iframe
+        dung reposi bootstrap
+        <iframe id="myFrame" src="/default.asp"></iframe>
+
+    <p>Click the button to change the value of the src attribute in the iframe.</p>
+
+    <button onclick="myFunction()">Try it</button>
+
+    <script>
+    function myFunction() {
+        document.getElementById("myFrame").src = "http://www.cnn.com";
+    }
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var foo = getParameterByName('filename');
+    alert(foo);
+    document.getElementById("myFrame").src = "http://www.cnn.com/"+foo;
+    </script>*@
+

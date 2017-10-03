@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Content/themes/accounting/Print.css?ver=1504272" rel="stylesheet"/>
+    @Scripts.Render("~/bundles/accapp")
+    @*<script src="@Url.Content("~/Scripts/App/Acc/barcode/jquery-barcode.min.js")"></script>*@
+
+    <script src="@Url.Content("~/Scripts/App/Acc/JsBarcode/JsBarcode.all.min.js")"></script>
+
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

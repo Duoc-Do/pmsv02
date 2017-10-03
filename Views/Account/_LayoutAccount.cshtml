@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<!-- Microdata markup added by Google Structured Data Markup Helper. -->
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="shortcut icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
+    <link href="~/Content/themes/accounting/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/accounting/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <link href="~/Content/site.css" rel="stylesheet" />
+
+    <!-- Theme style -->
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    @*navigation section*@
+    @*container content section*@
+    <div class="content-fluid">
+        <header>
+            <div style="text-align: center; padding: 20px 0px;">
+                <a class="brand" href="/">
+                    <img src="~/Content/themes/accounting/images/logo.png" />
+                </a>
+            </div>
+        </header>
+        <div class="container">
+
+            @RenderBody()
+
+        </div>
+
+    </div>
+
+    @*footer section*@
+    <div class="senviet-footer">
+            <div class="container-fluid">
+                <hr />
+                <footer>
+                    @*<p class="text-center">&copy; @DateTime.Now.Year - <a target="_blank" href="http://lotusviet.vn">Lotus Viet.</a></p>
+                    @Html.Partial("_LinkContact")*@
+                </footer>
+            </div>
+        </div>
+
+    @Html.Partial("_Common")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script src="~/Content/themes/accounting/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#profiletab a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            })
+        });
+    </script>
+
+</body>
+</html>

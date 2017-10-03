@@ -1,0 +1,83 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+    
+}
+
+
+
+<ul class="sidebar-menu">
+
+    <li class="active">
+        <a href="@Url.Action("Index", "AppHome", new { area = "Res" })" >
+            <i class="fa fa-dashboard"></i><span>Tổng quan</span>
+        </a>
+    </li>
+    <li>
+        <a id="ResHome" href="@Url.Action("Index", "ResHome", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-table"></i><span>Thu ngân</span></a>
+    </li>
+    <li>
+        <a href="@Url.Action("Kitchen", "ResHome", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-cutlery"></i><span>Bếp</span></a>
+    </li>
+    <li>
+        <a id="ResReport" href="@Url.Action("Index", "ResReport", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-bar-chart"></i><span>Báo cáo</span></a>
+    </li>
+    
+
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-cog"></i>
+            <span>Cấu hình hệ thống</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-list"></i>
+                    <span>Danh mục</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a id="AppItemTable" href="@Url.Action("Index2", "AppItemTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Món ăn</span></a>
+                    </li>
+                    <li>
+                        <a id="AppItemGroupTable" href="@Url.Action("Index", "AppItemGroupTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Nhóm</span></a>
+                    </li>
+                    <li>
+                        <a id="ResTable" href="@Url.Action("Index", "ResTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Bàn</span></a>
+                    </li>
+
+                    <li>
+                        <a id="AppUnitOfMeasureTable" href="@Url.Action("Index", "AppUnitOfMeasureTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Đvt</span></a>
+                    </li>
+
+                    <li>
+                        <a id="AppExpenseTable" href="@Url.Action("Index", "AppExpenseTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Loại phí</span></a>
+                    </li>
+
+                    <li>
+                        <a id="AppExpenseBudgetTable" href="@Url.Action("Index", "AppExpenseBudgetTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Chi phí tháng</span></a>
+                    </li>
+
+                </ul>
+            </li>
+            <li>
+                <a id="SysOption" href="@Url.Action("Edit2", "SysOption", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Tùy chọn</span></a>
+            </li>
+            <li>
+                <a id="SysUser" href="@Url.Action("Index", "SysUser", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Users</span></a>
+            </li>
+
+        </ul>
+    </li>
+
+</ul>
+

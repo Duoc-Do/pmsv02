@@ -1,0 +1,20 @@
+﻿@model WebApp.Areas.Admin.Models.SenContract
+@using WebApp.Areas.Admin.Services
+@{
+    var appajaxoption = (WebApp.Areas.Admin.Models.AppAjaxOption)ViewBag.appajaxoption;
+    var ajaxoption = appajaxoption.ajaxoption;
+    string ajaxstring = appajaxoption.ajaxstring();    
+}
+@{
+    if (Model.SenContractCashs != null)
+    {
+        string urlcontractcash = Url.Action("Index", "SenContractCash", new { ContractId = Model.ContractId,action_return="noaction"});
+    <a data-url="@(urlcontractcash)" href="javascript:;" onclick="appcommon.popup(this)"><span class="label label-success">Thu tiền: @(Model.SenContractCashs.Select(m => m.Amount).DefaultIfEmpty().Sum().Currency())  </span></a>
+    }
+    if (Model.SenCommissions != null)
+    {
+        string urlcommission = Url.Action("Index", "SenCommission", new { ContractId = Model.ContractId,action_return="noaction" });    
+    <a data-url="@(urlcommission)" href="javascript:;" onclick="appcommon.popup(this)"><span class="label label-primary">Hoa hồng: @(Model.SenCommissions.Select(m => m.Amount).DefaultIfEmpty().Sum().Currency())</span></a>
+    }
+   
+}

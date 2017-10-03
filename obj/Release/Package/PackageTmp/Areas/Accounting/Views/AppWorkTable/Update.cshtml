@@ -1,0 +1,46 @@
+﻿
+@model WebApp.Areas.Accounting.Models.AppWorkTable
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.svHiddenFor(model => model.WorkID)
+                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.WorkCode)
+                        @Html.bsEditorFor(model => model.IsActive)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+<script>
+    $(document).ready(function () {
+        $("#Name").change(function () {
+            $("#WorkCode").val(apputils.gencode($(this).val()));
+        });
+    });
+</script>
+

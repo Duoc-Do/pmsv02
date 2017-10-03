@@ -1,0 +1,81 @@
+﻿@using WebApp.Areas.Accounting.Services
+@{
+    //List<WebApp.Areas.Accounting.Models.ResOrderItemView> linesum = ViewBag.linesum;
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+
+    var orders = (from master in db.ResOrderViews where master.OrderStatusId == 1 select master).ToDictionary(m => m.OrderId);
+
+    var orderlines = (from row in db.ResOrderItemViews
+                      join master in db.ResOrders on row.OrderId equals master.OrderId
+                      where master.OrderStatusId == 1
+                      orderby row.CreateDate ascending
+                      select row
+                      ).ToList();
+    var orderlinegroups = (from groupline in orderlines
+                           group groupline by new
+                           {
+                               groupline.OrderId,
+                               groupline.CreateDate
+                           } into g
+                           select new { OrderId = g.Key.OrderId, CreateDate = g.Key.CreateDate, Quantity = g.Sum(x => x.Quantity), QuantityProcess = g.Sum(x => x.QuantityProcess) }
+                        ).ToList();
+
+    var appuser = GlobalVariant.GetAppUser();
+    bool isKitchen = "posadmin.poskitchen.systems.administrators".Contains(appuser.SysRole.Name.ToLower());
+
+}
+
+
+@if (orderlines != null)
+{
+
+    foreach (var item in orderlinegroups)
+    {
+
+        var master = orders[item.OrderId];
+
+        if (!isKitchen && appuser.UserID != master.CreatedBy.Value) { continue; }
+
+        string success = item.Quantity == item.QuantityProcess ? "box-success" : "box-primary";
+
+        <div class="col-md-4" data-orderid="@master.OrderId" id="@string.Format("{0}_{1}", master.OrderId, item.CreateDate.Value.ToString("yyyyMMddhms"))">
+            <div class="box @success box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title" style="margin-right: 66px;">@master.TableName : #@master.OrderId : @item.CreateDate.Value.ToString("d MMM yyyy HH:mm:ss") <span>| Order : @GlobalVariant.GetAppUserById(master.CreatedBy).FullName </span></h3>
+                    <div class="box-tools pull-right no-print">
+                        <button data-idupdate="@string.Format("{0}_{1}", master.OrderId, item.CreateDate.Value.ToString("yyyyMMddhms"))" data-orderid="@master.OrderId" data-createdate="@item.CreateDate.Value" onclick="appaccountingreshome.quantityprocess(this)" class="btn btn-box-tool"><i class="fa fa-check"></i></button>
+
+                        <button onclick="appcommon.printelem($(this).parent().parent().parent().parent())" class="btn btn-box-tool"><i class="fa fa-print"></i></button>
+                        <button onclick="$(this).parent().parent().parent().parent().remove()" data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" id="section-to-print">
+                    <table>
+                        <tbody>
+                            @{
+                                var lines = orderlines.Where(m => m.OrderId == master.OrderId && m.CreateDate.Value == item.CreateDate.Value).ToList();
+                                foreach (var item2 in lines)
+                                {
+                                    <tr>
+                                        <td>@Html.Raw(string.Format("{0}<b>x</b>{1} <span class='label text-red'>{2}</span>", WebApp.Areas.Accounting.Services.ExConvert.Data2String(item2.Quantity, "Numeric", "n", ""), item2.ItemName, item2.ItemNote))</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+    }
+}
+
+
+
+

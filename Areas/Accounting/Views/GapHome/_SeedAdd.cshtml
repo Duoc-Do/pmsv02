@@ -1,0 +1,17 @@
+﻿@model int
+@{ 
+    string urlcreate = Url.Action("Create", "GapSeed", new { area = "Accounting", action_return = "noaction",treeid=Model });
+}
+
+<div class="small-box bg-green-active">
+    <div class="inner text-center">
+        <div class="btn-group">
+            <a style="color:#fff;" href="javascript:;" data-url="@(urlcreate)" onclick="appcommon.popup(this,1)">
+                <h3 style="font-size: 80px;margin-bottom: 0;margin-left: 0;margin-right: 0;padding: 0;">
+                    <span class="fa fa-plus"></span>
+                </h3>
+                Thêm
+            </a>
+        </div>
+    </div>
+</div>

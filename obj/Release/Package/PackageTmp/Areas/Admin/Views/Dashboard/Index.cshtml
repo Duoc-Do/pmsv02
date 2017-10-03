@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Quản trị ứng dụng";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
+}
+
+@using WebApp.Areas.Admin.Models
+@using WebApp.Areas.Admin.Services
+
+@section leftsidesidebarsection
+{
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            @*          <div class="user-panel">
+            <div class="pull-left image">
+              <img class="img-circle" src="@(WebApp.Services.Media.PictureService.GetPictureUrl(WebApp.Services.GlobalUserContext.GetContext().SenUser.Avatar, 160))" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+              <p>Xin chào, @(User.Identity.Name)</p>
+              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+          </div>*@
+            @*          <!-- search form -->
+          <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Search..."/>
+              <span class="input-group-btn">
+                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+          <!-- /.search form -->*@
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            @Html.Partial("_AppMenu")
+
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+}
+
+@if (User.IsInRole("Admin"))
+{
+@Html.Partial("wStat")
+    @Html.Partial("wTop")
+@Html.Partial("wChat")    
+}
+
+
+@Scripts.Render("~/bundles/accapp")
+
+

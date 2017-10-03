@@ -1,0 +1,664 @@
+﻿@model WebApp.Areas.Accounting.Models.AppVCA01View
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@Html.Partial("_AddNew")
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {  
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <h3>Thông tin chung</h3>
+                @Html.svHiddenFor(model => model.DocumentID)
+                @Html.svHiddenFor(model => model.ParentID)
+                @Html.svHiddenFor(model => model.CurrencyID)
+                @Html.svHiddenFor(model => model.CustomerID)
+                @Html.svHiddenFor(model => model.PostType)
+                @Html.svHiddenFor(model => model.VoucherID)
+                @Html.svHiddenFor(model => model.VoucherCode)
+                @Html.svHiddenFor(model => model.VoucherName)
+                @Html.svHiddenFor(model => model.AccountDebitID)
+                                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.bsEditorFor(model => model.VoucherDate)
+                                    @Html.bsEditorFor(model => model.VoucherNumber)
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.bsEditorFor(model => model.IsoCode)
+                                    @Html.bsEditorFor(model => model.ExchangeRate)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                @Html.bsEditorFor(model => model.CustomerCode)
+                                @Html.bsTextAreaFor(model => model.CustomerName)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsTextAreaFor(model => model.Address)
+
+                                @Html.bsEditorFor(model => model.Contact)
+                            </div>
+                        </div>
+
+                        @Html.bsTextAreaFor(model => model.Description)
+                        @Html.bsEditorFor(model => model.DisplayNumberDebit)
+
+                    </div>
+                </div>
+
+                @*Lưới chi tiết hạch toán*@
+                <div class="row-fluid">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Hạch toán</h3>
+                        </div>
+                        <div id="divAppVCA01LineView" class="sv-grid-container">
+                            @Html.svGridVoucher(Model.AppVCA01LineViews, "DocumentLineID", "0", new WebApp.Areas.Accounting.Models.AppVCA01LineView())
+                        </div>
+                    </div>
+
+                </div>
+
+                @*Lưới chi tiết thuế*@
+                <div class="row-fluid">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Thuế</h3>
+                        </div>
+                        <div id="divAppVCA01VATView" class="sv-grid-container">
+                            @Html.svGridVoucher(Model.AppVCA01VATViews, "DocumentVATID", "0", new WebApp.Areas.Accounting.Models.AppVCA01VATView())
+                        </div>
+                    </div>
+                </div>
+
+                @*Tổng cộng*@
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6" id="tb_FC">
+                                @Html.bsEditorFor(model => model.SumAmountFC)
+                                @Html.bsEditorFor(model => model.SumAmountVATFC)
+                                @Html.bsEditorFor(model => model.SumTotalFC)
+                            </div>
+
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.SumAmount)
+                                @Html.bsEditorFor(model => model.SumAmountVAT)
+                                @Html.bsEditorFor(model => model.SumTotal)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Partial("_ToolbarVoucherUpdate", ajaxoption)
+            </div>
+
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    var globlevar_isocode = "@(Voucher.GetIsoCode())";
+
+    $(document).ready(function () {
+        hideshowgrid();
+        form_refresh();
+    });
+
+    function hideshowgrid() {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+        var IsoCode = $(sectionid+'#IsoCode').val();
+
+        var isFC = (IsoCode.toUpperCase() != globlevar_isocode.toUpperCase());
+        var fieldFC = "[fieldname=UnitPriceFC],[fieldname=AmountFC],[fieldname=ExchangeRateLine],[fieldname=Credit]";
+        var fieldvatFC = "[fieldname=AmountVATFC],[fieldname=AmountFC]";
+        if (isFC == true) {
+
+            $("#divAppVCA01LineView table:first tr").children(fieldFC).each(function () {
+                $(this).show();
+            });
+
+            $("#divAppVCA01LineView table:first tbody tr td").children(fieldFC).each(function () {
+                $(this).parent().show();
+            });
+
+            //thue
+            $("#divAppVCA01VATView table:first tr").children(fieldvatFC).each(function () {
+                $(this).show();
+            });
+
+            $("#divAppVCA01VATView table:first tbody tr td").children(fieldvatFC).each(function () {
+                $(this).parent().show();
+            });
+            //master
+
+            $(sectionid + "#tb_FC").show();
+        }
+        else {
+            $("#divAppVCA01LineView table:first tr").children(fieldFC).each(function () {
+                $(this).hide();
+            });
+
+            $("#divAppVCA01LineView table:first tbody tr td").children(fieldFC).each(function () {
+                $(this).parent().hide();
+            });
+
+            //thue
+            $("#divAppVCA01VATView table:first tr").children(fieldvatFC).each(function () {
+                $(this).hide();
+            });
+
+            $("#divAppVCA01VATView table:first tbody tr td").children(fieldvatFC).each(function () {
+                $(this).parent().hide();
+            });
+            //master
+            $(sectionid + "#tb_FC").hide();
+        }
+
+
+    }
+
+    function form_refresh() {
+
+        var SumQuantity0 = 0;
+        var SumAmount = 0;
+        var SumAmountFC = 0;
+
+        var SumAmountVAT = 0;
+        var SumAmountVATFC = 0;
+
+        var SumTotal = 0;
+        var SumTotalFC = 0;
+
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        $("#divAppVCA01LineView table:first >tbody>tr:visible").each(function () {
+
+            if ($(this).attr("rownumber") != "-1") {
+
+                var Amount = $(this).find('input[fieldname = "Amount"]:first');
+                var AmountFC = $(this).find('input[fieldname = "AmountFC"]:first');
+
+                SumAmount += parseFloat($(Amount).autoNumericGet());
+                SumAmountFC += parseFloat($(AmountFC).autoNumericGet());
+            }
+
+        });
+
+        $("#divAppVCA01VATView table:first >tbody>tr:visible").each(function () {
+
+            if ($(this).attr("rownumber") != "-1") {
+
+                var AmountVAT = $(this).find('input[fieldname = "AmountVAT"]:first');
+                var AmountVATFC = $(this).find('input[fieldname = "AmountVATFC"]:first');
+
+                SumAmountVAT += parseFloat($(AmountVAT).autoNumericGet());
+                SumAmountVATFC += parseFloat($(AmountVATFC).autoNumericGet());
+            }
+
+        });
+
+        $(sectionid+"#SumAmount").autoNumericSet(SumAmount);
+        $(sectionid +"#SumAmountFC").autoNumericSet(SumAmountFC);
+
+        $(sectionid + "#SumAmountVAT").autoNumericSet(SumAmountVAT);
+        $(sectionid + "#SumAmountVATFC").autoNumericSet(SumAmountVATFC);
+
+        SumTotal = SumAmount + SumAmountVAT;
+        SumTotalFC = SumAmountFC + SumAmountVATFC;
+
+        $(sectionid + "#SumTotal").autoNumericSet(SumTotal);
+        $(sectionid + "#SumTotalFC").autoNumericSet(SumTotalFC);
+
+    }
+
+    function validnumberline(row) {
+
+        var IsoCode = $(sectionid+'#IsoCode').val();
+        var isFC = (IsoCode.toUpperCase() != globlevar_isocode.toUpperCase());
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        if (isFC) {
+            var Credit = $(row).find('input[fieldname = "Credit"]:first');
+            var CreditValue = 0;
+            var ExchangeRateLineValue = $(row).find('input[fieldname = "ExchangeRateLine"]:first').autoNumericGet();
+
+            var Amount = $(row).find('input[fieldname = "Amount"]:first');
+            var AmountValue = 0;
+            var AmountFCValue = $(row).find('input[fieldname = "AmountFC"]:first').autoNumericGet();
+            var ExchangeRateValue = $(sectionid + '#ExchangeRate').autoNumericGet();
+
+            AmountValue = parseFloat(ExchangeRateValue) * parseFloat(AmountFCValue);
+            CreditValue = parseFloat(ExchangeRateLineValue) * parseFloat(AmountFCValue);
+
+            $(Amount).autoNumericSet(AmountValue);
+            $(Credit).autoNumericSet(CreditValue);
+            //form_refresh();
+
+        }
+        form_refresh();
+
+    }
+
+    function validnumbervat(row) {
+
+        var IsoCode = $(sectionid + '#IsoCode').val();
+        var isFC = (IsoCode.toUpperCase() != globlevar_isocode.toUpperCase());
+
+        if (isFC) {
+            var Amount = $(row).find('input[fieldname = "Amount"]:first');
+            var AmountValue = 0;
+            var AmountFCValue = $(row).find('input[fieldname = "AmountFC"]:first').autoNumericGet();
+            var ExchangeRateValue = $(sectionid + '#ExchangeRate').autoNumericGet();
+            AmountValue = parseFloat(ExchangeRateValue) * parseFloat(AmountFCValue);
+            $(Amount).autoNumericSet(AmountValue);
+
+            var AmountVAT = $(row).find('input[fieldname = "AmountVAT"]:first');
+            var AmountVATValue = 0;
+            var AmountVATFCValue = $(row).find('input[fieldname = "AmountVATFC"]:first').autoNumericGet();
+            var ExchangeRateValue = $(sectionid + '#ExchangeRate').autoNumericGet();
+            AmountVATValue = parseFloat(ExchangeRateValue) * parseFloat(AmountVATFCValue);
+            $(AmountVAT).autoNumericSet(AmountVATValue);
+
+            //form_refresh();
+
+        }
+        form_refresh();
+    }
+
+    function fieldchange(a) {
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("fieldname");
+        var url = '@Url.Action("FieldChange")';
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+        switch (fieldname) {
+            case "IsoCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#CurrencyID').val("");
+                $(sectionid + '#ExchangeRate').val(1);
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 0, fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#CurrencyID').val(data.rows.CurrencyID);
+                                $(sectionid + '#ExchangeRate').autoNumericSet(data.rows.ExchangeRate);
+
+                                $("#divAppVCA01LineView table:first >tbody>tr:visible").each(function () {
+
+                                    if ($(this).attr("rownumber") != "-1") {
+
+                                        validnumberline(this);
+                                    }
+
+                                });
+                                $("#divAppVCA01VATView table:first >tbody>tr:visible").each(function () {
+
+                                    if ($(this).attr("rownumber") != "-1") {
+
+                                        validnumbervat(this);
+                                    }
+
+                                });
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                            hideshowgrid();
+
+                        }
+                    });
+                }
+                break;
+            case "ExchangeRate":
+
+                $("#divAppVCA01LineView table:first >tbody>tr:visible").each(function () {
+
+                    if ($(this).attr("rownumber") != "-1") {
+
+                        validnumberline(this);
+                    }
+
+                });
+                $("#divAppVCA01VATView table:first >tbody>tr:visible").each(function () {
+
+                    if ($(this).attr("rownumber") != "-1") {
+
+                        validnumbervat(this);
+                    }
+
+                });
+
+                break;
+            case "CustomerCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#CustomerID').val("");
+                $(sectionid + '#CustomerName').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 0, fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#CustomerID').val(data.rows.CustomerID);
+                                $(sectionid + '#CustomerName').val(data.rows.Name);
+
+                                $(sectionid + '#Contact').val(data.rows.Contact);
+                                $(sectionid + '#Address').val(data.rows.Address);
+
+                                $("#divAppVCA01VATView table:first >tbody>tr:visible").each(function () {
+
+                                    if ($(this).attr("rownumber") != "-1") {
+                                        $(this).find('input[fieldname = "CustomerName"]').first().val('');
+                                        $(this).find('input[fieldname = "CustomerAddress"]').first().val('');
+                                        $(this).find('input[fieldname = "TaxCode"]').first().val('');
+
+                                        fieldchange($(this).find('input[fieldname = "VATDate"]').first());
+                                    }
+
+                                });
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DisplayNumberDebit":
+                $(sectionid + "#AccountDebitID").val("");
+
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 0, fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + "#AccountDebitID").val(data.rows.AccountID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "VATDate":
+                if (val != "") {
+                    var $tr = $thisobject.closest("tr");
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 2, fieldname: fieldname, keyword: "", voucherdate: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                var VATNumber = $tr.find('input[fieldname = "VATNumber"]').first();
+                                if ($(VATNumber).val() == "") {
+                                    $(VATNumber).val(data.rows.VATNumber);
+                                }
+                                var VATSerial = $tr.find('input[fieldname = "VATSerial"]').first();
+                                if ($(VATSerial).val() == "") {
+                                    $(VATSerial).val(data.rows.VATSerial);
+                                }
+
+                            }
+                        }
+                    });
+
+                    //nếu tên khách trống thì lấy tên khách trong master
+                    var CustomerName = $tr.find('input[fieldname = "CustomerName"]').first();
+                    if ($(CustomerName).val() == "") {
+                        $(CustomerName).val($(sectionid + '#CustomerName').val());
+                    }
+
+                    //nếu địa chỉ trống thì lấy trong master
+                    var CustomerAddress = $tr.find('input[fieldname = "CustomerAddress"]').first();
+                    if ($(CustomerAddress).val() == "") {
+                        $(CustomerAddress).val($(sectionid + '#Address').val());
+                    }
+
+                    //nếu mã số thuế trống thì lấy trong master
+                    var TaxCode = $tr.find('input[fieldname = "TaxCode"]').first();
+                    if ($(TaxCode).val() == "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { type: 2, fieldname: "CustomerCode", keyword: $(sectionid + '#CustomerCode').val() },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(TaxCode).val(data.rows.TaxCode);
+
+                                }
+                            }
+                        });
+                    }
+
+                    //nếu tiền hàng trống thì lấy trong master
+                    var Amount = $tr.find('input[fieldname = "Amount"]').first();
+                    if ($(Amount).val() == "") {
+                        $(Amount).val($(sectionid + '#SumAmount').val());
+                    }
+                    //ngoại tệ
+                    var AmountFC = $tr.find('input[fieldname = "AmountFC"]').first();
+                    if ($(AmountFC).val() == "") {
+                        $(AmountFC).val($(sectionid + '#SumAmountFC').val());
+                    }
+
+                }
+                break;
+            case "SalesTaxCode":
+                // phải chú ý trường hợp tên trường giống nhau ở 2 bảng chi tiết và thuế . nếu muốn xử lý khác thì phải kèm theo id thì mới chính xác
+                var $tr = $thisobject.closest("tr");
+
+                var SalesTaxID = $tr.find('input[fieldname = "SalesTaxID"]').first();
+                $(SalesTaxID).val("");
+
+                var Percentage = $tr.find('input[fieldname = "Percentage"]').first();
+                $(Percentage).val("");
+
+                var AmountVAT = $tr.find('input[fieldname = "AmountVAT"]').first();
+                $(AmountVAT).val("");
+
+                var AmountVATFC = $tr.find('input[fieldname = "AmountVATFC"]').first();
+                $(AmountVATFC).val("");
+
+                var Amount = $tr.find('input[fieldname = "Amount"]').first();
+                var AmountFC = $tr.find('input[fieldname = "AmountFC"]').first();
+                var DisplayNumberLineCredit = $tr.find('select[fieldname = "DisplayNumberLineCredit"]').first();
+
+                form_refresh();
+
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 2, fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(SalesTaxID).val(data.rows.SalesTaxID);
+                                $(Percentage).val(data.rows.Percentage);
+                                var AmountVATValue = (parseFloat($(Amount).autoNumericGet()) * parseFloat(data.rows.Percentage)) / 100;
+                                $(AmountVAT).autoNumericSet(AmountVATValue);
+
+                                //ngoại tệ
+                                var AmountVATFCValue = (parseFloat($(AmountFC).autoNumericGet()) * parseFloat(data.rows.Percentage)) / 100;
+                                $(AmountVATFC).autoNumericSet(AmountVATFCValue);
+
+
+                                $(SalesTaxID).val(data.rows.SalesTaxID);
+                                form_refresh();
+
+                                if ($(DisplayNumberLineCredit).selectizegetvalue() == "") {
+                                    $(DisplayNumberLineCredit).selectizesetvalue(data.rows.DisplayNumber);
+                                    fieldchange(DisplayNumberLineCredit);
+                                }
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DisplayNumberLineDebit":
+                var $tr = $thisobject.closest("tr");
+                var AccountDebitLineID = $tr.find('input[fieldname = "AccountDebitLineID"]').first();
+                $(AccountDebitLineID).val("");
+
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { type: 1, fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(AccountDebitLineID).val(data.rows.AccountID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+
+            case "DisplayNumberLineCredit":
+                // phải chú ý trường hợp tên trường giống nhau ở 2 bảng chi tiết và thuế . nếu muốn xử lý khác thì phải kèm theo id thì mới chính xác
+                var $tr = $thisobject.closest("tr");
+                var AccountCreditLineID = $tr.find('input[fieldname = "AccountCreditLineID"]').first();
+                $(AccountCreditLineID).val("");
+
+                if (val != "") {
+
+                    var tablename = $tr.closest("table").attr("tablename");
+
+                    //AppVCA01VATView
+                    //$('#CustomerName').val("");
+                    if (tablename == "AppVCA01VATView") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { type: 2, fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    //alert(data.rows.AccountCreditLineID);
+                                    $(AccountCreditLineID).val(data.rows.AccountID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        var customercode = $(sectionid + '#CustomerCode').val();
+                        var voucherdate = $(sectionid + '#VoucherDate').val();
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { type: 1, fieldname: fieldname, keyword: val, voucherdate: voucherdate, customercode: customercode },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(AccountCreditLineID).val(data.rows.AccountID);
+
+                                    var ExchangeRateLine = $tr.find('input[fieldname = "ExchangeRateLine"]').first();
+
+                                    if (data.rows.ExchangeRateLine != 0) {
+                                        $(ExchangeRateLine).val(data.rows.ExchangeRateLine);
+                                    }
+                                    else {
+                                        $(ExchangeRateLine).autoNumericSet(parseFloat($(sectionid + '#ExchangeRate').autoNumericGet()));
+                                    }
+
+                                    //ngoại tệ
+                                    var AmountFC = $tr.find('input[fieldname = "AmountFC"]').first();
+                                    var Credit = $tr.find('input[fieldname = "Credit"]').first();
+                                    if ($(AmountFC).val() != 0) {
+                                        var CreditValue = (parseFloat($(AmountFC).autoNumericGet()) * parseFloat($(ExchangeRateLine).autoNumericGet()));
+                                        $(Credit).autoNumericSet(CreditValue);
+                                    }
+
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+
+                }
+                break;
+
+            case "Amount":
+                var $tr = $thisobject.closest("tr");
+                var tablename = $tr.closest("table").attr("tablename");
+                if (tablename == "AppVCA01VATView") {
+                    var SalesTaxCode = $tr.find('select[fieldname = "SalesTaxCode"]').first();
+                    fieldchange(SalesTaxCode);
+                }
+                break;
+            case "AmountFC":
+                var $tr = $thisobject.closest("tr");
+                var tablename = $tr.closest("table").attr("tablename");
+                if (tablename == "AppVCA01VATView") {
+                    var SalesTaxCode = $tr.find('select[fieldname = "SalesTaxCode"]').first();
+                    fieldchange(SalesTaxCode);
+                    validnumbervat($tr);
+                }
+                else {
+                    validnumberline($thisobject.closest("tr"));
+                }
+                break;
+            case "AmountVAT":
+            case "AmountVATFC":
+                validnumbervat($thisobject.closest("tr"));
+                break;
+            default:
+                SenVietGlobal.ExObjectChange(a, url);
+                break;
+        }
+    };
+
+    //Kiểm tra thay đổi tất cả các text
+    //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+    $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+        fieldchange(this);
+    });
+
+   
+
+</script>

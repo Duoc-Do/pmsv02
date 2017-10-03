@@ -1,0 +1,102 @@
+﻿@model WebApp.Areas.Admin.Models.SenUserPaymentView
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    //IEnumerable<SelectListItem> items;
+
+    //List<SelectListItem> descriptions = new List<SelectListItem>();
+    //descriptions.AddRange(new[]{
+    //                        new SelectListItem() { Text = "Gia hạn ứng dụng", Value = "Gia hạn ứng dụng" }
+    //});
+                            
+    
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.svHiddenFor(model => model.UserPaymentId)                        @Html.svHiddenFor(model => model.CompanyId)                        @Html.svHiddenFor(model => model.UserId)                        @Html.bsEditorFor(model => model.VoucherDate)                        @Html.bsEditorFor(model => model.CompanyName)                        @Html.bsEditorFor(model => model.Description)                        @*@Html.bsDropDownList2For(model => model.Description,descriptions,"Chọn số ngày gia hạn")*@                        @*@Html.bsDropDownList2For(model => model.Description, descriptions)*@                        @Html.bsEditorFor(model => model.Quantity)                        @Html.bsEditorFor(model => model.UnitPrice)                        @Html.bsEditorFor(model => model.Amount)
+
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").off(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            fieldchange(this);
+        });
+    });
+
+    function fieldchange(a) {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("fieldname");
+        
+        var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "CompanyName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#CompanyId').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#CompanyId').val(data.rows.CompanyId);
+                                    $(sectionid + '#UserId').val(data.rows.UserId);
+
+
+                                    $(sectionid + '#UnitPrice').autoNumericSet(data.extrows.UnitPrice);
+                                    fieldchange($(sectionid + '#UnitPrice'));
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "Quantity":
+                    fieldchange($(sectionid + '#UnitPrice'));
+                    break;
+                case "UnitPrice":
+                    
+                    var QuantityValue = parseFloat($(sectionid + '#Quantity').autoNumericGet());
+                    var UnitPriceValue = parseFloat($(sectionid + '#UnitPrice').autoNumericGet());
+                    var AmountValue = QuantityValue * UnitPriceValue;
+                    $(sectionid + '#Amount').autoNumericSet(AmountValue);
+
+                    break;
+                default:
+            }
+    }
+</script>

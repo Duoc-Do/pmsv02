@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Kế toán online</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+
+    <link href="~/Content/themes/accounting/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/accounting/font-awesome-4.0.3/css/font-awesome.min.css" rel="stylesheet" />
+
+
+    @Styles.Render("~/Content/themes/accounting/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                    <nav>
+                        <ul id="menu" class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                            <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, null)</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, null)</li>
+
+                            <li>@Html.ActionLink("Quản trị", "Index", "Dashboard", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Kế toán online", "Index", "Dashboard", new { area = "Accounting" }, null)</li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        @*@RenderSection("featured", required: false)*@
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Partial("_AppMenu")
+            </div>
+
+            @*<section class="content-wrapper main-content clear-fix">*@
+
+            <div class="col-md-10" id="page-body-contain-id">
+
+                @RenderBody()
+            </div>
+            <div id="ajaxloadingelementid">
+                @*Đang xử lí...*@
+            </div>
+
+            @*</section>*@
+        </div>
+    </div>
+
+
+    <footer class="container-fluid">
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - Sen Việt Application</p>
+            </div>
+        </div>
+    </footer>
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/App/Acc/autoNumeric-1.7.4.js"></script>
+    <script src="~/Scripts/App/Acc/Lookup.js"></script>
+    <script src="~/Scripts/App/Acc/sv-autocomplete.js"></script>
+
+
+    <script src="~/Scripts/App/Acc/Datetime/jquery.ui.datepicker-vi.js"></script>
+    <script src="~/Scripts/App/Acc/Datetime/jquery-ui-timepicker-addon.js"></script>
+
+
+    <script src="~/Scripts/App/Acc/Datetime/jquery.datetimeentry.min.js"></script>
+    <script src="~/Scripts/App/Acc/Datetime/jquery.datetimeentry-vi.js"></script>
+    @Scripts.Render("~/bundles/accpaging")
+    <script src="~/Content/themes/accounting/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <script type="text/javascript">
+        function ajaxmenu_onsuccess() {
+            //alert("Tải xong ròi!!!");
+            $("input[type='text']").die(); //reset lại hàm live change trong ajax trước đó
+        }
+
+        //Xử lý ẩn hiện menu left
+        $(document).ready(function () {
+            //Cấu hình cache ajax
+            $.ajaxSetup({ cache: false }); // trong ứng dụng không nên cache vì trong IE cache lại giá trị là không đúng
+            //$(".panel h3:first").addClass("active"); //hiển thị menu đầu tiên
+            //$(".panel > div:not(:first)").hide(); //không phải menu đầu tiên thì ẩn đi
+            //$(".panel h3").click(function () {
+            //    $(this).next("div").slideToggle();
+            //    $(this).toggleClass("active");
+            //});
+        });
+
+    </script>
+
+</body>
+</html>

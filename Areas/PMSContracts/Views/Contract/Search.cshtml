@@ -1,0 +1,166 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.ContractModel>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<h2>Search</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractIDERP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CCE_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CommencementDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description_VN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractFormat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FCAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LCAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FCAmountExtension)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LCAmountExtension)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClientID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractorID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DurationInDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExtensionInDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifyDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrencyCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ForOrdering)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.proj_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.proj_status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractIDERP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CCE_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CommencementDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description_VN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractFormat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FCAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LCAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FCAmountExtension)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LCAmountExtension)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClientID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractorID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DurationInDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExtensionInDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifyDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrencyCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ForOrdering)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.proj_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.proj_status)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ContractID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ContractID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ContractID })
+        </td>
+    </tr>
+}
+
+</table>

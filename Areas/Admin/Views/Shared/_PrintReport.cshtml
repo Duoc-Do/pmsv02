@@ -1,0 +1,75 @@
+﻿@model string
+@{
+    var ReportInfo = WebApp.Areas.Admin.Services.Report.Uti.GetReports(Model);
+        string urlprint = Url.Action("Print");
+}
+
+<div class="row">
+
+    @Html.Partial("_DateRange")
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="SysReport" class="control-label">Mẫu báo cáo</label>
+
+                    <select id="sv-toolbar-sysreport" name="SysReport" class="form-control" style="margin-top: 2px;">
+
+                        @foreach (var item in ReportInfo)
+                        {
+                            <option value="@item.SysReportID" >@item.Des </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div style="padding-top: 26px;">
+                    <div class="btn-group pull-left">
+                        <a class="btn btn-default sv-toolbar-print" target="_blank" senviet-reporttype="PDF" href="@Url.Action("Print", new { reporttype = "PDF" })"><span class="fa fa-print"></span>&nbsp;In</a>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a class="sv-toolbar-print" target="_blank" senviet-reporttype="PDF" href="@Url.Action("Print", new { reporttype = "PDF" })">&nbsp;Pdf</a>
+                            </li>
+                            <li>
+                                <a class="sv-toolbar-print" target="_blank" senviet-reporttype="EXCEL" href="@Url.Action("Print", new { reporttype = "EXCEL" })">&nbsp;Excel</a>
+                            </li>
+
+                            <li>
+                                <a class="sv-toolbar-print" target="_blank" senviet-reporttype="WORD" href="@Url.Action("Print", new { reporttype = "WORD" })">&nbsp;Word</a>
+                            </li>
+                            <li>
+                                <a class="sv-toolbar-print" target="_blank" senviet-reporttype="IMAGE" href="@Url.Action("Print", new { reporttype = "IMAGE" })">&nbsp;Hình</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".sv-toolbar-print").click(function () {
+            var linkprinttmp = "@(urlprint)";
+            var reporttype = $(this).attr("senviet-reporttype");
+            var sysreportid = $("#sv-toolbar-sysreport").val();
+            $(this).attr("href", linkprinttmp + "?sysreportid=" + sysreportid + "&reporttype=" + reporttype);
+        });
+    });
+
+    $(document).ready(function () {
+        var $rowfocused;
+        $(".sv-gv-datarow").click(function () {
+            if ($rowfocused != null) {
+                $rowfocused.removeClass("sv-gv-datarow-focused");
+            }
+            $rowfocused = $(this);
+            $rowfocused.addClass("sv-gv-datarow-focused");
+        })
+    })
+</script>

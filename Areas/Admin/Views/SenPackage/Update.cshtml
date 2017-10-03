@@ -1,0 +1,74 @@
+﻿@model WebApp.Areas.Admin.Models.SenPackage
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+    IEnumerable<SelectListItem> apps =
+       from value in db.SenApplications
+       select new SelectListItem
+       {
+           Text = value.Name,
+           Value = value.ApplicationId.ToString()
+       };
+    string idarea = DateTime.Now.Ticks.ToString();
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                @Html.svHiddenFor(model => model.PackageId)
+                @*@Html.svHiddenFor(model => model.ApplicationId)*@
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsDropDownListFor(model => model.ApplicationId, apps)
+
+                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.UnitPrice)
+                        @*@Html.bsTextAreaFor(model => model.Description)*@
+                        <div class="form-group">
+                            <label for="Description" class="control-label">Description</label>
+                            <textarea name="Description" id="@(idarea)">@Model.Description</textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@
+
+<script src="~/Scripts/editors/tinymce/tinymce.min.js"></script>
+<script>
+
+        tinymce.init({
+            selector: "#@(idarea)",
+            theme: "modern",
+            height: "400",
+            plugins: [
+                ["textcolor advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker"],
+                ["searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking"],
+                ["save table contextmenu directionality emoticons template paste"]
+            ],
+            toolbar: "forecolor backcolor | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+            statusbar: false
+        });
+
+
+
+</script>

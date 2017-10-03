@@ -1,0 +1,1067 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="bahamut_sqlexpress_Solutions_dbo">
+      <rd:DataSourceID>f1afc70a-4114-4398-9521-f2f011069613</rd:DataSourceID>
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=.\SQLEXPRESS;Initial Catalog=Solutions;Integrated Security=True</ConnectString>
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <ReportParameters>
+    <ReportParameter Name="HeaderWarehouseName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_0</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderItemName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderDisplayNumber">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_2</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderAmountSell">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_9</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_10</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatAmountSell">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_15</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_16</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_18</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_19</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyAddress">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_20</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DateFrom">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_21</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DateTo">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_22</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUOMCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_23</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderItemCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_24</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderVoucherDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_25</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderVoucherNumber">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_26</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderQuantity">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_27</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatQuantity">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_28</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ChiefAccountantName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_18</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportCreatorName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_19</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUnitPriceSell">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_20</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatUnitPriceSell">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_21</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportFontSize">
+      <DataType>Integer</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_26</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ItemGroupName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_28</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CustomerName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_29</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DirectorName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_30</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyPhone">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_34</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyFax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_35</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUnitPrice1">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_28</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUnitPrice2">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_29</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderUnitPrice3">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_30</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderQuantity1">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_31</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderQuantity2">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_32</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HeaderQuantity3">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_33</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatQuantity1">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_34</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FormatUnitPrice1">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_35</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>11in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <PageHeader>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+    <ReportItems>
+      <Rectangle Name="rectangle3">
+        <Left>0.25in</Left>
+        <ReportItems>
+          <Rectangle Name="rectangle4">
+            <Left>2.5in</Left>
+            <ZIndex>1</ZIndex>
+            <ReportItems>
+              <Textbox Name="textbox27">
+                <Top>0.5in</Top>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>4</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>="Điện thoại : " + Parameters!CompanyPhone.Value + ", Fax : " + Parameters!CompanyFax.Value</Value>
+              </Textbox>
+              <Textbox Name="textbox26">
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>3</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>=UCase(Parameters!CompanyName.Value)</Value>
+              </Textbox>
+              <Textbox Name="textbox28">
+                <Top>0.25in</Top>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>2</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>Lầu 4 Tòa nhà GT, 403 Nguyễn Thái Bình, P.12, Q.Tân Bình, Tp.HCM</Value>
+              </Textbox>
+              <Textbox Name="textbox29">
+                <Top>0.75in</Top>
+                <Width>2.625in</Width>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>1</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Value>="Website: www.egiare.vn"</Value>
+              </Textbox>
+              <Textbox Name="textbox32">
+                <Top>0.75in</Top>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Left</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <CanGrow>true</CanGrow>
+                <Left>2.625in</Left>
+                <Value>="Email: sales@egiare.vn"</Value>
+              </Textbox>
+            </ReportItems>
+          </Rectangle>
+          <Image Name="image1">
+            <Sizing>AutoSize</Sizing>
+            <Width>2.29167in</Width>
+            <MIMEType>image/jpeg</MIMEType>
+            <Source>Embedded</Source>
+            <Style />
+            <Height>0.875in</Height>
+            <Value>logo</Value>
+          </Image>
+        </ReportItems>
+        <Width>7.75in</Width>
+        <Style>
+          <BorderColor>
+            <Bottom>DeepSkyBlue</Bottom>
+          </BorderColor>
+          <BorderStyle>
+            <Bottom>Solid</Bottom>
+          </BorderStyle>
+        </Style>
+      </Rectangle>
+    </ReportItems>
+    <Height>1in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+  </PageHeader>
+  <BottomMargin>0.25in</BottomMargin>
+  <rd:ReportID>d49b0c4e-2b08-4ff1-baca-90f17193925a</rd:ReportID>
+  <EmbeddedImages>
+    <EmbeddedImage Name="logo">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <PageWidth>8.25in</PageWidth>
+  <DataSets>
+    <DataSet Name="DSPrint">
+      <Fields>
+        <Field Name="SalesPriceGroupCode">
+          <DataField>SalesPriceGroupCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SalesPriceGroupName">
+          <DataField>SalesPriceGroupName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemGroupCode">
+          <DataField>ItemGroupCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemGroupName">
+          <DataField>ItemGroupName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemCode">
+          <DataField>ItemCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ItemName">
+          <DataField>ItemName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Quantity1">
+          <DataField>Quantity1</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UnitPrice1">
+          <DataField>UnitPrice1</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Quantity2">
+          <DataField>Quantity2</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UnitPrice2">
+          <DataField>UnitPrice2</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Quantity3">
+          <DataField>Quantity3</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UnitPrice3">
+          <DataField>UnitPrice3</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UOMCode">
+          <DataField>UOMCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>bahamut_sqlexpress_Solutions_dbo</DataSourceName>
+        <CommandText>SELECT        SalesPriceGroupCode, SalesPriceGroupName, ItemGroupCode, ItemGroupName, ItemCode, ItemName, Quantity1, UnitPrice1, Quantity2, UnitPrice2, Quantity3, 
+                         UnitPrice3, UOMCode
+FROM            RpSalesLinePrice</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <rd:DataSetInfo>
+        <rd:DataSetName>SolutionsDataSet</rd:DataSetName>
+        <rd:TableName>RpSalesLinePrice</rd:TableName>
+        <rd:TableAdapterName>RpSalesLinePriceTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <Code />
+  <Width>8.25in</Width>
+  <Body>
+    <ReportItems>
+      <List Name="list1">
+        <Left>0.25in</Left>
+        <ReportItems>
+          <Rectangle Name="rectangle2">
+            <ZIndex>1</ZIndex>
+            <ReportItems>
+              <Textbox Name="textbox2">
+                <Top>0.375in</Top>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>2</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>= "(Áp dụng cho " + First(Fields!SalesPriceGroupName.Value) +" từ ngày " +Parameters!DateFrom.Value + " đến khi có thông báo mới)"</Value>
+              </Textbox>
+              <Textbox Name="textbox1">
+                <rd:DefaultName>textbox1</rd:DefaultName>
+                <Width>4.21875in</Width>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(24+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <FontWeight>700</FontWeight>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <ZIndex>1</ZIndex>
+                <CanGrow>true</CanGrow>
+                <Left>1.89063in</Left>
+                <Height>0.375in</Height>
+                <Value>=UCase(Parameters!ReportTitle.Value)</Value>
+              </Textbox>
+              <Textbox Name="textbox33">
+                <Top>0.625in</Top>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                  <TextAlign>Center</TextAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+                <CanGrow>true</CanGrow>
+                <Height>0.25in</Height>
+                <Value>=UCase(Parameters!CompanyName.Value)+ " xin trân trọng gửi đến Quý Khách Hàng bảng giá sản phẩm."</Value>
+              </Textbox>
+            </ReportItems>
+            <Height>1.125in</Height>
+          </Rectangle>
+          <Table Name="table1">
+            <DataSetName>DSPrint</DataSetName>
+            <Top>1.125in</Top>
+            <Details>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox20">
+                          <rd:DefaultName>textbox20</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>7</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=RowNumber("list1_Details_Group")</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="ItemName">
+                          <rd:DefaultName>ItemName</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>6</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!ItemName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UOMCode">
+                          <rd:DefaultName>UOMCode</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <TextAlign>Center</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>5</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UOMCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UnitPrice1">
+                          <rd:DefaultName>UnitPrice1</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatUnitPrice1.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>4</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UnitPrice1.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Quantity2">
+                          <rd:DefaultName>Quantity2</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>WhiteSmoke</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatQuantity1.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>3</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!Quantity2.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UnitPrice2">
+                          <rd:DefaultName>UnitPrice2</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>WhiteSmoke</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatUnitPrice1.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>2</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UnitPrice2.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="Quantity3">
+                          <rd:DefaultName>Quantity3</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatQuantity1.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>1</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!Quantity3.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="UnitPrice3">
+                          <rd:DefaultName>UnitPrice3</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <Format>=Parameters!FormatUnitPrice1.Value</Format>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!UnitPrice3.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Details>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox19">
+                          <rd:DefaultName>textbox19</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>15</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>Stt</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox3">
+                          <rd:DefaultName>textbox3</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>14</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderItemName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox7">
+                          <rd:DefaultName>textbox7</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>13</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUOMCode.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox4">
+                          <rd:DefaultName>textbox4</rd:DefaultName>
+                          <Style>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>12</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUnitPrice1.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox6">
+                          <rd:DefaultName>textbox6</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>WhiteSmoke</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>11</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderQuantity2.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox5">
+                          <rd:DefaultName>textbox5</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>WhiteSmoke</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>10</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUnitPrice2.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox13">
+                          <rd:DefaultName>textbox13</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>9</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderQuantity3.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox16">
+                          <rd:DefaultName>textbox16</rd:DefaultName>
+                          <Style>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <BorderColor>
+                              <Default>DarkGray</Default>
+                            </BorderColor>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+                            <FontWeight>700</FontWeight>
+                            <TextAlign>Center</TextAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>8</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Parameters!HeaderUnitPrice3.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
+            </Header>
+            <TableColumns>
+              <TableColumn>
+                <Width>0.5in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>2.5in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.625in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.875in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.875in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.75in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.875in</Width>
+              </TableColumn>
+            </TableColumns>
+          </Table>
+        </ReportItems>
+        <Width>7.75in</Width>
+        <Grouping Name="list1_Details_Group">
+          <GroupExpressions>
+            <GroupExpression>=Fields!SalesPriceGroupCode.Value</GroupExpression>
+          </GroupExpressions>
+          <PageBreakAtEnd>true</PageBreakAtEnd>
+        </Grouping>
+      </List>
+    </ReportItems>
+    <Height>1.625in</Height>
+  </Body>
+  <Language>vi</Language>
+  <PageFooter>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+    <ReportItems>
+      <Textbox Name="textbox8">
+        <Width>7.75in</Width>
+        <Style>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+          <TextAlign>Left</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>3</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Left>0.25in</Left>
+        <Height>0.25in</Height>
+        <Value>Giá trên chưa bao gồm 10% thuế VAT</Value>
+      </Textbox>
+      <Textbox Name="textbox9">
+        <Top>0.5in</Top>
+        <Width>7.75in</Width>
+        <Style>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+          <TextAlign>Left</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>2</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Left>0.25in</Left>
+        <Height>0.25in</Height>
+        <Value>="Mọi thắc mắc xin vui lòng liên hệ phòng chăm sóc khách hàng: " + Parameters!CompanyPhone.Value</Value>
+      </Textbox>
+      <Textbox Name="textbox10">
+        <Top>0.75in</Top>
+        <Width>7.75in</Width>
+        <Style>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+          <TextAlign>Left</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>1</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Left>0.25in</Left>
+        <Height>0.25in</Height>
+        <Value>Cảm ơn quý khách đã lựa chọn sản phẩm của công ty chúng tôi!</Value>
+      </Textbox>
+      <Textbox Name="textbox11">
+        <Top>0.25in</Top>
+        <Width>7.75in</Width>
+        <Style>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>=(10+Parameters!ReportFontSize.Value).ToString() + "pt"</FontSize>
+          <TextAlign>Left</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Left>0.25in</Left>
+        <Height>0.25in</Height>
+        <Value>Miễn phí vận chuyển TP.HCM. Các tỉnh thành khác quý khách hàng chịu phí vận chuyển.</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>1.125in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+  </PageFooter>
+  <TopMargin>0.25in</TopMargin>
+</Report>

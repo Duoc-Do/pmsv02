@@ -1,0 +1,23 @@
+﻿@model IEnumerable<object>
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderList", ajaxoption)
+        @Html.Partial("_ToolbarList2", ajaxoption)
+
+        <div class="box-body">
+            @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+            {
+                @Html.svGridList2(Model, ajaxoption["keyfield"], ajaxoption["metaname"])
+            }
+        </div>
+
+        <div class="box-footer">
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/accapp")

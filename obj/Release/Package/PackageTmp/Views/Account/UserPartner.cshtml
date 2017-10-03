@@ -1,0 +1,192 @@
+﻿@model IEnumerable<WebApp.Areas.Admin.Models.SenContract>
+@using WebApp.Services.Helpers
+@{
+    ViewBag.Title = "Hợp đồng của bạn";
+    Dictionary<string, string> ajaxoption = WebApp.Services.GlobalAjax.GetAjaxOption(ViewBag.ajaxoption);
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+    string action_return = Url.Action("UserPartner", "Account", new { area = "" });
+
+    var metaobject = WebApp.Areas.Admin.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+    var contractstatus = new WebApp.Areas.Admin.Models.ContractStatus().selectlist.ToDictionary(m => m.Value);
+
+    var Status = ViewBag.ContractStatus;
+
+    var CommissionPayment = ViewBag.CommissionPayment;
+
+    var SumPayment = (decimal)(ViewBag.SumPayment??0);
+    var SumCommission = (decimal)(ViewBag.SumCommission??0);
+    var SumCommissionReceived = (decimal)(ViewBag.SumCommissionReceived??0);
+    var SumCommissionPayment = (decimal)(ViewBag.SumCommissionPayment??0);
+    
+}
+
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+
+    <div class="box box-primary">
+        @Html.Partial("_HeaderList", ajaxoption)
+
+        @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- /.box-header -->
+            <div class="box-header"></div>
+            
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                      <div class="description-block border-right">
+                        @*<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>*@
+                        <h5 class="description-header">@WebApp.Services.ExConvert.Data2String(SumPayment, "Numeric", "c", "")</h5>
+                        <span class="description-text text-red">TỔNG DOANH THU</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                      <div class="description-block border-right">
+                        @*<span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>*@
+                        <h5 class="description-header">@WebApp.Services.ExConvert.Data2String(SumCommission, "Numeric", "c", "")</h5>
+                        <span class="description-text text-yellow">TỔNG HOA HỒNG</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                      <div class="description-block border-right">
+                        @*<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>*@
+                        <h5 class="description-header">@WebApp.Services.ExConvert.Data2String(SumCommissionReceived, "Numeric", "c", "")</h5>
+                        <span class="description-text text-blue">TỔNG HOA HỒNG ĐÃ NHẬN</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                      <div class="description-block">
+                        @*<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>*@
+                        <h5 class="description-header">@WebApp.Services.ExConvert.Data2String(SumCommissionPayment, "Numeric", "c", "")</h5>
+                        <span class="description-text text-green">TỔNG HOA HỒNG ĐƯỢC NHẬN</span>
+                      </div><!-- /.description-block -->
+                    </div>
+                  </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-3">
+                        <select id="contractstatus" name="pcontractstatus" class="form-control">
+                            <option value="" @(Status != "" ? "" : "selected") >-- Tất cả trạng thái --</option>
+                            @foreach (var item in contractstatus)
+                            {
+                                <option value="@(item.Value.Value)" @(Status == item.Value.Value ? "selected" : "")>@item.Value.Text </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="checkbox">
+                        <label>
+                          <input id="commissionpayment" name="pcommissionpayment" type="checkbox"   @(CommissionPayment == "" ? "" : "checked")>
+                          @metaobject.GetMetaByColumnName("CommissionPayment").Des
+                        </label>
+                      </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" placeholder="Tìm kiếm" value="@(metaobject.Paging.Search)" class="form-control pull-right" name="Paging.Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
+
+                        <tr>
+                            @*<th style="width: 10px;">
+                                <input type="checkbox" class="check-box checkall">
+                            </th>*@
+
+                            <th style="width: 120px;">@metaobject.GetMetaByColumnName("ContractDate").Des</th>
+                            <th style="width: 120px;">@metaobject.GetMetaByColumnName("CompleteDate").Des</th>
+                            <th style="width: 120px;">@metaobject.GetMetaByColumnName("ContractNumber").Des</th>
+
+                            <th>@metaobject.GetMetaByColumnName("CustomerId").Des</th>
+
+                            <th>@metaobject.GetMetaByColumnName("Payment").Des</th>
+
+                            <th>@metaobject.GetMetaByColumnName("CommissionPercentage").Des</th>
+                            <th>@metaobject.GetMetaByColumnName("Commission").Des</th>
+                            <th>@metaobject.GetMetaByColumnName("CommissionReceived").Des</th>
+                            <th>@metaobject.GetMetaByColumnName("CommissionPayment").Des</th>
+
+
+                            <th style="width: 120px;">@metaobject.GetMetaByColumnName("Status").Des</th>
+
+
+
+
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+
+
+                            //var linkview = Url.Action("PrivateMessageView", "Account", new { area = "", messageid = privatemessage.PrivateMessageId });
+                        
+                            <tr>
+                                <td>@item.ContractDate.ToString("dd/MM/yyyy")</td>
+
+                                <td>@item.CompleteDate.Value.ToString("dd/MM/yyyy")</td>
+
+                                <td><a href="@(Url.Action("UserPartnerView", new { area = "", id = item.ContractId, action_return = Url.Action("UserPartner", "Account") }))" @(ajaxstring)>@item.ContractNumber</a></td>
+
+                                <td>@item.SenCustomer.Name </td>
+
+                                <td>@WebApp.Services.ExConvert.Data2String(item.Payment, "Numeric", "c", "") </td>
+                                <td>@WebApp.Services.ExConvert.Data2String(item.CommissionPercentage, "Numeric", "n", "")%</td>
+                                <td>@WebApp.Services.ExConvert.Data2String(item.Commission, "Numeric", "c", "")</td>
+                                <td>@WebApp.Services.ExConvert.Data2String(item.CommissionReceived, "Numeric", "c", "")</td>
+                                <td>@WebApp.Services.ExConvert.Data2String(item.CommissionPayment, "Numeric", "c", "")</td>
+
+                                <td>@contractstatus[item.Status.ToString()].Text</td>
+
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                @Html.Partial("_PagingPartial2", metaobject.Paging)
+            </div>
+            
+        }
+
+    </div>
+
+</div>
+
+
+
+
+
+@Scripts.Render("~/bundles/accapp")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#contractstatus").change(function () {
+            $(this).closest('form').submit();
+            //var value = $(this).val();
+            //alert(value);
+        });
+        $("#commissionpayment").change(function () {
+            $(this).closest('form').submit();
+        });
+    });
+</script>
+
+
+
+
+
+
+

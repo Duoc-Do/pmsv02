@@ -1,0 +1,39 @@
+﻿html,
+body {
+  overflow-x: hidden!important;
+  /*font-family: 'Source Sans Pro', sans-serif;*/
+    /*font-family: 'Segoe UI', sans-serif;*/
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  background: #f9f9f9;
+}
+
+    /*background: none repeat scroll 0 0 #f9f9f9;
+    font-family: 'Segoe UI',sans-serif;
+    min-height: 100%;
+    overflow-x: hidden !important;*/
+
+ .validation-summary-errors ul {
+        margin: 0;
+        padding: 0;
+    }
+.validation-summary-errors li {
+        /*color:#FF0000;*/
+        display: inline;
+        list-style: none;
+        margin: 0;
+    }
+
+
+/*phủ lại lớp của bootstrap*/
+
+.thumbnail,.info-box-icon,.info-box,.callout,.panel,.box,.dropdown-menu,.btn,.input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn {
+    border-radius:0;
+}
+
+
+@media (max-width: 767px) {
+  .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+    background: #3c8dbc;
+  }
+}

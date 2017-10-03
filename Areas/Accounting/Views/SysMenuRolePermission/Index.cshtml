@@ -1,0 +1,193 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+    //ViewBag.Title = "Index";
+    ((Dictionary<string, string>)ViewBag.ajaxoption)["action-return"] = "noaction";
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+
+    IEnumerable<SelectListItem> sysroles = from value in db.SysRoles select new SelectListItem { Text = value.FullName, Value = value.RoleID.ToString() };
+    
+}
+<div class="box box-primary">
+    @Html.Partial("_HeaderEdit")
+
+    <div class="box-body">
+
+        <!-- Right side column. Contains the navbar and content of the page -->
+        <!-- Main content -->
+        <section>
+            <span id="antiforgerytoken">
+                @Html.AntiForgeryToken()
+            </span>
+
+            <h2>Phân quyền menu</h2>
+            @Html.DropDownList("RoleID", sysroles, new { @class = "form-control" })
+            <div class="row-fluid">
+                <h4>Chi tiết quyền</h4>
+                <div id="sysmenu" class="list-group">
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var $select = $("#RoleID").selectize({
+            maxOptions: 10, selectOnTab: true, openOnFocus: false
+        });
+        var control = $select[0].selectize;
+        control.clear();
+
+        $("#RoleID").change(function () {
+            $("#sysmenu").html("");
+            var url = '@Url.Action("GetMenuByRole")';
+            var _value = $(this).val();
+            if (_value == "") {
+            }
+            else {
+
+                $.ajax({
+                    type: "GET", url: url, dataType: "json",
+                    data: { Id: _value },
+                    success: function (data) {
+                        if (data.rows != null) {
+                            loadtree($("#sysmenu"), data.rows);
+                        }
+                        else {
+
+                        }
+                    }
+                });
+            };
+        });
+    });
+
+    function menucheck(a) {
+        var link = $(a).closest('a');
+        var roleid = $(link).attr("data-roleid");
+        var menuid = $(link).attr("data-menuid");
+        var token = $("#antiforgerytoken").find("[name='__RequestVerificationToken']").val();
+
+        var url = '@Url.Action("UpdateMenuRole")';
+            $.ajax({
+                type: "POST", url: url, dataType: "json",
+                data: { RoleID: roleid, MenuID: menuid, __RequestVerificationToken: token },
+                success: function (data) {
+                    if (data.rows != null) {
+                        //alert(data.rows.length);
+                        //loadtree($("#" + id), data.rows);
+                    }
+                    else {
+
+                    }
+                }
+            });
+
+        }
+
+
+    function businesscheck(a,b) {
+        //var link = $(a).closest('a');
+        var roleid = $(a).attr("data-roleid");
+        var businesscode = $(a).attr("data-businesscode");
+        var token = $("#antiforgerytoken").find("[name='__RequestVerificationToken']").val();
+
+        var url = '@Url.Action("UpdateBusinessRole")';
+            $.ajax({
+                type: "POST", url: url, dataType: "json",
+                data: { RoleID: roleid, BusinessCode: businesscode, RoleType: b, __RequestVerificationToken: token },
+                success: function (data) {
+                    if (data.rows != null) {
+
+                    }
+                    else {
+
+                    }
+                }
+            });
+
+        }
+
+
+        function loadtree(a, data) {
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].MenuID.replace(/\./g, '_');
+                var li = $('<a href="javascript:;" class="list-group-item" data-roleid=' + data[i].RoleID + ' data-menuid=' + data[i].MenuID + '></a>');
+
+                var checkbox = $('<input onclick="menucheck(this)" type="checkbox" value="">');
+                $(checkbox).attr("name", "MenuID");
+                $(checkbox).attr("checked", data[i].IsActive);
+
+                var btn = $('<button onclick="loadchild(this)" class="btn btn-default" type="button" data-toggle="collapse" data-target="#' + id + '" aria-expanded="false" aria-controls="collapseExample"><i class="glyphicon glyphicon-plus"></i></button> ');
+                var div = $('<div class="collapse" style="margin-left:40px;" id="' + id + '"></div>');
+                var span = '  <span class="badge" onclick="loadchild(this)">' + data[i].Childs + '</span>';
+                var spanrole = $('<span class="pull-right"></span>');
+                if (data[i].MenuType == 3 && data[i].Childs == 0) {
+                    span = '';
+
+                    var checkbox_isadd = $('<input data-roleid=' + data[i].RoleID + ' data-businesscode=' + data[i].BusinessCode + ' onclick="businesscheck(this,1)" type="checkbox" value="">');
+                    $(checkbox_isadd).attr("checked", data[i].IsAdd);
+
+                    var checkbox_isdelete = $('<input data-roleid=' + data[i].RoleID + ' data-businesscode=' + data[i].BusinessCode + ' onclick="businesscheck(this,2)" type="checkbox" value="">');
+                    $(checkbox_isdelete).attr("checked", data[i].IsDelete);
+
+                    var checkbox_isedit = $('<input data-roleid=' + data[i].RoleID + ' data-businesscode=' + data[i].BusinessCode + ' onclick="businesscheck(this,3)" type="checkbox" value="">');
+                    $(checkbox_isedit).attr("checked", data[i].IsEdit);
+                    
+
+                    $(spanrole).append($('<label class="checkbox-inline">thêm</label>').prepend(checkbox_isadd));
+                    $(spanrole).append($('<label class="checkbox-inline">xóa</label>').prepend(checkbox_isdelete));
+                    $(spanrole).append($('<label class="checkbox-inline">sửa</label>').prepend(checkbox_isedit));
+
+                };
+
+                if (data[i].Childs != "0") {
+                    $(li).append(btn);
+                    $(li).append(" ");
+                }
+                else {
+                    if (data[i].MenuType != 3) {
+                        span = '';
+                    }
+                };
+
+                $(li).append(checkbox);
+                $(li).append(' ' + data[i].Des + span);
+
+                $(li).append(spanrole);
+                $(li).append(div);
+
+                $(a).append(li);
+            }
+        };
+
+
+        function loadchild(a) {
+            var link = $(a).closest('a');
+            var roleid = $(link).attr("data-roleid");
+            var menuid = $(link).attr("data-menuid");
+            var id = menuid.replace(/\./g, '_');
+            var isloaded = $("#" + id).hasClass('isloaded');
+            if (!isloaded) {
+                var url = '@Url.Action("GetMenuByRole")';
+                $.ajax({
+                    type: "GET", url: url, dataType: "json",
+                    data: { Id: roleid, ParentId: menuid },
+                    success: function (data) {
+                        if (data.rows != null) {
+                            //alert(data.rows.length);
+                            loadtree($("#" + id), data.rows);
+                        }
+                        else {
+
+                        }
+                    }
+                });
+            }
+            $("#" + id).addClass('isloaded');
+        };
+
+</script>

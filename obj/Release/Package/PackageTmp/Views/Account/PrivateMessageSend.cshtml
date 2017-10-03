@@ -1,0 +1,41 @@
+﻿@model WebApp.Models.SenPrivateMessage
+@using WebApp.Services.Helpers
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    ViewBag.Title = "Nhắn tin";
+}
+
+
+
+    <section id="@(ajaxoption["ajaxupdateid"])">
+        <div class="box box-primary">
+            @Html.Partial("_HeaderModal")
+            @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+            {   
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(false)
+
+                    @Html.HiddenFor(model => model.PrivateMessageId)                @Html.HiddenFor(model => model.FromUserId)
+                    @Html.HiddenFor(model => model.ToUserId)
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        @Html.bsEditorFor(model => model.Subject)                        @Html.bsTextAreaFor(model => model.Text)
+                            <div style="padding-top: 2px;"></div>
+                            <button class="btn btn-primary" data-dismiss="modal" id="sendpmsubmit">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+
+    <script>
+        $('#sendpmsubmit').click(function (e) {
+            e.preventDefault();
+            $(this).closest('form').submit();
+            return true;
+        });
+    </script>
+

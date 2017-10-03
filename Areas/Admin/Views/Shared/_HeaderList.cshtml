@@ -1,0 +1,66 @@
+﻿@model Dictionary<string, string>
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", Model["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", Model["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+    var metaname = Model["metaname"];
+}
+
+<div class="box-header">
+    <h3 class="box-title">@ViewBag.Title</h3>
+    <div class="pull-right box-tools">
+        @if (User.IsInRole("Admin"))
+        {
+            string urlconfig = Url.Action("Index", "SysTableDetail", new { tablename = metaname });
+            <a class="btn btn-primary btn-sm" href="@(urlconfig)" @ajaxstring><i class="fa fa-cog fa-fw"></i></a>
+        }
+        <button title="" data-toggle="tooltip" data-widget="help" class="btn btn-primary btn-sm help-btn" data-original-title="Trợ giúp"><i class="fa fa-question"></i></button>
+        <button title="" data-toggle="tooltip" data-widget="collapse" class="btn btn-primary btn-sm" data-original-title="Thu nhỏ"><i class="fa fa-minus"></i></button>
+        <button title="" data-toggle="tooltip" data-widget="remove" class="btn btn-primary btn-sm" data-original-title="Đóng"><i class="fa fa-times"></i></button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var businesscode = "@(Model["businesscode"])";
+        /*     
+        * Add collapse and remove events to boxes
+        */
+        $("[data-widget='collapse']").click(function () {
+            //Find the box parent        
+            var box = $(this).parents(".box").first();
+            //Find the body and the footer
+            var bf = box.find(".box-body, .box-footer");
+            if (!box.hasClass("collapsed-box")) {
+                bf.slideUp(300, function () {
+                    box.addClass("collapsed-box");
+                }
+                );
+            } else {
+
+                bf.slideDown(300, function () {
+                    box.removeClass("collapsed-box");
+                });
+            }
+        });
+        /*     
+         * Add collapse and remove events to boxes
+         */
+        $("[data-widget='remove']").click(function () {
+            //Find the box parent        
+            var box = $(this).parents(".box").first();
+            box.slideUp();
+            $("#senvietpopup").modal("hide");
+        });
+
+
+        $("[data-widget='help']").click(function () {
+            alert(businesscode);
+        });
+    })
+
+
+</script>

@@ -1,0 +1,365 @@
+﻿@model WebApp.Areas.Accounting.Models.AppItemView
+@using WebApp.Services.Media
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@Html.Partial("_AddNew")
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.ItemID)
+                @Html.svHiddenFor(model => model.ItemGroupID)
+                @Html.svHiddenFor(model => model.UOMID)
+                @Html.svHiddenFor(model => model.ItemMethodType)
+                @Html.svHiddenFor(model => model.ItemType)
+                @Html.svHiddenFor(model => model.AccountID)
+
+                @Html.svHiddenFor(model => model.AccountDebitID)
+                @Html.svHiddenFor(model => model.AccountCreditID)
+
+                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.bsEditorFor(model => model.Name)
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.UOMCode)
+
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemCode)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemGroupCode)
+
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemGroupName)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @*@Html.bsLabelFor(model => model.ItemPicture)*@
+                                <div id="ImagePathvalue">
+                                    @Html.bsEditorFor(model => model.ItemPicture)
+                                </div>
+
+                                <div id="ImagePathimage" style="margin-bottom: 8px;">
+                                    <a href="#">
+                                        <img style="max-height:150px;max-width:150px;"  src="@(PictureService.GetPictureUrl(Model.ItemPicture, 125, 125))"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    @{
+            string showremove = "";
+            if (String.IsNullOrEmpty(Model.ItemPicture)) { showremove = "style=\"display: none;\""; }
+                                    }
+                                    <div class="btn-group" style="margin-right: 8px; margin-bottom: 8px;">
+                                        <button id="ImagePathremove" type="button" class="btn btn-default btn-flat" @showremove><i class="fa fa-trash"></i></button>
+                                    </div>
+                                    <div id="ImagePathUpload" class="btn-group">
+                                        <noscript>
+                                            <p>
+                                                Xin vui lòng cho phép chạy JavaScript để tải file lên.
+                                            </p>
+                                            <!-- or put a simple form for upload here -->
+                                        </noscript>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @*@Html.bsEditorFor(model => model.ItemMethodType)*@
+                                @Html.bsEditorFor(model => model.ItemMethodTypeName)
+                            </div>
+                            <div class="col-md-6">
+                                @*@Html.bsEditorFor(model => model.ItemType)*@
+                                @Html.bsEditorFor(model => model.ItemTypeName)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Cost)
+                                @Html.bsEditorFor(model => model.Price)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.QuantityMax)
+                                @Html.bsEditorFor(model => model.QuantityMin)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.bsEditorFor(model => model.DisplayNumber)
+                        @Html.bsEditorFor(model => model.DisplayNumberCredit)
+                        @Html.bsEditorFor(model => model.DisplayNumberDebit)
+
+
+                        @Html.bsEditorFor(model => model.IsInventory)
+                        @Html.bsEditorFor(model => model.IsActive)
+                        @Html.bsTextAreaFor(model => model.Note)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+
+
+@*@Scripts.Render("~/bundles/jqueryval")*@
+
+<link href="~/Scripts/fileuploader/css/fileuploader.css" rel="stylesheet" />
+<script src="~/Scripts/fileuploader/js/fileuploader.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        var urlupload = "@(Url.RouteUrl("UploadImage", new { size = 250 }))";
+        var uploaderpicture = new qq.FileUploader({
+            element: document.getElementById('ImagePathUpload'),
+            action: urlupload,
+            onComplete: function (id, fileName, responseJSON) {
+                if (responseJSON.success) {
+                    $("#ImagePathimage").html("<img src='" + responseJSON.imageurl + "'/>");
+                    $("#ImagePathvalue input").val(responseJSON.imagename);
+                    $("#ImagePathremove").show();
+                }
+            },
+            strings: {
+                upload: "<i class='fa fa-cloud-upload'></i>",
+                drop: "Kéo tập tin vào đây để tải lên",
+                cancel: "Hủy",
+                failed: "Thất bại"
+            }
+        });
+
+        $("#ImagePathremove").click(function (e) {
+            $("#ImagePathimage").html("<img src='/images/logos/noDefaultImage.gif'/>");
+            $("#ImagePathvalue input").val("");
+            $(this).hide();
+        });
+    });
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+
+        $("#Name").change(function () {
+            $("#ItemCode").val(apputils.gencode($(this).val()));
+        });
+
+
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+            var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "ItemGroupCode":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#ItemGroupName').val("");
+                    $(sectionid + '#ItemGroupID').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#ItemGroupName').val(data.rows.Name);
+                                    $(sectionid + '#ItemGroupID').val(data.rows.ItemGroupID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "UOMCode":
+                    $(sectionid + '#UOMName').val("");
+                    $(sectionid + '#UOMID').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#UOMName').val(data.rows.Name);
+                                    $(sectionid + '#UOMID').val(data.rows.UOMID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "ItemTypeName":
+                    $(sectionid + '#ItemType').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#ItemType').val(data.rows.EnumValue);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "ItemMethodTypeName":
+                    $(sectionid + '#ItemMethodType').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#ItemMethodType').val(data.rows.EnumValue);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "DisplayNumber":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#AccountID').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#AccountID').val(data.rows.AccountID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "DisplayNumberDebit":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#AccountDebitID').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#AccountDebitID').val(data.rows.AccountID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "DisplayNumberCredit":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#AccountCreditID').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#AccountCreditID').val(data.rows.AccountID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                default:
+
+            }
+
+        });
+    });
+</script>

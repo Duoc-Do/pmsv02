@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Kích hoạt tài khoản";
+    Layout = "_LayoutAccount.cshtml";    
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="content-wrapper" style="text-align: center;">
+                <h2>Kích hoạt tài khoản</h2>
+
+                @if (@ViewBag.IsError)
+                {
+                    <p>Tài khoản kích hoạt không thành công. Xin vui lòng kiểm tra và thử lại. </p>
+                }
+                else
+                {
+                    <p>Tài khoản đã kích hoạt thành công.</p>
+                    <p>Xin vui lòng @Html.ActionLink(" Đăng nhập", "LogIn"). </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,123 @@
+﻿@model IEnumerable<object>
+@using WebApp.Services.Helpers
+@{
+    
+    ViewBag.Title = "Doanh nghiệp của bạn";
+    Dictionary<string, string> ajaxoption = WebApp.Services.GlobalAjax.GetAjaxOption(ViewBag.ajaxoption);
+    string ajaxstring = WebApp.Services.GlobalAjax.StringAjaxOption(ajaxoption);
+    string action_return = Url.Action("UserCompany", "Account", new { area = "" });
+
+    var metaobject = WebApp.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+
+}
+
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+
+    <div class="box box-primary">
+        @Html.Partial("_HeaderList", ajaxoption)
+
+        @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            @Html.AntiForgeryToken()
+            <!-- /.box-header -->
+            <div class="box-header"></div>
+            
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" placeholder="Tìm kiếm" value="@(metaobject.Paging.Search)" class="form-control pull-right" name="Paging.Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
+
+                        <tr>
+                            @*<th style="width: 10px;">
+                                <input type="checkbox" class="check-box checkall">
+                            </th>*@
+
+                            <th>Tên doanh nghiệp</th>
+                            <th style="width: 140px;">Gói ứng dụng</th>
+
+                            <th style="width: 120px;">Trạng thái</th>
+
+                            <th style="width: 120px;">Ngày đăng ký</th>
+                            <th style="width: 120px;">Ngày hết hạn</th>
+                            <th></th>
+
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+
+                            var usercompany = (WebApp.Models.SenCompanyView)item;
+                            //var linkview = Url.Action("PrivateMessageView", "Account", new { area = "", messageid = privatemessage.PrivateMessageId });
+                        
+                            <tr>
+
+                                @*<td>
+                                <input type="checkbox" value="@(privatemessage.PrivateMessageId)" name="RowSelected" class="check-box">
+                                </td>*@
+
+                                <td>
+                                    @usercompany.Name
+                                    <br />
+                                    @Html.Raw(usercompany.Comment)
+                                </td>
+
+                                <td>
+                                    @usercompany.PackageName
+                                </td>
+
+                                <td>
+                                    @Html.Raw(usercompany.IsApproved.Value ? "Đã duyệt" : "<strong>Chờ duyệt</strong>")
+                                    @Html.Raw(usercompany.IsLockedOut.Value ? "<br /><strong>Bị khóa</strong>" : "")
+
+                                </td>
+
+                                <td>@usercompany.CreateDate.GetValueOrDefault().ToString("dd/MM/yyyy") </td>
+                                <td>@usercompany.ExpireDate.GetValueOrDefault().ToString("dd/MM/yyyy") </td>
+
+                                <td>
+                                    <a href="@(Url.Action("UserPayment", new { area = "", companyid = usercompany.CompanyId, action_return = Url.Action("UserCompany", "Account") }))" class="btn btn-default" @(ajaxstring)>Gia hạn</a>
+                                    <a href="@(Url.Action("UpdateCompany", new { area = "", companyid = usercompany.CompanyId, action_return = Url.Action("UserCompany", "Account") }))" class="btn btn-default" @(ajaxstring)>Sửa</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                @Html.Partial("_PagingPartial", metaobject.Paging)
+            </div>
+            
+        }
+
+    </div>
+
+</div>
+
+
+
+
+
+@*@Scripts.Render("~/bundles/accapp")*@
+
+
+
+
+
+
+

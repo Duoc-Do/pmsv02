@@ -1,0 +1,72 @@
+﻿@model WebApp.Areas.PMSContracts.Models.GeneralModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>GeneralModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ContractID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContractID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClauseCode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClauseCode)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClauseContent)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClauseContent)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.OriginalLanguage)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.OriginalLanguage)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ParentId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ParentId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.BookType)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BookType)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreationDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreationDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Type)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Type)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

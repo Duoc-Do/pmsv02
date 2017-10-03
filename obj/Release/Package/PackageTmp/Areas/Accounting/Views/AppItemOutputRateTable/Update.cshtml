@@ -1,0 +1,159 @@
+﻿@model WebApp.Areas.Accounting.Models.AppItemOutputRateView
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.svHiddenFor(model => model.ProductID)
+                        @Html.svHiddenFor(model => model.ItemOutputRateID)
+                        @Html.svHiddenFor(model => model.ItemID)
+
+                        <div class="row">
+                            <div class="col-md-6">
+@Html.bsEditorFor(model => model.ProductCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ProductName)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemName)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                               @Html.bsEditorFor(model => model.Quantity)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.UOMCode)
+                            </div>
+                        </div>
+                       
+                        
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.DateOfExecution)
+                                
+                            </div>
+                            <div class="col-md-6">
+                               @Html.bsEditorFor(model => model.ExpiryDate)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Amount)
+
+                            </div>
+                            <div class="col-md-6">
+                               @Html.bsEditorFor(model => model.AmountFC)
+                            </div>
+                        </div>
+                       
+                        
+                       
+
+                        @Html.bsEditorFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+
+
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+            var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "ProductCode":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#ProductName').val("");
+                    $(sectionid + '#ProductID').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#ProductName').val(data.rows.Name);
+                                    $(sectionid + '#ProductID').val(data.rows.ItemID);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "ItemCode":
+                    //lấy dòng du lieu ve gan cho may cai khac
+
+                    $(sectionid + '#ItemName').val("");
+                    $(sectionid + '#ItemID').val("");
+                    $(sectionid + '#UOMCode').val("");
+                    if (val != "") {
+
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+
+                                    $(sectionid + '#ItemName').val(data.rows.Name);
+                                    $(sectionid + '#ItemID').val(data.rows.ItemID);
+                                    $(sectionid + '#UOMCode').val(data.rows.UOMCode);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+              
+              
+                default:
+
+            }
+
+        });
+    });
+</script>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<object>
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", ajaxoption["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", ajaxoption["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+
+    string action_return = "Index";
+    string action_edit = Url.Action("Edit");
+
+    var role = WebApp.Areas.Accounting.Services.GlobalVariant.GetAppUser().SysRole;
+    string isadmin = (role.Name.ToLower() == "posadmin" || role.IsAdmin) ? "" : " style=display:none;";
+}
+
+@*@Html.Partial("_bsPaging",metaobject.Paging)*@
+
+<div id="@(ajaxoption["ajaxupdateid"])" class="col-md-12">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderList", ajaxoption)
+
+        <div class="box-body">
+            @*@Html.Partial("_ToolbarList", ajaxoption)*@
+            <a @isadmin class="btn" id="sv-toolbar-edit" href="@(action_edit)" @(ajaxstring)><span class="fa fa-edit"></span>&nbsp;Sửa</a>
+            <br />
+            @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+            {
+                @Html.svGridList(Model, ajaxoption["keyfield"], ajaxoption["metaname"])
+            }
+        </div>
+
+        <div class="box-footer">
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var $rowfocused;
+        $(".sv-gv-datarow").click(function () {
+            if ($rowfocused != null) {
+                $rowfocused.removeClass("sv-gv-datarow-focused");
+            }
+            $rowfocused = $(this);
+            $rowfocused.addClass("sv-gv-datarow-focused");
+        });
+
+        $("#sv-toolbar-edit").click(function () {
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "/" + para + "?action_return=@(action_return)");
+            }
+            else {
+                return false;
+            }
+        });
+
+
+    })
+</script>

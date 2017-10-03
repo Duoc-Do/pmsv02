@@ -1,0 +1,110 @@
+﻿@model Dictionary<string, WebApp.Areas.Admin.Models.SysTableDetailView>
+@{
+    string tablename=Model.FirstOrDefault().Value.TableName;
+    string urlupdate = Url.Action("Update", "SysTableDetail", new { area = "admin" });
+    
+    }
+<th style="width: 1%;">
+
+    <div class="btn-group" style="margin-left:8px;">
+        <a class="dropdown-toggle btn-default btn-flat" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-cog fa-fw"></i>
+            @*<span class="caret"></span>*@
+        </a>
+
+        <ul class="dropdown-menu" id="draggablePanelList">
+            @foreach (var item in Model)
+            {
+                <li class="input-button">
+                    <div class="checkbox">
+                        <label class="input-button">
+                            <input type="checkbox" class="filter-column" data-columnorder="@(item.Value.GridViewOrder)" data-columnname="@(item.Value.ColumnName)" data-columnvalue="@(item.Value.GridViewShow ? "true" : "false")"   @(item.Value.GridViewShow ? "checked=\"checked\"" : "")>@item.Value.Des</label>
+                    </div>
+                </li>                
+            }
+            <li class="input-button">
+                <div class="checkbox">
+                    <button data-tablename="@(tablename)" class="btn btn-primary btn-flat btn-sm" type="button" id="@string.Format("btnfilter{0}",tablename)">
+                        <span class="fa fa-save"></span>&nbsp;Lưu
+                    </button>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+
+</th>
+
+
+<script>
+    jQuery(function ($) {
+        var panelList = $('#draggablePanelList');
+        panelList.sortable({
+            // Only make the .panel-heading child elements support dragging.
+            // Omit this to make then entire <li>...</li> draggable.
+            handle: '.input-button',
+            update: function () {
+                $('.dropdown-menu', panelList).each(function (index, elem) {
+                    var $listItem = $(elem),
+                        newIndex = $listItem.index();
+                    // Persist the new indices.
+                });
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('.dropdown-menu input,.dropdown-menu label').click(function (e) {
+            e.stopPropagation();
+        });
+
+        $(".filter-column").change(function () {
+            if (this.checked) {
+                $(this).attr("data-columnvalue", true);
+            }
+            else {
+                $(this).attr("data-columnvalue", false);
+            }
+        });
+
+        $('#@string.Format("btnfilter{0}",tablename)').click(function ()
+        {
+            var form = $(this).closest('form');
+            var _tablename = $(this).attr("data-tablename");
+            var columns = "";
+            var columnsvalue = "";
+            var columnsorder = "";
+
+            var i=0;
+            $(this).closest('ul').find('input.filter-column').each(function ()
+            {
+
+
+                var columnname=$(this).attr("data-columnname");
+                var columnvalue = $(this).attr('data-columnvalue');
+                var columnorder = $(this).closest('li').index();
+
+                columns += "&columns=" + columnname;
+                columnsvalue += "&columnvalues=" + columnvalue;
+                columnsorder += "&columnorders=" + columnorder;
+                
+
+                i++;
+            });
+
+            $.ajax({
+                type: "POST",
+                data: columns + columnsvalue + columnsorder + "&tablename=" + _tablename,
+                url: "@(urlupdate)",
+                success: function (data) {
+                    //alert('ok');
+                    $(form).submit();
+                }
+            });
+        });
+
+    });
+</script>
+

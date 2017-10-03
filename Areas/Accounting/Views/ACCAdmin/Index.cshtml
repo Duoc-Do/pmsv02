@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">
+                <img src="@Url.Content("~/Content/themes/admin/images/logo.png")" alt="Sen Việt" /></div>
+            <div class="login">
+                @Html.Partial("_LogOnPartial")
+            </div>
+            
+        </div>
+        @*end page-header*@
+        <div class="page-body">
+            <table style="border: 0 none; border-collapse: collapse; width: 100%;">
+                <tr>
+                    <td style="min-width: 200px; width: 200px; border: 0 none; padding: 0px; vertical-align: top;">
+                        @*Menu quản lý cấu hình hệ thống kế toán*@ @*@Html.Partial("../../Areas/ACC/Views/Shared/_LayoutSYSMenu")      *@
+                        @*Menu quản lý bút toán cuối kỳ*@ @*@Html.Partial("../../Areas/ACC/Views/Shared/_LayoutGLMenu")  *@
+                        @*Menu quản lý tiền*@ 
+                        @Html.Partial("_LayoutCAMenu")        
+
+                        @*Menu quản lý bán hàng*@ @*@Html.Partial("../../Areas/ACC/Views/Shared/_LayoutSOMenu")        *@
+                        @*Menu quản lý mua hàng*@ @*@Html.Partial("../../Areas/ACC/Views/Shared/_LayoutPOMenu")        *@
+                        @*Menu quản lý kho hàng*@ 
+                        @Html.Partial("_LayoutINMenu")
+                        @*Menu quản lý tài sản*@ @*@Html.Partial("../../Areas/ACC/Views/Shared/_LayoutFAMenu")        *@
+                        @*Menu quản lý du lịch*@ @*@Html.Partial("../../Areas/Tourism/Views/Shared/_LayoutTourismMenu")*@
+                       
+                        @*Quản lý thành viên*@
+                    </td>
+                    @*        <td style="width:0px;" ></td>*@
+                    <td style="border: 0 none; padding: 0px; vertical-align: top; max-width: 980px;">
+                        <div id="ajaxloadingelementid">
+                            Đang xử lí...
+                        </div>
+                        <div id="page-body-contain-id" class="page-body-contain">
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>@*end page-body*@
+        <div class="page-footer">
+        </div>
+        @*end page-footer*@
+    </div>
+    @*end page*@

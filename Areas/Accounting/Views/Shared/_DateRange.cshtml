@@ -1,0 +1,75 @@
+﻿<!-- Split button -->
+@{
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var datefrom = (DateTime)reportparams["DateFrom"];
+    var dateto = (DateTime)reportparams["DateTo"];
+}
+<div class="col-md-6">
+                    <div class="form-group">
+                    <label for="SysReport" class="control-label">Ngày báo cáo</label>
+    @Html.Hidden("DateFrom", datefrom.ToString("dd/MM/yyyy"))
+    @Html.Hidden("DateTo", dateto.ToString("dd/MM/yyyy"))
+    <div class="input-group form-inline">
+
+        <button id="daterange-btn" class="btn btn-default" type="button">
+            <i class="fa fa-calendar"></i>&nbsp;<span>@datefrom.ToString("dd/MM/yyyy") - @dateto.ToString("dd/MM/yyyy")</span>
+
+            <i class="fa fa-caret-down"></i>
+        </button>
+
+        <a class="btn btn-primary" href="javascript:void(0)" onclick="$(this).closest('form').submit();">&nbsp;Áp dụng</a>
+
+    </div>
+                        
+                        </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var _datefrom2 = "@(datefrom.ToString("dd/MM/yyyy"))";
+        var _dateto2 = "@(dateto.ToString("dd/MM/yyyy"))";
+
+        $('#daterange-btn').daterangepicker(
+                  {
+                      ranges: {
+                          'Hôm nay': [moment(), moment()],
+                          'Hôm qua': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                          '7 ngày qua': [moment().subtract('days', 6), moment()],
+                          '30 ngày qua': [moment().subtract('days', 29), moment()],
+                          'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                          'Tháng trước': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                          'Năm nay': [moment().startOf('year'), moment().endOf('year')],
+                          'Năm trước': [moment().subtract('year', 1).startOf('year'), moment().subtract('year', 1).endOf('year')]
+                      },
+                      format: 'DD/MM/YYYY',//'YYYY-MM-DD',
+                      startDate: _datefrom2,// moment().subtract('days', 29),
+                      endDate: _dateto2,//moment(),
+                      separator: ' tới ',
+                      locale: {
+                          applyLabel: 'Áp dụng',
+                          cancelLabel: 'Trở lại',
+                          fromLabel: 'Từ',
+                          toLabel: 'Tới',
+                          customRangeLabel: 'Tùy chọn',
+                          daysOfWeek: ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'],
+                          monthNames: ['Tháng giêng', 'Tháng hai', 'Tháng ba', 'Tháng tư', 'Tháng năm', 'Tháng sáu', 'Tháng bảy', 'Tháng tám', 'Tháng chín', 'Tháng mười', 'Tháng mười một', 'Tháng mười hai'],
+                          firstDay: 1
+                      }
+                  },
+          function (start, end) {
+              // parse JSON formatted date to javascript date object
+
+              var datestart = new Date(start);
+              var _start = datestart.getDate().toString() + "/" + (datestart.getMonth() + 1).toString() + "/" + datestart.getFullYear().toString();
+
+              var dateend = new Date(end);
+              var _end = dateend.getDate().toString() + "/" + (dateend.getMonth() + 1).toString() + "/" + dateend.getFullYear().toString();
+
+              $("#DateFrom").val(_start);
+              $("#DateTo").val(_end);
+              $('#daterange-btn').closest('form').submit();
+          }
+          );
+    });
+</script>

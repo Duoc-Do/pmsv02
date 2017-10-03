@@ -1,0 +1,41 @@
+﻿@model WebApp.Areas.Admin.Models.vw_aspnet_MembershipUsers
+@using WebApp.Areas.Admin.Services
+<div class="box box-primary collapsed-box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Chi tiết</h3>
+        <div class="box-tools pull-right">
+            <button type="button" data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-plus"></i></button>
+        </div>
+        <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: none;">
+        <div class="row">
+            <div class="col-md-6">@Html.bsEditorFor(model => model.SenUserView.FullName)</div>
+            <div class="col-md-6">@Html.bsEditorFor(model => model.SenUserView.Telephone)</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.bsEditorFor(model => model.SenUserView.Address)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.svHiddenFor(model => model.SenUserView.Avatar)
+                <div id="ImagePathimage" style="margin-bottom: 8px;">
+                    <a href="#" class="thumbnail">
+                        <img style="max-height:250px;max-width:250px;"  src="@(WebApp.Services.Media.PictureService.GetPictureUrl(Model.SenUserView.Avatar, 125))"/>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.bsEditorFor(model => model.SenUserView.AmountBalance)
+                @Html.bsEditorFor(model => model.SenUserView.LastPayment)
+                <a target="_blank" href="@Model.SenUserView.Address">Xem facebook</a>
+            </div>
+
+        </div>
+        @Html.svHiddenFor(model => model.SenUserView.UserId)                                    @Html.svHiddenFor(model => model.SenUserView.SenUserId)
+    </div>
+    <!-- /.box-body -->
+</div>

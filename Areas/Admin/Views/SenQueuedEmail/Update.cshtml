@@ -1,0 +1,62 @@
+﻿@model WebApp.Areas.Admin.Models.SenQueuedEmail
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    string idbody = DateTime.Now.Ticks.ToString();
+    
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.QueuedEmailId)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.bsEditorFor(model => model.EmailAccountId)@Html.bsEditorFor(model => model.FromName)@Html.bsEditorFor(model => model.From)@Html.bsEditorFor(model => model.ToName)@Html.bsEditorFor(model => model.To)@Html.bsEditorFor(model => model.Bcc)@Html.bsEditorFor(model => model.CC)@Html.bsEditorFor(model => model.Subject)@*@Html.bsTextAreaFor(model => model.Body)*@
+                        <div class="form-group">
+                            <label for="Body" class="control-label">Body</label>
+
+                            <textarea name="Body" id="@(idbody)">
+                                 @Model.Body
+                            </textarea>
+                        </div>
+                        @Html.bsEditorFor(model => model.SentTries)@Html.bsEditorFor(model => model.SentOnUtc)@Html.bsEditorFor(model => model.Priority)@Html.bsEditorFor(model => model.CreatedOnUtc)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@
+
+
+<script>
+    tinymce.init({
+        selector: "#@(idbody)",
+        theme: "modern",
+        height: "400",
+        plugins: [
+            ["textcolor advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker"],
+            ["searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking"],
+            ["save table contextmenu directionality emoticons template paste"]
+        ],
+        toolbar: "forecolor backcolor | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+        statusbar: false
+    });
+
+</script>

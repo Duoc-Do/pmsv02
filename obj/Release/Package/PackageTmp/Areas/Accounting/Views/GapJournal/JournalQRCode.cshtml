@@ -1,0 +1,74 @@
+﻿@model WebApp.Areas.Accounting.Models.GapJournal
+@using WebApp.Areas.Accounting.Services
+@{
+    ViewBag.Title = "PrintOrder";
+    Layout = "~/Areas/Accounting/Views/Shared/_PrintQRCode.cshtml";
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+
+
+    string url = Url.Action("Gap", "Pub", new { area = "", id = GlobalVariant.GetCompanyId(), journalid = Model.JournalId }, Request.Url.Scheme);
+
+    if (GlobalVariant.GetSysOption()["GapPubLink"] != null)
+    {
+        if (!string.IsNullOrEmpty(GlobalVariant.GetSysOption()["GapPubLink"].ToString()))
+        {
+            url = string.Format(GlobalVariant.GetSysOption()["GapPubLink"].ToString(), GlobalVariant.GetCompanyId(), Model.JournalId);
+        }
+    }
+
+}
+
+@*<h3> Nhật ký gieo số: #@Model.JournalId  @url</h3>*@
+<h3>@url</h3>
+<div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+<script type="text/javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 400,
+        height: 400
+    });
+
+    function makeCode() {
+        var elText = "@(url)"; //document.getElementById("text");
+        qrcode.makeCode(elText);
+    }
+
+    makeCode();
+
+    //(function () {
+    //    var afterPrint = function () {
+    //        // Here you would send an AJAX request to the server to track that a page
+    //        // has been printed.  You could additionally pass the URL if you wanted to
+    //        // track printing across an entire site or application.
+    //        window.close();
+    //    };
+
+    //    if (window.matchMedia) {
+    //        var mediaQueryList = window.matchMedia('print');
+    //        mediaQueryList.addListener(function (mql) {
+    //            if (!mql.matches) {
+    //                afterPrint();
+    //            }
+    //        });
+    //    }
+
+    //    window.onafterprint = afterPrint;
+    //}());
+
+
+    //window.focus();
+
+    //window.print();
+
+
+    //$("#text").
+    //	on("blur", function () {
+    //		makeCode();
+    //	}).
+    //	on("keydown", function (e) {
+    //		if (e.keyCode == 13) {
+    //			makeCode();
+    //		}
+    //	});
+
+</script>

@@ -1,0 +1,99 @@
+﻿@model IEnumerable<WebApp.Areas.Admin.Models.SenContractCash>
+@using WebApp.Areas.Admin.Services
+
+@{
+    var appajaxoption = (WebApp.Areas.Admin.Models.AppAjaxOption)ViewBag.appajaxoption;
+    var ajaxoption = appajaxoption.ajaxoption;
+    string ajaxstring = appajaxoption.ajaxstring();
+
+    var metaobject = WebApp.Areas.Admin.Services.GlobalMeta.GetMetaObject(ajaxoption["metaname"]);
+    var columns = metaobject.GetMetaTable();
+}
+
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderList", ajaxoption)
+
+        <div class="box-body">
+            @Html.Partial("_bsToolbarList", ajaxoption)
+            <hr />
+            <div class="row-fluid">
+                @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+                {
+                    <div class="row-fluid">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-striped table-condensed table-hover" data-tablename="@columns["ContractCashId"].TableName" data-senviet-keys="ContractCashId">
+                                <tbody>
+                                    @*phần header*@
+                                    <tr class="headerrow">
+                                        @Html.Partial("_bsTableHeaderCellConfig", columns)
+                                        @Html.Partial("_bsTableHeaderRow", columns)
+                                    </tr>
+                                    @*phần lọc số liệu*@
+                                    <tr class="filterrow">
+                                        <th></th>
+                                        @Html.Partial("_bsTableFilterRow", columns)
+
+                                    </tr>
+
+
+                                    @*phần nội dung*@
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="datarow" data-datarow-para="@(string.Format("&{0}={1}", "ContractCashId", item.ContractCashId))" data-datarow-key="@(item.ContractCashId)">
+
+                                            @Html.Partial("_bsTableEditCell", ajaxstring)
+
+                                            @foreach (var column in columns)
+                                            {
+                                                if (!column.Value.GridViewShow == true) { continue; }
+                                                column.Value.CalSummary(item);
+                                                switch (column.Value.ColumnName)
+                                                {
+                                                    default:
+                                                @Html.Partial("_bsTableDataCell", item, new ViewDataDictionary() { { "column", column.Value } })
+                                                        break;
+                                                }
+                                            }
+
+
+                                        </tr>
+                                    }
+                                    @*phần footer*@
+
+                                    <tr class="footerrow">
+                                        @Html.Partial("_bsTableFooterCellConfig")
+                                        @Html.Partial("_bsTableFooterRow", columns)
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        @Html.Partial("_PagingPartial", metaobject.Paging)
+
+                    </div>
+                                        
+
+                }
+            </div>
+        </div>
+
+        <div class="box-footer">
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+
+
+

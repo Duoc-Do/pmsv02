@@ -1,0 +1,70 @@
+﻿<!-- Split button -->
+@{
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var datefrombg = (DateTime)reportparams["DateFromBG"];
+    var datetobg = (DateTime)reportparams["DateToBG"];
+}
+
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="SysReport" class="control-label">Ngày báo cáo</label>
+        @Html.Hidden("DateFromBG", datefrombg.ToString("dd/MM/yyyy"))
+        @Html.Hidden("DateToBG", datetobg.ToString("dd/MM/yyyy"))
+        <div class="input-group">
+            <button id="daterange-btn-bg" class="btn btn-default pull-right" type="button">
+                <i class="fa fa-calendar"></i>&nbsp;<span>@datefrombg.ToString("dd/MM/yyyy") - @datetobg.ToString("dd/MM/yyyy")</span>
+                <i class="fa fa-caret-down"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        var _datefrombg2 = "@(datefrombg.ToString("dd/MM/yyyy"))";
+        var _datetobg2 = "@(datetobg.ToString("dd/MM/yyyy"))";
+
+        $('#daterange-btn-bg').daterangepicker(
+                  {
+                      ranges: {
+                          'Hôm nay': [moment(), moment()],
+                          'Hôm qua': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                          '7 ngày qua': [moment().subtract('days', 6), moment()],
+                          '30 ngày qua': [moment().subtract('days', 29), moment()],
+                          'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                          'Tháng trước': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                          'Năm nay': [moment().startOf('year'), moment().endOf('year')],
+                          'Năm trước': [moment().subtract('year', 1).startOf('year'), moment().subtract('year', 1).endOf('year')]
+                      },
+                      format: 'DD/MM/YYYY',//'YYYY-MM-DD',
+                      startDate: _datefrombg2,// moment().subtract('days', 29),
+                      endDate: _datetobg2,//moment(),
+                      separator: ' tới ',
+                      locale: {
+                          applyLabel: 'Áp dụng',
+                          cancelLabel: 'Trở lại',
+                          fromLabel: 'Từ',
+                          toLabel: 'Tới',
+                          customRangeLabel: 'Tùy chọn',
+                          daysOfWeek: ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'],
+                          monthNames: ['Tháng giêng', 'Tháng hai', 'Tháng ba', 'Tháng tư', 'Tháng năm', 'Tháng sáu', 'Tháng bảy', 'Tháng tám', 'Tháng chín', 'Tháng mười', 'Tháng mười một', 'Tháng mười hai'],
+                          firstDay: 1
+                      }
+                  },
+          function (start, end) {
+              // parse JSON formatted date to javascript date object
+
+              var datestart = new Date(start);
+              var _start = datestart.getDate().toString() + "/" + (datestart.getMonth() + 1).toString() + "/" + datestart.getFullYear().toString();
+
+              var dateend = new Date(end);
+              var _end = dateend.getDate().toString() + "/" + (dateend.getMonth() + 1).toString() + "/" + dateend.getFullYear().toString();
+
+              $("#DateFromBG").val(_start);
+              $("#DateToBG").val(_end);
+              $('#daterange-btn-bg').closest('form').submit();
+          }
+          );
+    });
+</script>

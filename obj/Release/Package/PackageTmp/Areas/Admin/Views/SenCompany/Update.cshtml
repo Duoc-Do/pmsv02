@@ -1,0 +1,159 @@
+﻿@model WebApp.Areas.Admin.Models.SenCompany
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+
+    //IEnumerable<SelectListItem> lists0 =
+    //from value in db.vw_aspnet_MembershipUsers
+    //select new SelectListItem
+    //{
+    //    Text = value.UserName,
+    //    Value = value.UserId.ToString()
+    //};
+
+    IEnumerable<SelectListItem> lists1 =
+    from value in db.SenPackageViews
+    select new SelectListItem
+    {
+        Text = value.ApplicationName + " - " + value.Name,
+        Value = value.PackageId.ToString()
+    };
+
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                @Html.svHiddenFor(model => model.CompanyId)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.svHiddenFor(model => model.UserId)
+                                @Html.bsLabel("UserProfile_UserName","Tài khoản")
+                                @Html.bsAutoComplete("UserProfile_UserName","UserName", Model.UserProfile!=null? Model.UserProfile.UserName:"")
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsDropDownListFor(model => model.PackageId, lists1)
+
+@*                              @Html.svHiddenFor(model => model.PackageId)
+                                @Html.bsLabel("SenPackage_Name","Gói")
+                                @Html.bsAutoComplete("SenPackage_Name","PackageName", Model.SenPackage.Name)*@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.bsEditorFor(model => model.Name)
+                                @Html.bsEditorFor(model => model.Address)
+                                @Html.bsEditorFor(model => model.TaxCode)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Telephone)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.FaxNumber)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Email)
+
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Website)
+                            </div>
+                        </div>
+
+                        @Html.bsEditorFor(model => model.IsLockedOut)                        @Html.bsEditorFor(model => model.IsApproved)                        @Html.bsEditorFor(model => model.Logo)                        @Html.bsTextAreaFor(model => model.ConnectionString)                        @Html.bsTextAreaFor(model => model.Description)                        @Html.bsTextAreaFor(model => model.Comment)
+
+                        @Html.bsEditorFor(model => model.CreateDate)
+                        @Html.bsEditorFor(model => model.ExpireDate)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").off(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            fieldchange(this);
+        });
+    });
+
+    function fieldchange(a) {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("fieldname");
+        
+        var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "CompanyName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#CompanyId').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#CompanyId').val(data.rows.CompanyId);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                case "UserName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#UserId').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#UserId').val(data.rows.UserId);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+                default:
+            }
+    }
+</script>

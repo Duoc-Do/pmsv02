@@ -1,0 +1,131 @@
+﻿@model WebApp.Areas.Accounting.Models.GapJournal
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    int[] fieldid = ViewBag.fieldid;
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    IEnumerable<SelectListItem> trees =
+from value in db.GapTrees
+select new SelectListItem
+{
+    Text = value.Name,
+    Value = value.TreeId.ToString()
+};
+
+
+    IEnumerable<SelectListItem> seeds =
+from value in db.GapSeeds
+where value.TreeId == Model.TreeId
+select new SelectListItem
+{
+    Text = value.Name,
+    Value = value.SeedId.ToString()
+};
+
+    string urlgettree = Url.Action("GetTree", "GapJournal", new { area = "Accounting"});
+
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @foreach (var item in fieldid)
+                        {
+                            @Html.Hidden("fieldid[]", item)
+
+                        }
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6"></div>
+                        </div>
+                        @*@Html.svHiddenFor(model => model.TreeId)*@
+                        @Html.svHiddenFor(model => model.StatusId)
+                        @*@Html.svHiddenFor(model => model.SeedId)*@
+                        @Html.svHiddenFor(model => model.JournalId)
+                        @*@Html.svHiddenFor(model => model.FieldId)*@
+
+                        @Html.bsDropDownList2For(model => model.TreeId, trees, "Chọn cây trồng")
+                        
+                        @Html.bsDropDownList2For(model => model.SeedId, seeds, "Chọn giống")
+
+                        @Html.bsEditorFor(model => model.JournalDate)
+                        <div class="row">
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.HarvestDateBG, new { data_numberdatebg = Model.GapTree == null ? 0 : Model.GapTree.RefHarvestDateBG.GetValueOrDefault()})</div>
+
+                            <div class="col-md-6">@Html.bsEditorFor(model => model.HarvestDateEnd,new { data_numberdateend = (Model.GapTree==null?0: Model.GapTree.RefHarvestDateEnd.GetValueOrDefault())})</div>
+                        </div>
+                       
+                   
+
+                            @Html.bsTextAreaFor(model => model.Note)
+
+
+
+
+</div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script>
+    $("#TreeId").change(function () 
+    {
+        var a = this.value;
+        var linkgettree = "@(urlgettree)";
+        linkgettree = linkgettree + "?treeid=" + a;
+        $.getJSON(linkgettree, function (result) {
+            $("#HarvestDateBG").attr("data_numberdatebg", result.RefHarvestDateBG);
+            $("#HarvestDateEnd").attr("data_numberdateend", result.RefHarvestDateEnd);
+
+
+
+            $("#SeedId").html('');
+            $("#SeedId").append('<option value="">Chọn giống</option>');
+            $.each(result.GapSeeds, function (i, field) {
+                $("#SeedId").append('<option value="' + field.SeedId + '">' + field.Name + '</option>');
+            });
+
+            updaterefresh();
+        });
+    })
+
+    $("#JournalDate").change(function ()
+    {
+        updaterefresh();
+    })
+
+    function updaterefresh()
+    {
+        var n1 = $("#HarvestDateBG").attr("data_numberdatebg");
+        var n2 = $("#HarvestDateEnd").attr("data_numberdateend");
+        var d1 = moment($("#JournalDate").val(), "DD/MM/YYYY",true);
+
+        var d2 = moment(d1).add('days', n1);
+        var d3 = moment(d1).add('days', n2);
+
+        $("#HarvestDateBG").val(moment(d2).format("DD/MM/YYYY"));
+        $("#HarvestDateEnd").val(moment(d3).format("DD/MM/YYYY"));
+
+    }
+</script>

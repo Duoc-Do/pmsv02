@@ -1,0 +1,52 @@
+﻿@model WebApp.Areas.Accounting.Models.GapField
+@using WebApp.Areas.Accounting.Services
+@{
+    var appajaxoption = new WebApp.Areas.Accounting.Models.AppAjaxOption();
+    var ajaxoption = appajaxoption.ajaxoption;
+    ajaxoption.Add("ajaxupdateid", "gaphome_container");
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    Dictionary<string, string> stringname = new Dictionary<string, string>();
+    stringname.Add("farm", "Thửa");
+}
+
+@*@Html.Partial("_bsPaging",metaobject.Paging)*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+    {
+        <div class="row-fluid">
+            <div class="box box-primary">
+
+                <ul class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "GapHome", new { area = "Accounting" })" @(ajaxstring)>@stringname["farm"]</a> </li>
+                    <li><a href="@Url.Action("GetField", "GapHome", new { area = "Accounting", farmid = Model.FarmId})" @(ajaxstring)>@Model.GapFarm.Name</a> </li>
+                    <li><a class="active" href="@Url.Action("GetRow", "GapHome", new { area = "Accounting", fieldid = Model.FieldId})" @(ajaxstring)>@Model.Name</a> </li>
+                </ul>
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                            @Html.Partial("_RowAdd",Model.FieldId)
+                        </div>
+                        @foreach (var item in Model.GapRows)
+                        {
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                                <!-- small box -->
+                                @Html.Partial("_Row", item)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+@Scripts.Render("~/bundles/accapp")

@@ -1,0 +1,40 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+    WebAppAccEntities db = new WebAppAccEntities(GlobalVariant.GetConnection());
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    int roleid = GlobalVariant.GetAppUser().RoleID;
+    var query = from m in db.SysMenus
+                join n in db.SysMenuRoles on m.MenuID equals n.MenuID
+                where n.RoleID == roleid && m.IsActive == true && n.IsActive
+                && m.BusinessCode.StartsWith("AppV") && m.MenuType == 3
+                orderby m.MenuID
+                select m;
+    var menu = query.ToList();
+    
+}
+<ul class="nav navbar-nav">
+    <li class="dropdown">
+        <a title="thêm nhanh chứng từ" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-book">&nbsp;</i> <span class="fa fa-plus"></span></a>
+        <ul class="dropdown-menu">
+            @foreach (var item in menu)
+            {
+                var businesscodeweb = item.BusinessCode.Replace("Browse", "");
+                <li>
+                    <a id="@(businesscodeweb)" href="/Accounting/@(businesscodeweb)/Create" @(ajaxstring)>@item.Des</a>
+                </li>
+            }
+        </ul>
+    </li>
+
+</ul>
+
+
+

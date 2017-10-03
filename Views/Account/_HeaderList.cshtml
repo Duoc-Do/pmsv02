@@ -1,0 +1,62 @@
+﻿@model Dictionary<string, string>
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", Model["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", Model["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+}
+
+<div class="box-header">
+    <div class="pull-right box-tools">
+        <button title="" data-toggle="tooltip" data-widget="collapse" class="btn btn-primary btn-sm" data-original-title="Thu nhỏ"><i class="fa fa-minus"></i></button>
+        <button title="" data-toggle="tooltip" data-widget="remove" class="btn btn-primary btn-sm" data-original-title="Đóng"><i class="fa fa-times"></i></button>
+    </div>
+    <h3 class="box-title">@ViewBag.Title</h3>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var businesscode = "@(Model["businesscode"])";
+
+       /*     
+        * Add collapse and remove events to boxes
+        */
+
+
+        $("[data-widget='collapse']").click(function () {
+
+
+            //Find the box parent
+            var box = $(this).parents(".box").first();
+            //Find the body and the footer
+            var bf = box.find(".box-body, .box-footer");
+            if (!box.hasClass("collapsed-box")) {
+                bf.slideUp(300, function ()
+                {
+                    box.addClass("collapsed-box");
+                }
+                );
+            } else {
+
+                bf.slideDown(300, function ()
+                {
+                    box.removeClass("collapsed-box");
+                });
+            }
+        });
+        /*     
+         * Add collapse and remove events to boxes
+         */
+        $("[data-widget='remove']").click(function () {
+            //Find the box parent        
+            var box = $(this).parents(".box").first();
+            box.slideUp();
+        });
+
+    })
+
+
+</script>

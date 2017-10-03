@@ -1,0 +1,80 @@
+﻿@model IEnumerable<WebApp.Areas.Accounting.Models.RpAccountLedgerConstruction>
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var reportparams = (Dictionary<string, object>)ViewBag.ReportParams;
+    var DisplayNumber = reportparams["DisplayNumber"].ToString();
+    var ConstructionCode = reportparams["ConstructionCode"].ToString();
+
+
+    var datefrom = (DateTime)reportparams["DateFrom"];
+    var dateto = (DateTime)reportparams["DateTo"];
+    string UrlThrilldown = Url.Action("ThrillDown", new { area = "Accounting", DateFrom = datefrom.ToShortDateString(), DateTo = dateto.ToShortDateString() });
+}
+
+<div id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+
+        @Html.Partial("_HeaderList", ajaxoption)
+
+
+        @using (@Ajax.BeginForm("Index", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+        {
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ConstructionCode" class="control-label">Mã công trình</label>
+                            @*<input fieldname="ConstructionCode" isautocomplete="isautocomplete" class="form-control text-box single-line" id="ConstructionCode" name="ConstructionCode" type="text" value="@(ConstructionCode)" />*@
+                            <select data-selectontab="false" fieldname="ConstructionCode" isautocomplete="isautocomplete" class="form-control" id="ConstructionCode" name="ConstructionCode">
+                                <option value="@ConstructionCode">@ConstructionCode</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="DisplayNumber" class="control-label">Tài khoản</label>
+                            @*<input tableautocomplete="AppAccountTable" fieldname="DisplayNumber" isautocomplete="isautocomplete" class="form-control text-box single-line" id="DisplayNumber" name="DisplayNumber" type="text" value="@(DisplayNumber)" />*@
+                            <select data-selectontab="false" tableautocomplete="AppAccountTable" fieldname="DisplayNumber" isautocomplete="isautocomplete" class="form-control" id="DisplayNumber" name="DisplayNumber">
+                                <option value="@DisplayNumber">@DisplayNumber</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @Html.Partial("_PrintReport", ajaxoption["businesscode"])
+            </div>
+            <div class="box-body">
+                @Html.svGridReport(Model, ajaxoption["metaname"], true)
+            </div>
+        }
+
+        <div class="box-footer">
+        </div>
+    </div>
+
+    <a id="senvietlinkthrilldown" data-ajax="true" data-ajax-loading="#ajaxloadingelementid" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-success="ajaxmenu_onsuccess" data-ajax-update="#page-body-contain-id" href="@(UrlThrilldown)" style="margin-left: 10px;display:none;">Chi tiết thrill down</a>
+</div>
+
+@Scripts.Render("~/bundles/accapp")
+
+<script>
+    $(document).ready(function () {
+        $(".sv-report-thrilldown").click(function () {
+
+            var DocumentID = $(this).parent().parent().find("td[sv-fieldname='DocumentID']").text();
+            var VoucherCode = $(this).parent().parent().find("td[sv-fieldname='VoucherCode']").text();
+            var linktmp = $("#senvietlinkthrilldown").attr("href");
+            var linkthrilldown = linktmp + "&DocumentID=" + DocumentID + "&VoucherCode=" + VoucherCode;
+
+            $("#senvietlinkthrilldown").attr("href", linkthrilldown);
+            $("#senvietlinkthrilldown").trigger("click");
+        })
+    })
+
+</script>
+
+

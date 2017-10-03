@@ -1,0 +1,55 @@
+﻿@model WebApp.Areas.Accounting.Models.GapTree
+@using WebApp.Areas.Accounting.Services
+@{
+    var appajaxoption = new WebApp.Areas.Accounting.Models.AppAjaxOption();
+    var ajaxoption = appajaxoption.ajaxoption;
+    ajaxoption.Add("ajaxupdateid", "gaphome_container");
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    Dictionary<string, string> stringname = new Dictionary<string, string>();
+    stringname.Add("tree", "Cây trồng");
+}
+
+@*@Html.Partial("_bsPaging",metaobject.Paging)*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+    {
+        <div class="row-fluid">
+            <div class="box box-primary">
+                <ul class="breadcrumb">
+                    <li><a href="@Url.Action("Index2", "GapHome", new { area = "Accounting" })" @(ajaxstring)> @stringname["tree"] </a> </li>
+                    <li class="active"><a href="@(Url.Action("GetSeed", "GapHome", new { area = "Accounting", TreeId = Model.TreeId }))" @(ajaxstring)> @Model.Name </a></li>
+                </ul>
+                @*<div class="box-body">
+                    <ul class="nav nav-pills">
+                        <li role="presentation"><a href="javascript:;" onclick="appaccountinggaphome.selectall()">Select all</a></li>
+                        <li role="presentation"><a href="javascript:;" onclick="appaccountinggaphome.unselectall()">Unselect all</a></li>
+                    </ul>
+                </div>*@
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                            @Html.Partial("_SeedAdd", Model.TreeId)
+                        </div>
+                        @foreach (var item in Model.GapSeeds)
+                        {
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                                <!-- small box -->
+                                @Html.Partial("_Seed", item)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+@Scripts.Render("~/bundles/accapp")

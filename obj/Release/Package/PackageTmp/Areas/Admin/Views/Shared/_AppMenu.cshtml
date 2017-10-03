@@ -1,0 +1,217 @@
+﻿@using WebApp.Areas.Admin.Models
+@using WebApp.Areas.Admin.Services
+@{
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+    
+}
+<script>
+
+    // Run on document ready
+    $(function () {
+        $('.sidebar-menu a').click(function () {
+            if ($(this).attr("id") == null) { return; }
+            location.hash = $(this).attr("id");
+            $(document).scrollTop(0);
+        });
+    });
+
+</script>
+
+
+<ul class="sidebar-menu">
+    @if (User.IsInRole("Admin") || User.IsInRole("CRM"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>CRM</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a id="SenGiftCard" href="@Url.Action("Index", "SenGiftCard", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-gift"></i><span>Thẻ quà tặng</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="SenProduct" href="@Url.Action("Index", "SenProduct", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Sản phẩm</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="SenCustomer" href="@Url.Action("Index", "SenCustomer", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Khách hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="SenContract" href="@Url.Action("Index", "SenContract", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-shopping-cart"></i><span>Hợp đồng</span>
+                    </a>
+
+                </li>
+            </ul>
+        </li>
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <li>
+            <a href="@Url.Action("Index", "MembershipUsers", new { area = "Admin" })" @(ajaxstring)>
+                <i class="fa fa-users"></i><span>Thành viên</span>
+            </a>
+        </li>
+
+        <li>
+            <a id="SenCompany" href="@Url.Action("Index", "SenCompany", new { area = "Admin" })" @(ajaxstring)>
+                <i class="fa fa-building-o"></i><span>Doanh nghiệp</span>
+            </a>
+        </li>
+        
+        <li class="treeview">
+
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>Cấu hình hệ thống</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a id="SenPackageLine" href="@Url.Action("Index", "SenPackageLine", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Điều kiện gói ứng dụng</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "SenPackage", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Gói ứng dụng</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="@Url.Action("Index", "SenMessageTemplate", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Mẫu tin nhắn</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "SenEmailAccount", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Tài khoản email</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="@Url.Action("Index", "SenScheduleTask", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Lịch tác vụ</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="@Url.Action("Index", "SysTable", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Mô tả bảng</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "SysColumn", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Mô tả cột</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "SysTableDetail", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Mô tả đối tượng</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="@Url.Action("Index", "Roles", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Phân quyền</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "UsersInRoles", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-user"></i><span>Phân quyền thành viên</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "SenApplication", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-user"></i><span>Ứng dụng LotusViet</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "SenService", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-user"></i><span>Doanh nghiệp thành viên</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "SenUser", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-users"></i><span>Thành viên sen việt</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "SenUserPayment", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-users"></i><span>Nạp tiền cho công ty</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SenUserCash" href="@Url.Action("Index", "SenUserCash", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-users"></i><span>Nạp tiền</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SenPrivateMessage" href="@Url.Action("Index", "SenPrivateMessage", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Tin nhắn</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SenQueuedEmail" href="@Url.Action("Index", "SenQueuedEmail", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Email đã gửi</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SenLog" href="@Url.Action("Index", "SenLog", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Nhật ký</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SenCommission" href="@Url.Action("Index", "SenCommission", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Hoa hồng</span>
+                    </a>
+                </li>
+
+                                <li>
+                    <a id="SenContractCash" href="@Url.Action("Index", "SenContractCash", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>Thu hợp đồng</span>
+                    </a>
+                </li>
+
+                                <li>
+                    <a id="SysOption" href="@Url.Action("Index2", "SysOption", new { area = "Admin" })" @(ajaxstring)>
+                        <i class="fa fa-dashboard"></i><span>SysOption</span>
+                    </a>
+                </li>
+            </ul>
+
+        </li>        
+
+    }
+</ul>
+
+
+

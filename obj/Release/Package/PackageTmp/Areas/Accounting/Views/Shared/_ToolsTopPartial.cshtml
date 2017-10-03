@@ -1,0 +1,41 @@
+﻿
+<div class="line">
+
+<h4> Tải nhiều nhất </h4>
+<ul id="toolstop">
+</ul>
+</div>
+
+
+    <script type="text/javascript">
+        
+        var urldata = "@Url.Action("ToolsTop", "CMSHome")";
+        var urlbase ="http://www.lotusviet.vn/vietlotus/vi.aspx";
+
+//         "@Request.CurrentExecutionFilePath";
+
+        function GetJsonDataChar() {
+            $.ajax({
+                type: "POST",
+                data: {},
+                url: urldata,
+                success: function (data) {
+
+            var arrdata = [];
+            $.each(data, function () {
+                arrdata.push(this);
+            })
+
+            for (var i = 0; i < arrdata.length; i++) {
+                
+                if (arrdata[i].Title!=null) {                
+                $("#toolstop").append( "<li><a href="+ urlbase + arrdata[i].Path + ">" + arrdata[i].Title + "</a></li>");
+                }
+            }
+                }
+            });
+        };
+
+        GetJsonDataChar();
+
+    </script>

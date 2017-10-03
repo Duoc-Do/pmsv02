@@ -1,0 +1,27 @@
+﻿@model string
+@{
+    string action_create = Url.Action("Create");
+    string action_edit = Url.Action("Edit");
+    string action_delete = Url.Action("Delete");
+}
+<td>
+<div class="btn-group">
+
+    <a class="dropdown-toggle btn btn-flat" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </a>
+
+    <ul role="menu" class="dropdown-menu">
+        <li>
+            <a class="sv-toolbar-edit" href="@(action_edit)" @(Model)><span class="fa fa-edit"></span>&nbsp;Sửa</a>
+        </li>
+        <li>
+            <a class="sv-toolbar-delete" href="@(action_delete)" @(Model)><span class="fa fa-trash-o"></span>&nbsp;Xóa</a>
+        </li>
+        <li>
+            <a class="sv-toolbar-copy" href="@(action_create)" @(Model)><span class="fa fa-copy"></span>&nbsp;Copy</a>
+        </li>
+    </ul>
+</div>
+</td>

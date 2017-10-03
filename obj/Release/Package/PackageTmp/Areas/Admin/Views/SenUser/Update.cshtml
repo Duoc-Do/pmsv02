@@ -1,0 +1,74 @@
+﻿@model WebApp.Areas.Admin.Models.SenUserView
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body" style="display: block;">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.svHiddenFor(model => model.UserId)                        @Html.svHiddenFor(model => model.SenUserId)                        @Html.svHiddenFor(model => model.ApplicationId)                        @Html.bsEditorFor(model => model.UserName)                        @Html.bsEditorFor(model => model.Telephone)                        @Html.bsEditorFor(model => model.MobileAlias)                        @Html.bsEditorFor(model => model.LoweredUserName)                        @Html.bsEditorFor(model => model.LastPayment)                        @Html.bsEditorFor(model => model.LastActivityDate)                        @Html.bsEditorFor(model => model.IsAnonymous)                        @Html.bsEditorFor(model => model.FullName)                        @Html.bsEditorFor(model => model.Avatar)                        @Html.bsEditorFor(model => model.AmountBalance)                        @Html.bsEditorFor(model => model.Address)
+                        <a target="_blank" href="@Model.Address">Xem facebook</a>
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+
+@Scripts.Render("~/bundles/adminapp")
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        $("#@(ajaxoption["ajaxupdateid"]) input:enabled:visible:first").focus();
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+            var url = '@Url.Action("FieldChange")';
+            switch (fieldname) {
+                case "UserName":
+                    //lấy dòng du lieu ve gan cho may cai khac
+                    $(sectionid + '#UserId').val("");
+                    if (val != "") {
+                        $.ajax({
+                            type: "GET", url: url, dataType: "json",
+                            data: { fieldname: fieldname, keyword: val },
+                            success: function (data) {
+                                if (data.rows != null) {
+                                    $(sectionid + '#UserId').val(data.rows.UserId);
+                                }
+                                else {
+                                    $thisobject[0].selectize.setValue('');
+                                    $thisobject[0].selectize.clearOptions();
+                                }
+                            }
+                        });
+                    }
+                    break;
+               
+                default:
+            }
+        });
+    });
+</script>
+

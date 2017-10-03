@@ -1,0 +1,69 @@
+﻿@model WebApp.Areas.Admin.Models.SenMessageTemplate
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    string idbody = DateTime.Now.Ticks.ToString();
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+
+    IEnumerable<SelectListItem> senaccountemails =
+    from value in db.SenEmailAccounts
+    select new SelectListItem
+    {
+        Text = value.DisplayName,
+        Value = value.EmailAccountId.ToString()
+    };
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.MessageTemplateId)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsDropDownListFor(model => model.EmailAccountId, senaccountemails)
+
+                        @Html.bsEditorFor(model => model.BccEmailAddresses)
+                        @Html.bsEditorFor(model => model.Subject)
+                        @Html.bsEditorFor(model => model.Name)
+                        @*@Html.bsEditorFor(model => model.Body)*@
+                        <div class="form-group">
+                            <label for="Body" class="control-label">Body</label>
+                            <textarea name="Body" id="@(idbody)">@Model.Body</textarea>
+                        </div>
+                        @Html.bsEditorFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@
+
+<script src="~/Scripts/editors/tinymce/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: "#@(idbody)",
+        theme: "modern",
+        height: "400",
+        plugins: [
+            ["textcolor advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker"],
+            ["searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking"],
+            ["save table contextmenu directionality emoticons template paste"]
+        ],
+        toolbar: "forecolor backcolor | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+        statusbar: false
+    });
+
+</script>

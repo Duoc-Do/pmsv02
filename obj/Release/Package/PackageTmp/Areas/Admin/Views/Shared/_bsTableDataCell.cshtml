@@ -1,0 +1,36 @@
+﻿@model object
+@{
+    var column = (WebApp.Areas.Admin.Models.SysTableDetailView)ViewData["column"];
+
+    var value = column.UType == true ? Model : Model.GetType().GetProperty(column.ColumnName).GetValue(Model, null) ?? String.Empty;
+
+
+    string datatype = WebApp.Areas.Admin.Services.ExConvert.Sqltype2Systemtype(column.DATA_TYPE);
+    switch (datatype)
+    {
+        case "boolean":
+            var col = new TagBuilder("input");
+            col.MergeAttribute("type", "checkbox", true);
+            col.MergeAttribute("disabled", "disabled", true);
+
+            col.AddCssClass("check-box");
+            if (value.ToString() != "")
+            {
+                if ((bool)value)
+                {
+                    col.MergeAttribute("checked", "checked");
+                }
+            }
+            <td>@Html.Raw(col.ToString())</td>                    
+            break;
+        case "numeric":
+             string _value = string.Format("<span title=\"{0}\">{0}</span>", WebApp.Areas.Admin.Services.ExConvert.Data2String(value, datatype, column.FormatValue, column.CultureInfo));
+            <td class="text-right">@Html.Raw(_value)</td>                        
+            break;
+        default:
+             string __value = string.Format("<span title=\"{0}\">{0}</span>", WebApp.Areas.Admin.Services.ExConvert.Data2String(value, datatype, column.FormatValue, column.CultureInfo));
+            <td>@Html.Raw(__value)</td>                        
+            break;
+    }
+    
+}

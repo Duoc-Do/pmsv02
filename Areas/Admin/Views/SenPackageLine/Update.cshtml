@@ -1,0 +1,45 @@
+﻿
+@model WebApp.Areas.Admin.Models.SenPackageLine
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+
+    IEnumerable<SelectListItem> lists =
+    from value in db.SenPackageViews
+    select new SelectListItem
+    {
+        Text = value.ApplicationName + " - " + value.Name,
+        Value = value.PackageId.ToString()
+    };
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+@Html.svHiddenFor(model => model.PackageLineId)@*@Html.svHiddenFor(model => model.PackageId)*@
+                                
+                <div class="panel panel-default">
+                    <div class="panel-body">                
+@Html.bsDropDownListFor(model => model.PackageId, lists)@Html.bsEditorFor(model => model.Name)@Html.bsEditorFor(model => model.Value)@Html.bsTextAreaFor(model => model.Description)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@

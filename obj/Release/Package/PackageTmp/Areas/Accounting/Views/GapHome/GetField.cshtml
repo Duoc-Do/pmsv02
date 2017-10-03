@@ -1,0 +1,146 @@
+﻿@model WebApp.Areas.Accounting.Models.GapFarm
+@using WebApp.Areas.Accounting.Services
+@{
+    var appajaxoption = new WebApp.Areas.Accounting.Models.AppAjaxOption();
+    var ajaxoption = appajaxoption.ajaxoption;
+    ajaxoption.Add("ajaxupdateid", "gaphome_container");
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string urlgapjournal = Url.Action("Create2", "GapJournal", new { area = "Accounting", action_return = "noaction" });
+
+    string urlgapjournalcare = Url.Action("Create2", "GapJournalCare", new { area = "Accounting", action_return = "noaction" });
+
+    string urlgapjournalharvest = Url.Action("Create2", "GapJournalHarvest", new { area = "Accounting", action_return = "noaction" });
+
+
+    string urlgapcomplete = Url.Action("Complete", "GapJournal", new { area = "Accounting" });
+
+    Dictionary<string, string> stringname = new Dictionary<string, string>();
+    stringname.Add("farm", "Thửa");
+
+}
+
+@*@Html.Partial("_bsPaging",metaobject.Paging)*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    @using (@Ajax.BeginForm(new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"], LoadingElementId = ajaxoption["ajaxloadingid"] }))
+    {
+        <div class="row-fluid">
+            <div class="box box-primary">
+                <ul class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "GapHome", new { area = "Accounting" })" @(ajaxstring)> @stringname["farm"]</a> </li>
+                    <li><a class="active" href="@Url.Action("GetField", "GapHome", new { area = "Accounting", farmid = Model.FarmId})" @(ajaxstring)>@Model.Name</a> </li>
+                </ul>
+                <div class="box-body">
+                    <ul class="nav nav-pills">
+                        <li role="presentation"><a href="javascript:;" onclick="appaccountinggaphome.selectall()">Select all</a></li>
+                        <li role="presentation"><a href="javascript:;" onclick="appaccountinggaphome.unselectall()">Unselect all</a></li>
+
+                        <li role="presentation">
+                            <a href="javascript:;" data-url="@(urlgapjournal)" onclick="appaccountinggetfield.seeding(this)">Gieo trồng</a>
+                        </li>
+                        <li role="presentation"><a href="javascript:;" data-url="@(urlgapjournalcare)" onclick="appaccountinggetfield.care(this)">Chăm sóc</a></li>
+                        @*<li role="presentation"><a href="javascript:;" onclick="appaccountinggaphome.unselectall()">Cách ly</a></li>*@
+                        <li role="presentation"><a href="javascript:;" data-url="@(urlgapjournalharvest)" onclick="appaccountinggetfield.harvest(this)">Thu hoạch</a></li>
+                        <li role="presentation">
+
+                            <a href="javascript:;" data-url="@(urlgapcomplete)" onclick="appaccountinggetfield.complete(this)">Hoàn thành</a>
+                        </li>
+
+                    </ul>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                                @Html.Partial("_FieldAdd", Model.FarmId)
+                            </div>
+                            @foreach (var item in Model.GapFields)
+                            {
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+                                    <!-- small box -->
+                                    @Html.Partial("_Field", item)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+        </div>
+    }
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+<script type="text/javascript">
+    var appaccountinggetfield =
+            {
+                seeding: function (a) {
+                    var fieldids = "&";
+                    $('#@(ajaxoption["ajaxupdateid"]) input[name="RowSelected"]:checked').each(function () {
+                        //alert(this.value);
+                        fieldids += "fieldid=" + this.value + "&";
+                    });
+                    if (fieldids=="&") {
+                        return;
+                    }
+                    var href = $(a).attr("data-url");
+                    $(a).attr("data-url", href + fieldids);
+                    appcommon.popup(a, 1);
+                },
+
+                care: function (a) {
+                    var fieldids = "&";
+                    $('#@(ajaxoption["ajaxupdateid"]) input[name="RowSelected"]:checked').each(function () {
+                        //alert(this.value);
+                        fieldids += "fieldid=" + this.value + "&";
+                    });
+                    if (fieldids == "&") {
+                        return;
+                    }
+                    var href = $(a).attr("data-url");
+                    $(a).attr("data-url", href + fieldids);
+                    appcommon.popup(a, 1);
+                },
+                harvest: function (a) {
+                    var fieldids = "&";
+                    $('#@(ajaxoption["ajaxupdateid"]) input[name="RowSelected"]:checked').each(function () {
+                        fieldids += "fieldid=" + this.value + "&";
+                    });
+                    if (fieldids == "&") {
+                        return;
+                    }
+                    var href = $(a).attr("data-url");
+                    $(a).attr("data-url", href + fieldids);
+                    appcommon.popup(a, 1);
+                },
+                complete: function (a) {
+                    var fieldids = "?";
+                    $('#@(ajaxoption["ajaxupdateid"]) input[name="RowSelected"]:checked').each(function () {
+                        fieldids += "fieldid=" + this.value + "&";
+                    });
+                    if (fieldids == "?") {
+                        return;
+                    }
+                    var href = $(a).attr("data-url");
+                    $(a).attr("data-url", href + fieldids);
+                    var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+                    $.post(href + fieldids, {
+                        __RequestVerificationToken: tokenxacthuc
+                    },
+                           function (data, status) {
+                               //$("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                               //alert("Data: " + data.ketqua + "\nStatus: " + status);
+                               $(a).closest('form').submit();
+                           });
+
+
+
+                    //appcommon.popup(a, 1);
+                }
+            }
+
+</script>

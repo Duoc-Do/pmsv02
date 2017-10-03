@@ -1,0 +1,162 @@
+﻿@using WebApp.Areas.Accounting.Models
+@using WebApp.Areas.Accounting.Services
+@{
+    WebAppAccEntities db = new WebAppAccEntities(GlobalVariant.GetConnection());
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "page-body-contain-id");
+    ajaxstring += "data-ajax-success=ajaxmenu_onsuccess ";
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string hideselect = GlobalVariant.GetAppUser().SysRole.IsAdmin ? "" : " style = display:none;";
+
+
+    //string POSView = "Nhà đầu tư";
+    //string POSAdmin = "Quản lí quán";
+    //string POSCash = "Thu ngân quán";
+    //string POSOrder = "Order quán";
+
+    string RoleName = GlobalVariant.GetAppUser().SysRole.Name;
+    
+}
+
+<ul class="sidebar-menu">
+    @if (User.IsInRole("Admin"))
+    {
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-cog"></i>
+                <span>Cấu hình quản trị</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a id="SysTableDetail" href="@Url.Action("Index", "SysTableDetail", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysTableDetail</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysBusiness" href="@Url.Action("Index", "SysBusiness", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysBusiness</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="SysMenu" href="@Url.Action("Index", "SysMenu", new { area = "Accounting" })" @(ajaxstring)>
+                        <i class="fa fa-cog"></i><span>SysMenu</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    <li class="active">
+        <a href="@Url.Action("Index", "AppHome", new { area = "Pos" })" >
+            <i class="fa fa-dashboard"></i><span>Bảng điều khiển</span>
+        </a>
+    </li>
+    <li>
+        <a id="ResHome" href="@Url.Action("Index", "ResHome", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-table"></i><span>Bảng theo dõi</span></a>
+    </li>
+    <li>
+        <a id="ResReport" href="@Url.Action("Index", "ResReport", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-bar-chart"></i><span>Báo cáo</span></a>
+    </li>
+    <li class="treeview" @hideselect>
+        <a href="#">
+            <i class="fa fa-list"></i>
+            <span>Danh mục</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a id="AppItemTable" href="@Url.Action("Index2", "AppItemTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Món ăn</span></a>
+            </li>
+            <li>
+                <a id="AppItemGroupTable" href="@Url.Action("Index", "AppItemGroupTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Nhóm món ăn</span></a>
+            </li>
+            <li>
+                <a id="ResTable" href="@Url.Action("Index", "ResTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Bàn ăn</span></a>
+            </li>
+
+            <li>
+                <a id="AppUnitOfMeasureTable" href="@Url.Action("Index", "AppUnitOfMeasureTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Đơn vị tính</span></a>
+            </li>
+
+            <li>
+                <a id="AppExpenseTable" href="@Url.Action("Index", "AppExpenseTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Danh mục phí</span></a>
+            </li>
+
+            <li>
+                <a id="AppExpenseBudgetTable" href="@Url.Action("Index", "AppExpenseBudgetTable", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Chi phí tháng</span></a>
+            </li>
+
+        </ul>
+    </li>
+
+    <li class="treeview" @hideselect>
+        <a href="#">
+            <i class="fa fa-cog"></i>
+            <span>Cấu hình hệ thống</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a id="SysOption" href="@Url.Action("Edit2", "SysOption", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Tùy chọn</span></a>
+            </li>
+            <li>
+                <a id="SysUser" href="@Url.Action("Index", "SysUser", new { area = "Accounting" })" @(ajaxstring)><i class="fa fa-angle-right"></i><span>Users</span></a>
+            </li>
+
+        </ul>
+    </li>
+
+</ul>
+
+
+<script>
+
+    // Run on document ready
+    $(function () {
+        @*var IsAuthenticated="@User.Identity.IsAuthenticated";*@
+
+        $('.sidebar-menu a').click(function () {
+            if ($(this).attr("id") == null) { return; }
+            location.hash = $(this).attr("id");
+            $(document).scrollTop(0);
+        });
+
+    });
+
+
+
+    var globalvariant = {
+        syscompany: {},
+        sysoption: {}
+    }
+    $(document).ready(function () {
+        @{
+            var sysoption = GlobalVariant.GetSysOption();
+            var syscompany = GlobalVariant.GetSysCompany();
+          <text>
+        globalvariant.syscompany.CompanyName = "@(syscompany["CompanyName"].ToString())";
+        globalvariant.syscompany.CompanyAddress = "@(syscompany["CompanyAddress"].ToString())";
+        globalvariant.syscompany.CompanyPhone = "@(syscompany["CompanyPhone"].ToString())";
+        globalvariant.syscompany.CompanyHomePage = "@(syscompany["CompanyHomePage"].ToString())";
+
+        globalvariant.sysoption.RoundQuantity = "@(sysoption["RoundQuantity"].ToString())";
+        globalvariant.sysoption.RoundAmount = "@(sysoption["RoundAmount"].ToString())";
+        globalvariant.sysoption.RoundAmountFC = "@(sysoption["RoundAmountFC"].ToString())";
+
+        globalvariant.sysoption.RoundUnitPrice = "@(sysoption["RoundUnitPrice"].ToString())";
+        globalvariant.sysoption.RoundUnitPriceFC = "@(sysoption["RoundUnitPriceFC"].ToString())";
+
+        </text>
+            }
+    });
+
+
+</script>

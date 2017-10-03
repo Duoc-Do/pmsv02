@@ -1,0 +1,68 @@
+﻿@model List<WebApp.Areas.Accounting.Models.SysOption>
+@using WebApp.Areas.Accounting.Services
+@{
+    ((Dictionary<string, string>)ViewBag.ajaxoption)["action-return"] = "noaction";
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                <p class="text-success">@ViewBag.FcSysOptionLockDateMessage</p>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @{
+            var lockdate = Model.Where(m => m.SysOptionName == "LockDate").SingleOrDefault();
+                                    }
+                                    <div class="form-group">
+                                        <label for="@(lockdate.SysOptionName)" class="control-label">@lockdate.Des</label>
+                                        <input type="text" value="@(lockdate.SysOptionValue)" name="SysOptionValue" id="@(lockdate.SysOptionName)" fieldname="@(lockdate.SysOptionName)" class=" form-control text-date datetime">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Thực hiện</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        @*<div class="form-group"><label for="BalanceDate" class="control-label">Ngày đầu kỳ (*)</label><span class="datetimeEntry_wrap"><input type="text" value="01/01/2014" name="BalanceDate" id="BalanceDate" fieldname="BalanceDate" class="datetime form-control text-box single-line hasDatetimeEntry"></span></div>*@
+
+                        @*@Html.bsEditorFor(model => model.Type)                        @Html.bsEditorFor(model => model.SysOptionValue)                        @Html.bsEditorFor(model => model.SysOptionName)                        @Html.bsEditorFor(model => model.SysOptionDefault)                        @Html.bsEditorFor(model => model.Des)*@
+                    </div>
+                </div>
+
+                @*@Html.Partial("_ToolbarListUpdate", ajaxoption)*@
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+@Scripts.Render("~/bundles/accapp")
+
+@*<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        $.datepicker.setDefaults($.datepicker.regional["vi"]);
+        $("#LockDate").datepicker($.datepicker.regional["vi"]);
+    });
+</script>*@

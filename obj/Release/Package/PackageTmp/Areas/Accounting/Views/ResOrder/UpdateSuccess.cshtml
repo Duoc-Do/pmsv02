@@ -1,0 +1,17 @@
+﻿@model int
+@{
+    int OrderId = ViewBag.OrderId == null ? 0 : (int)ViewBag.OrderId;
+}
+
+<script>
+    $(document).ready(function () {
+
+        appaccountingreshome.tablerefresh('dashboardtable_@(Model)');
+        appaccountingreshome.tabdashboard.tableactive();
+        appaccountingreshome.tablerefreshalls('dashboardtable_@(Model)');
+
+        if (parseInt("@(OrderId)") > 0) {
+            appaccountingreshome.printkitchen(parseInt("@(OrderId)"), parseInt("@(Model)"));
+        }
+    });
+</script>

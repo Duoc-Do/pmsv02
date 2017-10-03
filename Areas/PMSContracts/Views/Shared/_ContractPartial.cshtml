@@ -1,0 +1,96 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.ContractModel>
+
+@foreach (var item in Model)
+            {
+    <tr>
+
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ContractID)
+            </td>*@
+        <td class="text-center">
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="@Html.DisplayFor(modelItem => item.ContractIDERP)">@Html.DisplayFor(modelItem => item.ContractIDERP)</a>
+        </td>
+        <td class="text-center">
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="@Html.DisplayFor(modelItem => item.ContractIDERP)">@Html.DisplayFor(modelItem => item.ContractCode)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description_VN)
+        </td>
+        <td class="text-center">
+            @Html.DisplayFor(modelItem => item.ModifyDate)
+        </td>
+        <td class="text-center">
+            @Html.DisplayFor(modelItem => item.proj_status)
+        </td>
+        @*<td>
+                @Html.DisplayFor(modelItem => item.CCE_ID)
+            </td>*@
+
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ContractDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CommencementDate)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>*@
+
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ContractFormat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FCAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LCAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FCAmountExtension)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LCAmountExtension)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ClientID)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ContractorID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DurationInDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExtensionInDays)
+            </td>
+        *@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.CurrencyCode)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ForOrdering)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.proj_id)
+            </td>*@
+        <td class="text-center">
+
+            <a href='@Url.Action("Edit", "Contract", new { id = item.ContractID})' title="Edit">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </a>&nbsp;
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="View">
+                <i class="glyphicon glyphicon-search"></i>
+            </a>&nbsp;
+            <a href='@Url.Action("Delete", "Contract", new { id = item.ContractID})' title="Delete">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+        </td>
+
+    </tr>
+}

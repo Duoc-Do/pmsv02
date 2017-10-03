@@ -1,0 +1,30 @@
+﻿@model WebApp.Areas.Admin.Models.vw_aspnet_MembershipUsers
+@using WebApp.Areas.Admin.Services
+@{
+    var appajaxoption = (WebApp.Areas.Admin.Models.AppAjaxOption)ViewBag.appajaxoption;
+    var ajaxoption = appajaxoption.ajaxoption;
+    string ajaxstring = appajaxoption.ajaxstring();    
+}
+@{
+    if (Model.SenContracts != null)
+    {
+        string urlcontract = Url.Action("Index", "SenContract", new { AssignedTo = Model.UserId });
+    <a href="@(urlcontract)" @ajaxstring><span class="label label-success">Hợp đồng: @(Model.SenContracts.Count) - @Model.SenContracts.Select(m => m.Amount).DefaultIfEmpty().Sum().Price()  </span></a>
+    }
+    if (Model.SenCompanys != null)
+    {
+        string urlcompany = Url.Action("Index", "SenCompany", new { UserId = Model.UserId });    
+    <a href="@(urlcompany)" @ajaxstring><span class="label label-primary">Doanh nghiệp: @(Model.SenCompanys.Count)</span></a>
+    }
+    if (Model.SenCustomers != null)
+    {
+        string urlcustomer = Url.Action("Index", "SenCustomer", new { AssignedTo = Model.UserId });    
+    <a href="@(urlcustomer)" @ajaxstring><span class="label label-warning">Khách hàng: @(Model.SenCustomers.Count)</span></a>
+    }
+     
+        if (Model.SenUserView != null)
+    {
+
+    <span class="label label-warning">Số dư: @(Model.SenUserView.AmountBalance.HasValue?Model.SenUserView.AmountBalance.Value.Currency():"0")</span>
+    }
+}

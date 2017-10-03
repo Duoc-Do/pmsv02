@@ -1,0 +1,109 @@
+﻿@model WebApp.Areas.Admin.Models.vw_aspnet_MembershipUsers
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.UserId)                @Html.svHiddenFor(model => model.ApplicationId)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.UserName)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Email)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Password" class="control-label">Mật khẩu</label>
+                                    <input type="password" name="Password" id="Password" fieldname="Password" class=" form-control text-box single-line">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ConfirmPassword" class="control-label">Xác nhận mật khẩu</label>
+                                    <input type="password" name="ConfirmPassword" id="ConfirmPassword" fieldname="ConfirmPassword" class=" form-control text-box single-line">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.MobilePIN)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.MobileAlias)
+                            </div>
+                        </div>
+
+                        @Html.bsEditorFor(model => model.IsLockedOut, new { @class = "check-line" })                        @Html.bsEditorFor(model => model.IsApproved, new { @class = "check-line" })                        @Html.bsEditorFor(model => model.IsAnonymous, new { @class = "check-line" })                        @Html.bsTextAreaFor(model => model.Comment)
+
+                        <div class="form-group">
+                            <label for="SelectedUserRoles" class="control-label">Phân quyền</label>
+                            <br />
+                            @for (int i = 0; i < Model.Roles.Count; i++)
+                            {
+                                var item = Model.Roles[i];
+                                var ischeck = "";
+                                if (Model.SelectedUserRoles != null)
+                                {
+                                    if (Model.SelectedUserRoles.Contains(item.RoleName))
+                                    {
+                                        ischeck = "checked=\"checked\"";
+                                    }
+                                }
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" @ischeck value="@(item.RoleName)" name="SelectedUserRoles" class="check-box">@item.Description
+                                </label>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                   @if (Model.SenUserView != null)
+                        {
+                            @Html.Partial("_SenUser")
+
+                            <div class="box box-primary collapsed-box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Thông tin mở rộng</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <!-- /.box-tools -->
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-md-12">@Html.Partial("_ExView")</div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                        }
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")

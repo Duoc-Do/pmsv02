@@ -1,0 +1,169 @@
+﻿@model WebApp.Areas.Admin.Models.SenContract
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var contractstatus = new WebApp.Areas.Admin.Models.ContractStatus().selectlist.ToDictionary(m => m.Value);
+
+    ViewBag.Title = "Chi tiết hợp đồng";
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @*@Html.Partial("_HeaderEdit")*@
+        @Html.Partial("_HeaderView")
+
+        <div class="box-body">
+            @Html.AntiForgeryToken()
+            @Html.bsValidationSummary(false)
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.bsDisplayFor(model => model.ContractDate)
+                            @Html.bsDisplayFor(model => model.CompleteDate)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.bsDisplayFor(model => model.ContractNumber)
+
+                            @Html.bsLabelFor(model => model.Status)
+                            <p>@contractstatus[Model.Status.ToString()].Text</p>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.bsLabel("SenCustomer_CustomerName", "Khách hàng")
+                            <p>@(Model.SenCustomer != null ? Model.SenCustomer.Name : "") </p>
+
+                        </div>
+                        <div class="col-md-6">
+                            @Html.bsLabel("SenProduct_ProductName", "Sản phẩm")
+                            <p>@(Model.SenProduct != null ? Model.SenProduct.Name : "")</p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.bsDisplayFor(model => model.ContractAmount)
+                            @Html.bsDisplayFor(model => model.DiscountPercenttage)                                @Html.bsDisplayFor(model => model.Discount)
+                            @Html.bsDisplayFor(model => model.Amount)
+                            @Html.bsDisplayFor(model => model.Payment)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.bsDisplayFor(model => model.CommissionPercentage)                                @Html.bsDisplayFor(model => model.Commission)                                @Html.bsDisplayFor(model => model.CommissionReceived)
+                            @Html.bsDisplayFor(model => model.CommissionPayment)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                    @Html.bsDisplayFor(model => model.Note)
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <div class="box box-primary collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Lịch sử thu hợp đồng</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (Model.SenContractCashs != null)
+                            {
+                                <div class="row-fluid">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-hover">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Ngày chứng từ</th>
+                                                    <th>Nội dung</th>
+                                                    <th>Tiền</th>
+                                                </tr>
+                                                @foreach (var item in Model.SenContractCashs)
+                                                {
+                                                    <tr>
+                                                        <td>@item.VoucherDate.ToLocalDateString()</td>
+                                                        <td>@item.Description</td>
+                                                        <td>@item.Amount.Currency()</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+            <div class="box box-primary collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Lịch sử nhận hoa hồng</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (Model.SenCommissions != null)
+                            {
+                                <div class="row-fluid">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-hover">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Ngày chứng từ</th>
+                                                    <th>Nội dung</th>
+                                                    <th>Tiền</th>
+                                                </tr>
+                                                @foreach (var item in Model.SenCommissions)
+                                                {
+                                                    <tr>
+                                                        <td>@item.VoucherDate.ToLocalDateString()</td>
+                                                        <td>@item.Description</td>
+                                                        <td>@item.Amount.Currency()</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/adminapp")

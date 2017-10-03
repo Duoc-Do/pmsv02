@@ -1,0 +1,213 @@
+﻿@model WebApp.Areas.PMSContracts.Models.ContractModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ContractModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractIDERP)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractIDERP)
+            @Html.ValidationMessageFor(model => model.ContractIDERP)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CCE_ID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CCE_ID)
+            @Html.ValidationMessageFor(model => model.CCE_ID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractCode)
+            @Html.ValidationMessageFor(model => model.ContractCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractDate)
+            @Html.ValidationMessageFor(model => model.ContractDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CommencementDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CommencementDate)
+            @Html.ValidationMessageFor(model => model.CommencementDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description_VN)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Description_VN)
+            @Html.ValidationMessageFor(model => model.Description_VN)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractFormat)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractFormat)
+            @Html.ValidationMessageFor(model => model.ContractFormat)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FCAmount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FCAmount)
+            @Html.ValidationMessageFor(model => model.FCAmount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LCAmount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LCAmount)
+            @Html.ValidationMessageFor(model => model.LCAmount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FCAmountExtension)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FCAmountExtension)
+            @Html.ValidationMessageFor(model => model.FCAmountExtension)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LCAmountExtension)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LCAmountExtension)
+            @Html.ValidationMessageFor(model => model.LCAmountExtension)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ClientID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ClientID)
+            @Html.ValidationMessageFor(model => model.ClientID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractorID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractorID)
+            @Html.ValidationMessageFor(model => model.ContractorID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DurationInDays)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DurationInDays)
+            @Html.ValidationMessageFor(model => model.DurationInDays)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ExtensionInDays)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ExtensionInDays)
+            @Html.ValidationMessageFor(model => model.ExtensionInDays)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ModifyDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ModifyDate)
+            @Html.ValidationMessageFor(model => model.ModifyDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CurrencyCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CurrencyCode)
+            @Html.ValidationMessageFor(model => model.CurrencyCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Status)
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ForOrdering)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ForOrdering)
+            @Html.ValidationMessageFor(model => model.ForOrdering)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Type)
+            @Html.ValidationMessageFor(model => model.Type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.proj_id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.proj_id)
+            @Html.ValidationMessageFor(model => model.proj_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.proj_status)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.proj_status)
+            @Html.ValidationMessageFor(model => model.proj_status)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

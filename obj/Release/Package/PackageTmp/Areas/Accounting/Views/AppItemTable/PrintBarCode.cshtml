@@ -1,0 +1,263 @@
+﻿@model IEnumerable<WebApp.Areas.Accounting.Models.AppItemView>
+@using WebApp.Areas.Accounting.Services
+@{
+    ViewBag.Title = "In barcode";
+    Layout = "~/Areas/Accounting/Views/Shared/_PrintBarCode.cshtml";
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    //List<SelectListItem> cols = new List<SelectListItem>();
+    ////cols.Add(new SelectListItem() { Value = "1", Text = "1 cột" });
+    //cols.Add(new SelectListItem() { Value = "2", Text = "2 cột" });
+    //cols.Add(new SelectListItem() { Value = "3", Text = "3 cột" });
+    //cols.Add(new SelectListItem() { Value = "4", Text = "4 cột" });
+
+}
+@*<div class="form-group">
+        <select class="form-control" id="columnoption2" name="columnoption2">
+            <option value="1" selected='selected'>1 cột</option>
+            @foreach (var item in cols)
+            {
+                <option value="@(item.Value)">@item.Text</option>
+            }
+        </select>
+    </div>*@
+<div class="box box-primary">
+    @Html.Partial("_HeaderEdit")
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="btn-toolbar" role="toolbar" aria-label="...">
+                    <div class="btn-group" data-toggle="buttons" role="group" id="columnoption">
+                        <label class="btn btn-primary active">
+                            <input value="1" type="radio" name="columnoption" id="option1" autocomplete="off" checked> 1 cột
+                        </label>
+                        <label class="btn btn-primary">
+                            <input value="2" type="radio" name="columnoption" id="option2" autocomplete="off"> 2 cột
+                        </label>
+                        <label class="btn btn-primary">
+                            <input value="3" type="radio" name="columnoption" id="option3" autocomplete="off"> 3 cột
+                        </label>
+
+                        <label class="btn btn-primary">
+                            <input value="4" type="radio" name="columnoption" id="option3" autocomplete="off"> 4 cột
+                        </label>
+                    </div>
+
+                    <div class="btn-group" data-toggle="buttons" role="group">
+                        <label class="btn btn-primary active">
+                            <input name="printitemcode" type="checkbox" autocomplete="off" checked> In mã hàng
+                        </label>
+                        <label class="btn btn-primary">
+                            <input name="printitemname" type="checkbox" autocomplete="off"> In tên hàng
+                        </label>
+                        <label class="btn btn-primary">
+                            <input name="printitemprice" type="checkbox" autocomplete="off"> In giá
+                        </label>
+                        <label class="btn btn-primary">
+                            <input name="printitemquantity" type="checkbox" autocomplete="off"> In số lượng
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="btn-toolbar" role="toolbar" aria-label="...">
+
+                    <div class="btn-group" data-toggle="buttons" role="group">
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="heightbarcodecontainer" placeholder="Chiều cao nhãn tự động">
+                        </div>
+                    </div>
+
+                    <div class="btn-group" data-toggle="buttons" role="group">
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="heightbarcode" placeholder="Chiều cao barcode tự động">
+                        </div>
+                    </div>
+
+                    <div class="btn-group" data-toggle="buttons" role="group">
+                        <a class="btn btn-default" href="javascript:;" onclick="PreviewBarCode();"><i class="fa fa-print"></i>&nbsp;Xem trước</a>
+                    </div>
+
+
+                    <div class="btn-group" data-toggle="buttons" role="group">
+                        <a class="btn btn-default" href="javascript:;" onclick="PrintBarCode()"><i class="fa fa-print"></i>&nbsp;In</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    <div class="container-fluid">
+        <div class="nav-tabs" id="dashboardtabcontainer">
+            <ul class="nav nav-tabs">
+
+                <li class="active">
+                    <a data-toggle="tab" href="@String.Format("#tab_{0}", "tablelist")">Danh sách in</a>
+                </li>
+                <li><a data-toggle="tab" href="@String.Format("#tab_{0}", "printpreview")">Xem trước</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="tab_tablelist" class="tab-pane active">
+                    <div class="row-fluid">
+
+
+
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead> <tr> <th>Mã</th> <th>Tên</th><th>Giá</th> <th>Số bản in</th><th>Số lượng</th></tr> </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>
+                                            @item.ItemCode
+                                        </td>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @ExConvert.Price2String(item.Price)
+                                        </td>
+                                        <td>
+                                            <input type="text" value="1" style="text-align:right;" name="@(item.ItemCode)" fieldname="@(item.ItemCode)" decimaldigits="0" class="numeric form-control text-box single-line">
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input aria-describedby="basic-addon1" type="text" value="1" style="text-align:right;" name="quantity@(item.ItemCode)" fieldname="quantity@(item.ItemCode)" decimaldigits="0" class="numeric form-control text-box single-line">
+                                                <span class="input-group-addon" id="basic-addon1">@(item.UOMCode)</span>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+                </div>
+                <div id="tab_printpreview" class="tab-pane">
+
+                    <div class="row">
+                        <div id="barcodecontainer" class="container-fluid"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function PrintBarCode() {
+        generateBarcodeAll();
+        appcommon.printelem($('#barcodecontainer'), true)
+    }
+
+    function PreviewBarCode()
+    {
+        generateBarcodeAll();
+        $('#dashboardtabcontainer a[href="#tab_printpreview"]').tab('show');
+    }
+
+    function generateBarcodeAll() {
+        //var columnoption = $("#columnoption option:selected").val();
+        var columnoption = $('input[name="columnoption"]:checked', '#columnoption').val()
+
+        var divcontainer = $("#barcodecontainer");
+        var classcol = "text-center col-xs-" + 12 / columnoption;
+
+        var heightcontainer = "";
+        var heightbarcodecontainer = $("#heightbarcodecontainer").val();
+        if (heightbarcodecontainer != "") {
+            heightcontainer = "style='min-height:" + heightbarcodecontainer + "px;max-height:" + heightbarcodecontainer + "px;'"
+        }
+
+        var heightbarcode = parseInt($("#heightbarcode").val());
+        if (isNaN(heightbarcode)) {
+
+            heightbarcode = 100;
+        }
+
+        divcontainer.html("");
+
+        var i = 0;
+        @foreach (var item in Model)
+                    {
+                    <text>
+
+
+        var numberlabel = $("input[name='" + "@(item.ItemCode)" + "']").val();
+        var quantity = parseFloat($("input[name='quantity" + "@(item.ItemCode)" + "']").val());
+
+
+        for (var j = 0; j < numberlabel; j++) {
+            var divcol = $("<div " + heightcontainer + "></div>");
+            divcol.addClass(classcol);
+            var svg = $("<svg class=" + '@(string.Format("barcodeitem{0}",item.ItemCode))' + "></svg>");
+            divcol.append(svg);
+
+
+
+            var label = "";
+
+
+            var barcodevalue = "@(item.ItemCode)";
+            if ($('input[name="printitemquantity"]').prop('checked')) {
+
+                if (!isNaN(quantity)) {
+                    if (quantity != 1) {
+                        barcodevalue += " " + quantity.toString() + " @(item.UOMCode)";
+                    }
+                }
+            }
+
+            if ($('input[name="printitemcode"]').prop('checked')) {
+                label += barcodevalue;
+
+                //alert(label);
+                @*"@(item.ItemCode)";*@
+            }
+
+
+            if ($('input[name="printitemname"]').prop('checked')) {
+                label += " @(item.Name)";
+            }
+            if ($('input[name="printitemprice"]').prop('checked')) {
+                label += " @(ExConvert.Price2String(item.Price))";
+            }
+
+            divcol.append("<div class='text-center'><span  style='font: 20px monospace;width:150px;'>" + label + "</span></div>");
+            divcontainer.append(divcol);
+            var clsbarcode = '.barcodeitem' + '@(item.ItemCode)';
+
+
+            //alert(barcodevalue);
+            JsBarcode(clsbarcode, barcodevalue, { displayValue: false, height: heightbarcode });
+        }
+
+        i++;
+        </text>
+
+                    }
+
+    }
+
+
+
+</script>

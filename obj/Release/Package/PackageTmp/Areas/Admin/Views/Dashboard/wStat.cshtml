@@ -1,0 +1,116 @@
+﻿@using WebApp.Areas.Admin.Services;
+@using WebApp.Areas.Admin.Models;
+@{
+    var db = new AdminContext();
+    int year = DateTime.Today.Year;
+    int month = DateTime.Today.Month;
+
+    var today = DateTime.Today;
+    var firstdaymonth = new DateTime(today.Year, today.Month, 1);
+
+    string UrlMembershipUsers = Url.Action("Index", "MembershipUsers", new { area = "Admin" });
+    var newuser = db.aspnet_Memberships.Where(m => m.CreateDate.Year == year && m.CreateDate.Month == month).Count();
+    var newuserisapproved = db.aspnet_Memberships.Where(m => m.IsApproved == true && m.CreateDate.Year == year && m.CreateDate.Month == month).Count();
+    var newusernotapproved = db.aspnet_Memberships.Where(m => m.IsApproved != true && m.CreateDate.Year == year && m.CreateDate.Month == month).Count();
+
+
+
+    string UrlSenCompany = Url.Action("Index", "SenCompany", new { area = "Admin" });
+
+
+    var newpm = db.SenPrivateMessages.Where(m => m.CreatedOnUtc.Year == year && m.CreatedOnUtc.Month == month).Count();
+    var newchat = db.SenChatMessages.Where(m => m.Timestamp.Year == year && m.Timestamp.Month == month).Count();
+
+
+    var newcompany = db.SenCompanys.Where(m => m.CreateDate.Value.Year == year && m.CreateDate.Value.Month == month).Count();
+
+    var newcompanyisapproved = db.SenCompanys.Where(m => m.IsApproved == true && m.CreateDate.Value.Year == year && m.CreateDate.Value.Month == month).Count();
+    var newcompanynotapproved = db.SenCompanys.Where(m => m.IsApproved != true && m.CreateDate.Value.Year == year && m.CreateDate.Value.Month == month).Count();
+
+
+
+    string UrlSenContract = Url.Action("Index", "SenContract", new { area = "Admin" });
+
+    var newcontract = db.SenContracts.Where(m => m.ContractDate.Year == year && m.ContractDate.Month == month).Count();
+    var newcontractamount = db.SenContracts.Where(m => m.ContractDate.Year == year && m.ContractDate.Month == month).Select(m => m.ContractAmount).DefaultIfEmpty().Sum();
+
+        
+}
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-cart-outline"></i></span>
+            <div class="info-box-content">
+                <a href="@(UrlSenContract)" @GlobalVariant.AjaxInfo  title="Hợp đồng mới">
+                    <span class="info-box-text">Hợp đồng mới</span>
+                </a>
+
+                <span class="info-box-number">@newcontract</span>
+                <span class="info-box-number">@newcontractamount.Currency()</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-envelope-o"></i></span>
+            <div class="info-box-content">
+
+                <span class="info-box-text">Messages</span>
+                <a href="@(Url.Action("Index", "SenPrivateMessage", new {area="admin"}))" @(GlobalVariant.AjaxInfo)><span class="info-box-number">@(newpm)&nbsp;<i class="fa fa-bell-o"></i></span></a>
+                <span class="info-box-number">@(newchat)&nbsp;<i class="fa fa-comment-o"></i></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-building-o"></i></span>
+            <div class="info-box-content">
+
+                <a href="@(UrlSenCompany)" @GlobalVariant.AjaxInfo  title="Doanh nghiệp mới">
+                    <span class="info-box-text">Doanh nghiệp mới</span>
+                </a>
+
+                <span class="info-box-number">
+                    @(newcompany)
+                </span>
+                <span class="info-box-number">
+                    <span class="text-success">@(newcompanyisapproved)&nbsp;<i class="fa fa-check"></i></span><span class="text-warning">&nbsp;@(newcompanynotapproved)</span>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+            <div class="info-box-content">
+                <a  href="@(UrlMembershipUsers)" @GlobalVariant.AjaxInfo >
+                    <span class="info-box-text">Thành viên mới</span>
+                </a>
+                <span class="info-box-number">@newuser</span>
+                <span class="info-box-number">
+                    <span class="text-success">@(newuserisapproved)&nbsp;<i class="fa fa-check"></i></span><span class="text-warning">&nbsp;@(newusernotapproved)</span>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+

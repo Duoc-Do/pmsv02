@@ -1,0 +1,33 @@
+﻿@model WebApp.Areas.Admin.Models.SenEmailAccount
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @Html.svHiddenFor(model => model.EmailAccountId)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+@Html.bsEditorFor(model => model.Email)@Html.bsEditorFor(model => model.DisplayName)@Html.bsEditorFor(model => model.Host)@Html.bsEditorFor(model => model.Port)@Html.bsEditorFor(model => model.Username)@Html.bsEditorFor(model => model.Password)@Html.bsEditorFor(model => model.EnableSsl)@Html.bsEditorFor(model => model.UseDefaultCredentials)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@

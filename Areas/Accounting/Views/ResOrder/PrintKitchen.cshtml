@@ -1,0 +1,50 @@
+﻿@model WebApp.Areas.Accounting.Models.ResOrderView
+@using WebApp.Areas.Accounting.Services
+@{
+    List<WebApp.Areas.Accounting.Models.ResOrderItemView> linesum = ViewBag.linesum;
+    var appuser = GlobalVariant.GetAppUser();
+    bool isKitchen = "posadmin.poskitchen.systems.administrators".Contains(appuser.SysRole.Name.ToLower());
+
+    bool isMyOrder = (appuser.UserID == Model.CreatedBy.Value);   
+}
+@if (Model != null)
+{
+    if (isKitchen || isMyOrder)
+    {
+        var id = string.Format("{0}_{1}", Model.OrderId, linesum.FirstOrDefault().CreateDate.Value.ToString("yyyyMMddhms"));
+    
+    <div class="col-md-4" data-orderid="@Model.OrderId" id="@id">
+        <div class="box box-primary box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title" style="margin-right: 66px;">@Model.TableName : #@Model.OrderId : @linesum.FirstOrDefault().CreateDate.Value.ToString("d MMM yyyy HH:mm:ss") <span>| Order : @GlobalVariant.GetAppUserById(Model.CreatedBy).FullName </span></h3>
+                <div class="box-tools pull-right no-print">
+                    @if (isKitchen)
+                    {
+                        <button data-idupdate="@string.Format("{0}_{1}", Model.OrderId, linesum.FirstOrDefault().CreateDate.Value.ToString("yyyyMMddhms"))" data-orderid="@Model.OrderId" data-createdate="@linesum.FirstOrDefault().CreateDate.Value" onclick="appaccountingreshome.quantityprocess(this)" data-widget="remove" class="btn btn-box-tool"><i class="fa fa-check"></i></button>
+                        <button onclick="appcommon.printelem($(this).parent().parent().parent().parent())" data-widget="remove" class="btn btn-box-tool"><i class="fa fa-print"></i></button>
+                    }
+                    <button onclick="$(this).parent().parent().parent().parent().remove()" data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" id="section-to-print">
+                <table>
+                    <tbody>
+                        @foreach (var item in linesum)
+                        {
+                            <tr>
+                                <td>@Html.Raw(string.Format("{0}<b>x</b>{1} <span class='label text-red'>{2}</span>", WebApp.Areas.Accounting.Services.ExConvert.Data2String(item.Quantity, "Numeric", "n", ""), item.ItemName, item.ItemNote))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>            
+    }
+}
+
+
+

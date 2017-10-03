@@ -1,0 +1,90 @@
+﻿@{string action_email = Url.Action("ContractNotification", new { area = "Admin" });}
+
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Email
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li><a id="emailhopdongmoi" href="javascript:;">Email cộng tác có hợp đồng mới</a></li>
+        <li><a id="emailcapnhathopdong" href="javascript:;">Email cộng tác thay đổi hợp đồng</a></li>
+        <li><a id="emailketthuc" href="javascript:;">Email cộng tác hợp đồng kết thúc</a></li>
+    </ul>
+</div>
+
+
+<div class="btn-group">
+
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Thanh toán
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+
+        <li><a id="sencontractcash_add" href="javascript:;">Thu tiền hợp đồng</a></li>
+        <li><a id="sencommission_add" href="javascript:;">Chi hoa hồng</a></li>
+    </ul>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#emailhopdongmoi").click(function () {
+            emailthongbao(0);
+        });
+
+        $("#emailcapnhathopdong").click(function () {
+            emailthongbao(1);
+        });
+
+        $("#emailketthuc").click(function () {
+            emailthongbao(2);
+        });
+
+
+        $("#sencontractcash_add").click(function () {
+            //alert("thu tiền");
+            var para = $(".datarow.active:eq(0)").attr("data-datarow-para");
+            if (para === undefined) { alert("Phải chọn hợp đồng"); return; }
+            var url = "@(Url.Action("Create","SenContractCash",new{area="admin",action_return="noaction" }))";
+            url = url + para;
+            appcommon.popuplink(url, $(".datarow.active:eq(0)"), 1);
+        });
+
+        $("#sencommission_add").click(function () {
+            //alert("chi hoa hồng");
+            var para = $(".datarow.active:eq(0)").attr("data-datarow-para");
+            if (para === undefined) { alert("Phải chọn hợp đồng"); return;}
+            var url = "@(Url.Action("Create","SenCommission",new{area="admin",action_return="noaction" }))";
+            url = url + para;
+            appcommon.popuplink(url, $(".datarow.active:eq(0)"), 1);
+        });
+
+
+    });
+
+    function emailthongbao(a) {
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-key");
+
+        if (para === undefined) {
+            alert("Phải chọn hợp đồng");
+        }
+        else {
+            var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+            $.post("@(action_email)",
+             {
+                 __RequestVerificationToken: tokenxacthuc,
+                 ContractId: para,
+                 ContractType: a
+             },
+             function (data, status) {
+                 appcommon.notification("thông báo", data.ketqua, 3000);
+                 //$("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                 //alert("Data: " + data.ketqua + "\nStatus: " + status);
+             });
+            //return false;
+        }
+    }
+</script>

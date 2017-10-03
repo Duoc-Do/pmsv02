@@ -1,0 +1,187 @@
+﻿@model List<WebApp.Areas.Admin.Models.SysOption>
+@using WebApp.Areas.Admin.Services
+@{
+    ((Dictionary<string, string>)ViewBag.ajaxoption)["action-return"] = "noaction";
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var db = new WebApp.Areas.Admin.Models.AdminContext();
+
+
+}
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @{
+            var roundamount = Model.Where(m => m.SysOptionName == "RoundAmount").SingleOrDefault();
+                                    }
+                                    <div class="form-group">
+                                        <label for="@(roundamount.SysOptionName)" class="control-label">@roundamount.Des</label>
+                                        <input type="text" value="@(roundamount.SysOptionValue)" name="@(roundamount.SysOptionName)" id="@(roundamount.SysOptionName)" fieldname="@(roundamount.SysOptionName)" decimaldigits="0" senviet-vmin="0" senviet-vmax="6" class="numeric form-control text-box single-line">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    @{
+            var roundamountfc = Model.Where(m => m.SysOptionName == "RoundAmountFC").SingleOrDefault();
+                                    }
+                                    <div class="form-group">
+                                        <label for="@(roundamountfc.SysOptionName)" class="control-label">@roundamountfc.Des</label>
+                                        <input type="text" value="@(roundamountfc.SysOptionValue)" name="@(roundamountfc.SysOptionName)" id="@(roundamountfc.SysOptionName)" fieldname="@(roundamountfc.SysOptionName)" decimaldigits="0" senviet-vmin="0" senviet-vmax="6" class="numeric form-control text-box single-line">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @{
+            var roundunitprice = Model.Where(m => m.SysOptionName == "RoundUnitPrice").SingleOrDefault();
+                                    }
+                                    <div class="form-group">
+                                        <label for="@(roundunitprice.SysOptionName)" class="control-label">@roundunitprice.Des</label>
+                                        <input type="text" value="@(roundunitprice.SysOptionValue)" name="@(roundunitprice.SysOptionName)" id="@(roundunitprice.SysOptionName)" fieldname="@(roundunitprice.SysOptionName)" decimaldigits="0" senviet-vmin="0" senviet-vmax="6" class="numeric form-control text-box single-line">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    @{
+            var roundunitpricefc = Model.Where(m => m.SysOptionName == "RoundUnitPriceFC").SingleOrDefault();
+                                    }
+                                    <div class="form-group">
+                                        <label for="@(roundunitpricefc.SysOptionName)" class="control-label">@roundunitpricefc.Des</label>
+                                        <input type="text" value="@(roundunitpricefc.SysOptionValue)" name="@(roundunitpricefc.SysOptionName)" id="@(roundunitpricefc.SysOptionName)" fieldname="@(roundunitpricefc.SysOptionName)" decimaldigits="0" senviet-vmin="0" senviet-vmax="6" class="numeric form-control text-box single-line">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @{
+                           var roundquantity = Model.Where(m => m.SysOptionName == "RoundQuantity").SingleOrDefault();
+                        }
+                        <div class="form-group">
+                            <label for="@(roundquantity.SysOptionName)" class="control-label">@roundquantity.Des</label>
+                            <input type="text" value="@(roundquantity.SysOptionValue)" name="@(roundquantity.SysOptionName)" id="@(roundquantity.SysOptionName)" fieldname="@(roundquantity.SysOptionName)" decimaldigits="0" senviet-vmin="0" senviet-vmax="6"  class="numeric form-control text-box single-line">
+                        </div>
+
+                        @*phan chu ky*@
+
+                        @{
+            var directorname = Model.Where(m => m.SysOptionName == "DirectorName").SingleOrDefault();
+                        }
+                        <div class="form-group">
+                            <label for="@(directorname.SysOptionName)" class="control-label">@directorname.Des</label>
+                            <input type="text" value="@(directorname.SysOptionValue)" name="@(directorname.SysOptionName)" id="@(directorname.SysOptionName)" fieldname="@(directorname.SysOptionName)" class=" form-control text-box single-line">
+                        </div>
+
+                        @{
+            var chiefaccountantname = Model.Where(m => m.SysOptionName == "ChiefAccountantName").SingleOrDefault();
+                        }
+                        <div class="form-group">
+                            <label for="@(chiefaccountantname.SysOptionName)" class="control-label">@chiefaccountantname.Des</label>
+                            <input type="text" value="@(chiefaccountantname.SysOptionValue)" name="@(chiefaccountantname.SysOptionName)" id="@(chiefaccountantname.SysOptionName)" fieldname="@(chiefaccountantname.SysOptionName)" class=" form-control text-box single-line">
+                        </div>
+
+                        @{
+            var reportcreatorname = Model.Where(m => m.SysOptionName == "ReportCreatorName").SingleOrDefault();
+                        }
+                        <div class="form-group">
+                            <label for="@(reportcreatorname.SysOptionName)" class="control-label">@reportcreatorname.Des</label>
+                            <input type="text" value="@(reportcreatorname.SysOptionValue)" name="@(reportcreatorname.SysOptionName)" id="@(reportcreatorname.SysOptionName)" fieldname="@(reportcreatorname.SysOptionName)" class=" form-control text-box single-line">
+                        </div>
+
+
+                    </div>
+                </div>
+
+                @*@Html.Partial("_ToolbarListUpdate", ajaxoption)*@
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+@Scripts.Render("~/bundles/accapp")
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    $(document).ready(function () {
+        @{var _rolefilter = Model.Where(m => m.SysOptionName == "RoleFilter").SingleOrDefault();}
+        var $select = $("#@(_rolefilter.SysOptionName)").selectize({
+            create: false
+        });
+
+
+        //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+        $("#@(ajaxoption["ajaxupdateid"]) input[type='text']").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+            var $thisobject = $(this);
+            var val = $(this).val();
+            var fieldname = $(this).attr("fieldname");
+
+            var token = $("#@(ajaxoption["ajaxupdateid"])").find("[name='__RequestVerificationToken']").val();
+            var url = '@Url.Action("Edit2", "SysOption", new { area = "Admin" })';
+            $.ajax({
+                type: "POST", url: url, dataType: "json",
+                data: { SysOptionName: fieldname, SysOptionValue: val, __RequestVerificationToken: token },
+                success: function (data) {
+                    if (data != null) {
+                        alert(data);
+                        //$(sectionid + '#AccountID').val(data.rows.AccountID);
+                        //$(sectionid + '#AccountName').val(data.rows.Name);
+                    }
+                    else {
+                        alert("Lỗi");
+                        //$thisobject[0].selectize.setValue('');
+                        //$thisobject[0].selectize.clearOptions();
+                    }
+                }
+            });
+        });
+
+        $("#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+            var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+             var $thisobject = $(this);
+             var val = $(this).val();
+             var fieldname = $(this).attr("fieldname");
+
+             var token = $("#@(ajaxoption["ajaxupdateid"])").find("[name='__RequestVerificationToken']").val();
+            var url = '@Url.Action("Edit2", "SysOption", new { area = "Admin" })';
+             $.ajax({
+                 type: "POST", url: url, dataType: "json",
+                 data: { SysOptionName: fieldname, SysOptionValue: val, __RequestVerificationToken: token },
+                 success: function (data) {
+                     if (data != null) {
+                         alert(data);
+                         //$(sectionid + '#AccountID').val(data.rows.AccountID);
+                         //$(sectionid + '#AccountName').val(data.rows.Name);
+                     }
+                     else {
+                         alert("Lỗi");
+                         //$thisobject[0].selectize.setValue('');
+                         //$thisobject[0].selectize.clearOptions();
+                     }
+                 }
+             });
+         });
+    });
+</script>

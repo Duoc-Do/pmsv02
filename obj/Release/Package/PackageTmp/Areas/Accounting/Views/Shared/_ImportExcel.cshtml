@@ -1,0 +1,62 @@
+﻿@model object
+@using WebApp.Areas.Accounting.Services
+@{
+    var ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    var urlimport = Url.Action("ImportExcel", new { action_return = "Index" });
+}
+
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+        <div class="box-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    @using (Html.BeginForm("ImportExcel", "", FormMethod.Post, new { enctype = "multipart/form-data", id = "file_upload" }))
+                    {
+ 
+                        @Html.ValidationSummary(true)
+
+                        <div class="fileupload-buttonbar">
+                            <div class="progressbar fileupload-progressbar">
+                            </div>
+                            <br />
+                            <span class="fileinput-button"><a href="javascript:void(0)" class="upload-xls-btn">Import
+                    từ excel</a>
+                                <input type="file" name="files[]" multiple />
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+<script src="@Url.Content("~/Scripts/jquery.fileupload.js")" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+
+        //$('.progressbar').progressbar({ value: 0 });
+
+        $('#file_upload').fileupload({
+            //            dataType: 'json',
+            url: "@(urlimport)",
+            //progressall: function (e, data) {
+            //    $(this).find('.progressbar').progressbar({ value: parseInt(data.loaded / data.total * 100, 10) });
+            //},
+            success: function (data) {
+                $(sectionid).html(data);
+            },
+            done: function (e, data) {
+
+            }
+        });
+    });
+</script>

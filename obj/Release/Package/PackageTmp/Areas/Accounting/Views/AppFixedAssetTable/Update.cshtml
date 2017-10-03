@@ -1,0 +1,387 @@
+﻿@model WebApp.Areas.Accounting.Models.AppFixedAssetView
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@Html.Partial("_AddNew")
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+                @*phần thay đổi*@
+                @Html.svHiddenFor(model => model.FixedAssetTypeID)                @Html.svHiddenFor(model => model.FixedAssetID)                @Html.svHiddenFor(model => model.FixedAssetGroupID)                @Html.svHiddenFor(model => model.DepartmentID)                @Html.svHiddenFor(model => model.AccountID)                @Html.svHiddenFor(model => model.AccountDebitID)                @Html.svHiddenFor(model => model.AccountCreditID)
+                @Html.svHiddenFor(model => model.CreatedBy)
+                @Html.svHiddenFor(model => model.CreatedDateTime)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsEditorFor(model => model.Name)
+                        @Html.bsEditorFor(model => model.FixedAssetCode)
+
+
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsEditorFor(model => model.FixedAssetTypeCode)                        @Html.bsEditorFor(model => model.FixedAssetTypeName)                        @Html.bsEditorFor(model => model.DepartmentCode)
+                        @Html.bsEditorFor(model => model.DepartmentName)                        @Html.bsEditorFor(model => model.FixedAssetGroupCode)                        @Html.bsEditorFor(model => model.FixedAssetGroupName)
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.PeriodOfDepreciation)
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.DisplayNumber)
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.DisplayNumberCredit)
+
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.DisplayNumberDebit)
+
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.VoucherDateDecrease)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.VoucherNumberDecrease)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.bsEditorFor(model => model.DescriptionDecrease)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.SuspensionDate)
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.bsEditorFor(model => model.DescriptionSuspension)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsEditorFor(model => model.FixedAssetNumber)                        @Html.bsEditorFor(model => model.MadeIn)                        @Html.bsEditorFor(model => model.YearProduction)                        @Html.bsEditorFor(model => model.YearUse)                        @Html.bsEditorFor(model => model.Power)
+                    </div>
+                </div>
+
+                @*Lưới chi tiết thuế*@
+                <div class="row-fluid">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Phụ tùng kèm theo</h3>
+                        </div>
+                        <div id="divAppEquipmentTable" class="sv-grid-container">
+                            @Html.svGridVoucher(Model.AppEquipmentTables, "EquipmentID", "0", new WebApp.Areas.Accounting.Models.AppEquipmentTable())
+                        </div>
+                    </div>
+                </div>
+
+
+                @*Lưới chi tiết hạch toán*@
+                <div class="row-fluid">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Chi tiết tài sản</h3>
+                        </div>
+                        <div id="divAppFixedAssetLineTable" class="sv-grid-container">
+                            @Html.svGridVoucher(Model.AppFixedAssetLineTables, "FixedAssetLineID", "0", new WebApp.Areas.Accounting.Models.AppFixedAssetLineTable())
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.bsTextAreaFor(model => model.Note)                                                                        @Html.bsEditorFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+
+
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    function fieldchange(a) {
+        var $thisobject = $(a);
+        var val = $(a).val();
+        var fieldname = $(a).attr("fieldname");
+        var url = '@Url.Action("FieldChange")';
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+        switch (fieldname) {
+            case "Amount":
+                var $tr = $thisobject.closest("tr");
+                var Amount2 = $tr.find('input[fieldname = "Amount2"]').first();
+                fieldchange(Amount2);
+                break;
+            case "Amount2":
+                var $tr = $thisobject.closest("tr");
+
+                var AmountValue = parseFloat($tr.find('input[fieldname = "Amount"]').first().autoNumericGet());
+                var Amount2Value = parseFloat($thisobject.autoNumericGet());
+
+                var Amount = $tr.find('input[fieldname = "Amount"]').first();
+                var Amount2 = $tr.find('input[fieldname = "Amount2"]').first();
+                var AmountEnd = $tr.find('input[fieldname = "AmountEnd"]').first();
+
+                $(AmountEnd).autoNumericSet(AmountValue - Amount2Value);
+
+                fieldchange(AmountEnd);
+                break;
+            case "AmountEnd":
+                var $tr = $thisobject.closest("tr");
+
+                var AmountEndValue = parseFloat($thisobject.autoNumericGet());
+                var PeriodOfDepreciation = parseFloat($(sectionid + '#PeriodOfDepreciation').autoNumericGet());
+
+
+                var Amount = $tr.find('input[fieldname = "Amount"]').first();
+                var Amount2 = $tr.find('input[fieldname = "Amount2"]').first();
+
+                var AmountDepreciation = $tr.find('input[fieldname = "AmountDepreciation"]').first();
+                if (PeriodOfDepreciation == null || PeriodOfDepreciation == 0) { PeriodOfDepreciation = 1; }
+                $(AmountDepreciation).autoNumericSet(AmountEndValue / PeriodOfDepreciation);
+                break;
+
+            case "ItemTypeName":
+                $(sectionid + '#ItemType').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#ItemType').val(data.rows.EnumValue);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "ItemMethodTypeName":
+                $(sectionid + '#ItemMethodType').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+                                $(sectionid + '#ItemMethodType').val(data.rows.EnumValue);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DisplayNumber":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#AccountID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#AccountID').val(data.rows.AccountID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DisplayNumberDebit":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#AccountDebitID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#AccountDebitID').val(data.rows.AccountID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DisplayNumberCredit":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#AccountCreditID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#AccountCreditID').val(data.rows.AccountID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "FixedAssetTypeCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#FixedAssetTypeID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#FixedAssetTypeID').val(data.rows.FixedAssetTypeID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "DepartmentCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#DepartmentID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#DepartmentID').val(data.rows.DepartmentID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+
+            case "FixedAssetGroupCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#FixedAssetGroupID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#FixedAssetGroupID').val(data.rows.FixedAssetGroupID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            default:
+
+        }
+
+    };
+
+
+    //Kiểm tra thay đổi tất cả các text
+    //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+    $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+        fieldchange(this);
+    });
+
+
+    $("#Name").change(function () {
+        $("#FixedAssetCode").val(apputils.gencode($(this).val()));
+    });
+
+</script>

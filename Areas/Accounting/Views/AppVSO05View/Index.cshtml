@@ -1,0 +1,53 @@
+﻿@model IEnumerable<object>
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", ajaxoption["ajaxupdateid"]);
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", ajaxoption["ajaxloadingid"]);
+    ajaxstring += "data-ajax=true ";
+
+    //string action_return = "Index";
+    string action_create1 = Url.Action("Create", "AppVSO01View");
+    string action_return = "Index";
+
+    //ajaxstring
+
+    var builderdiv = new TagBuilder("div");
+    builderdiv.AddCssClass("btn-group");
+    var builderbtn = new TagBuilder("button");
+    builderbtn.AddCssClass("btn btn-primary dropdown-toggle");
+    builderbtn.MergeAttribute("data-toggle", "dropdown");
+    builderbtn.InnerHtml = "Công cụ <span class=\"caret\"></span>";
+    builderdiv.InnerHtml = builderbtn.ToString();
+
+    var builderul = new TagBuilder("ul");
+    builderul.AddCssClass("dropdown-menu");
+    builderul.MergeAttribute("role", "menu");
+    builderul.InnerHtml += string.Format("<li><a id=\"sv-toolbar-createby\" href=\"{0}\" {1}>Xuất hàng </a></li>", action_create1, ajaxstring);
+
+    builderdiv.InnerHtml += builderul.ToString();
+
+    ViewBag._ToolbarVoucherEx = builderdiv.ToString();
+
+}
+
+
+@Html.Partial("_IndexVoucher")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#sv-toolbar-createby").click(function () {
+            var para = $(".sv-gv-datarow-focused:eq(0)").attr("sv-gv-datarow-para");
+            if (para != null) {
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "/" + "?action_return=@(action_return)&documentid=" + para);
+            }
+            else {
+                return false;
+            }
+        });
+    })
+</script>

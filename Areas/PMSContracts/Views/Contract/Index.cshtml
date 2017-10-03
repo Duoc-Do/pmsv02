@@ -1,0 +1,195 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.ContractModel>
+@*@model IEnumerable<WebApp.Areas.PMSContracts.Models.ClientModel>*@
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+@section HeaderPage{
+    <section class="content-header">
+        <h1>
+            Contract page
+        </h1>
+    </section>
+}
+<div class="box box-primary">
+
+
+    @*@if (ViewBag.ClientList!=null)
+    {
+        @Html.DropDownListFor(model => model, ViewBag.ClientList as SelectList, "---Select Country---", new { @class="form-control"})
+
+    }*@
+    <div class="box-header">
+
+        @*<i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")*@
+        <div class="box-tools">
+            @using (Html.BeginForm("Index", "Contract", FormMethod.Get))
+            {
+                <div class="input-group input-group-sm" style="width: 250px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
+
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+    </div>
+    <div class="box-body table-responsive">
+
+        <div class="fr-list">
+            <div id="listdata">
+                <table class="table table-hover table-bordered" id="contractList">
+                    <thead>
+                        <tr>
+
+                            @*<th>@Html.DisplayNameFor(model => model.ContractID)</th>*@
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.ContractIDERP)
+                            </th>
+
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.ContractCode)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.Description_VN)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.ModifyDate)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.proj_status)
+                            </th>
+                            @*<th>
+                                        @Html.DisplayNameFor(model => model.ContractDate)
+                                    </th>
+                                             <th>
+                                    @Html.DisplayNameFor(model => model.CCE_ID)
+                                </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CommencementDate)
+                                    </th>*@
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>*@
+
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.ContractFormat)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FCAmount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LCAmount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FCAmountExtension)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LCAmountExtension)
+                                </th>*@
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.ClientID)
+                                </th>*@
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.ContractorID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DurationInDays)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ExtensionInDays)
+                                </th>
+                            *@
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.CurrencyCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ForOrdering)*@
+                            </th>
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.Type)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.proj_id)
+                                </th>*@
+
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @Html.Partial("_ContractPartial")
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
+        </div>
+        <br />
+        <a href="javascript:;" id="loadingmore" class="btn btn-primary text-center">View more</a>
+    </div>
+</div>
+
+
+<div id="loading"></div>
+<script>
+    var loadpg = document.getElementById('loadingmore');
+    var scwindow = document.querySelector('html');
+    var _inCallback = 1;
+    var pagenumber = 1;
+
+    loadpg.addEventListener('click', function () {
+        loadContracts();
+    }, false);
+
+    function loadContracts() {
+        $('div#loading').empty();
+     
+        pagenumber++;
+        var _inCallback = 2;
+        $('div#loading').html('<p>Loading...</p>');
+        $.get("Contract/Contract?page=" + pagenumber + "&pagesize=pagenumber&isjson=2", function (data) {
+            //alert(data);
+            if (data != '') {
+                $("#contractList tbody").append(data);
+            }
+            else {
+                pagenumber = -1;
+            }
+            _inCallback = 1;
+            $('div#loading').empty();
+        });
+    }
+
+    window.addEventListener('scroll', function (e) {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            loadContracts();
+        }
+    });
+</script>
+<!-- <script>
+   // $(function () {
+        // $('#contractList').DataTable()
+        //$('#contractList').DataTable({
+        //    'paging': false,
+        //    'lengthChange': false,
+        //    'searching': false,
+        //    'ordering': true,
+        //    'info': true,
+        //    'autoWidth': false
+        //});
+        //function searchClick() {
+        //    var searchText = $("#textSearch").val();
+        //    var queryString = "SearchText=" + searchText;
+        //    $.post("/Contract/Search", queryString,callBackSearch,"_default");
+        //}
+    // })
+</script>-->

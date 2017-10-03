@@ -1,0 +1,8 @@
+﻿@model List<WebApp.Areas.Accounting.Models.ResOrderView>
+@foreach (var item2 in Model)
+{
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+        <!-- small box -->
+        @Html.Partial("TakeawayOrder",item2)
+    </div>
+}

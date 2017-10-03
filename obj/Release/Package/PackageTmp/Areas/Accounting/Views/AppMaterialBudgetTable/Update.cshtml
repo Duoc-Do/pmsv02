@@ -1,0 +1,173 @@
+﻿@model WebApp.Areas.Accounting.Models.AppMaterialBudgetView
+@using WebApp.Areas.Accounting.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.svHiddenFor(model => model.MaterialBudgetID)
+                        @Html.svHiddenFor(model => model.ItemID)
+                        @Html.svHiddenFor(model => model.ExpenseID)
+                        @Html.svHiddenFor(model => model.ConstructionID)
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ConstructionCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ConstructionName)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ItemName)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ExpenseCode)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.ExpenseName)
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.DateOfExecution)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Quantity)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.Amount)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.bsEditorFor(model => model.AmountFC)
+                            </div>
+                        </div>
+                        @Html.bsEditorFor(model => model.IsActive)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@Scripts.Render("~/bundles/accapp")
+<script type="text/javascript">
+    //Kiểm tra thay đổi tất cả các text
+    //$("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").die(); //Xóa cache
+    $("#@(ajaxoption["ajaxupdateid"]) input[type='text'],#@(ajaxoption["ajaxupdateid"])  select").on("change", function () {
+        var sectionid = "#@(ajaxoption["ajaxupdateid"]) ";
+        var $thisobject = $(this);
+        var val = $(this).val();
+        var fieldname = $(this).attr("fieldname");
+        var url = '@Url.Action("FieldChange")';
+        switch (fieldname) {
+            case "ItemCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#ItemName').val("");
+                $(sectionid + '#ItemID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#ItemName').val(data.rows.Name);
+                                $(sectionid + '#ItemID').val(data.rows.ItemID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "ConstructionCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#ConstructionName').val("");
+                $(sectionid + '#ConstructionID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#ConstructionName').val(data.rows.Name);
+                                $(sectionid + '#ConstructionID').val(data.rows.ConstructionID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+            case "ExpenseCode":
+                //lấy dòng du lieu ve gan cho may cai khac
+
+                $(sectionid + '#ExpenseName').val("");
+                $(sectionid + '#ExpenseID').val("");
+                if (val != "") {
+
+                    $.ajax({
+                        type: "GET", url: url, dataType: "json",
+                        data: { fieldname: fieldname, keyword: val },
+                        success: function (data) {
+                            if (data.rows != null) {
+
+                                $(sectionid + '#ExpenseName').val(data.rows.Name);
+                                $(sectionid + '#ExpenseID').val(data.rows.ExpenseID);
+                            }
+                            else {
+                                $thisobject[0].selectize.setValue('');
+                                $thisobject[0].selectize.clearOptions();
+                            }
+                        }
+                    });
+                }
+                break;
+
+            default:
+        }
+    })
+
+</script>

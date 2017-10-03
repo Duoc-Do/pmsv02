@@ -1,0 +1,96 @@
+﻿@{string action_create1 = Url.Action("Approved", new { area = "Admin" });}
+@{string action_create2 = Url.Action("CreateDb", new { area = "Admin" });}
+@{string action_create3 = Url.Action("SynCompanyName", new { area = "Admin" });}
+
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Công cụ
+    <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li><a id="emailchapthuan" href="javascript:;">Email chấp thuận</a></li>
+        <li><a id="emailtuchoi" href="javascript:;">Email từ chối</a></li>
+        <li><a id="syncompanyname" href="javascript:;">Đồng bộ tên doanh nghiệp</a></li>
+        <li><a id="createdb" href="javascript:;">Tạo database</a></li>
+    </ul>
+</div>
+
+
+<script>
+    $("#emailchapthuan").click(function () {
+        emailthongbaopheduyet(true)
+    });
+
+    $("#emailtuchoi").click(function () {
+        emailthongbaopheduyet(false)
+    });
+
+    $("#createdb").click(function () {
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-key")
+        if (para != "") {
+            var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+            $.post("@(action_create2)",
+            {
+                __RequestVerificationToken: tokenxacthuc,
+                CompanyId: para
+            },
+            function (data, status) {
+                $("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                //alert("Data: " + data.ketqua + "\nStatus: " + status);
+            });
+        }
+        else {
+            alert("Phải chọn công ty");
+            //return false;
+        }
+    });
+
+
+    $("#syncompanyname").click(function () {
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-key");
+        if (para != "") {
+            var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+            //var url="@(action_create3)"
+            $.post("@(action_create3)",
+            {
+                __RequestVerificationToken: tokenxacthuc,
+                CompanyId: para
+            },
+            function (data, status) {
+                $("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                //alert("Data: " + data.ketqua + "\nStatus: " + status);
+            });
+        }
+        else {
+            alert("Phải chọn công ty");
+            //return false;
+        }
+    });
+
+
+
+    function emailthongbaopheduyet(a) {
+        //var para = $(".datarow.active:eq(0)").attr("data-datarow-para").substring(1,$(".datarow.active:eq(0)").attr("data-datarow-para").length);
+        var para = $(".datarow.active:eq(0)").attr("data-datarow-para");
+        if (para != "") {
+            var tokenxacthuc = $('input[name="__RequestVerificationToken"]').val();
+            var url = "@(action_create1)" + "?IsApproved=" + a + para;
+            $.post(url,
+            {
+                __RequestVerificationToken: tokenxacthuc
+                //,
+                //CompanyId: para,
+                //IsApproved: a
+            },
+            function (data, status) {
+                $("#sectioncontentmessage").text(data.ketqua).slideDown().fadeOut(3000);
+                //alert("Data: " + data.ketqua + "\nStatus: " + status);
+            });
+        }
+        else {
+            alert("Phải chọn công ty");
+            //return false;
+        }
+    }
+</script>

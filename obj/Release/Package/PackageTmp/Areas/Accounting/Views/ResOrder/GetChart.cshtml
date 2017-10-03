@@ -1,0 +1,516 @@
+﻿@using WebApp.Areas.Accounting.Services
+@using WebApp.Areas.Accounting.Models
+@{
+    ViewBag.Title = "GetChart";
+    DateTime datefrom = ViewBag.datefrom;
+    DateTime dateto = ViewBag.dateto;
+    int userid = ViewBag.userid;
+
+
+    var db = new WebApp.Areas.Accounting.Models.WebAppAccEntities(GlobalVariant.GetConnection());
+    var users = db.SysUsers.OrderBy(m => m.FullName).ToList();
+    var approle = GlobalVariant.GetAppUser().SysRole;
+    string hideselect = (approle.IsAdmin || "posadmin.posview.poscash".Contains(approle.Name.ToLower())) ? "" : " style = display:none;";
+    
+}
+
+<style>
+    .legend .color-sample {
+    border: 2px solid;
+    display: block;
+    float: left;
+    height: 1em;
+    margin-right: 0.5em;
+    width: 1em;
+}
+</style>
+
+<div id="chartid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" @hideselect >
+                <select class="form-control" id="userid" name="UserID">
+                    <option value="0" @(userid == 0 ? "selected='selected'" : "")>-- tất cả doanh số --</option>
+                    @foreach (var item in users)
+                    {
+                        <option value="@(item.UserID)" @(userid == item.UserID ? "selected='selected'" : "")>@item.FullName</option>
+                    }
+                </select>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group pull-right" id="reportrange">
+
+                <div class="input-group">
+                    <button id="daterange-btn" class="btn btn-default pull-right">
+                        <i class="fa fa-calendar"></i>&nbsp;<span>@datefrom.ToString("dd/MM/yyyy") - @dateto.ToString("dd/MM/yyyy")</span>
+
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <canvas id="canvas" style="padding-right: 30px;"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        <ul class="legend" id="lineLegend">
+
+        </ul>
+            </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+                @*<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>*@
+                <h5 class="description-header" id="sumrevenuetotal"></h5>
+                <span class="description-text">TỔNG DOANH THU</span>
+            </div>
+            <!-- /.description-block -->
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+                @*<span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>*@
+                <h5 class="description-header" id="sumcosttotal"></h5>
+                <span class="description-text">TỔNG GIÁ VỐN</span>
+            </div>
+            <!-- /.description-block -->
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+                @*<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>*@
+                <h5 class="description-header" id="sumexpensetotal"></h5>
+                <span class="description-text">TỔNG ĐỊNH PHÍ</span>
+            </div>
+            <!-- /.description-block -->
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+                @*<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>*@
+                <h5 class="description-header text-green" id="sumincometotal"></h5>
+                <span class="description-text">TỔNG LỢI NHUẬN</span>
+            </div>
+            <!-- /.description-block -->
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <hr />
+    <div class="row">
+        <div class="col-md-6 col-xs-6">
+            <canvas id="chart-area"></canvas>
+            <h4 class="text-center">Doanh số cao nhất</h4>
+        </div>
+
+        <div class="col-md-6 col-xs-6">
+            <canvas id="chart-area2"></canvas>
+            <h4 class="text-center">Bán chạy nhất</h4>
+        </div>
+    </div>
+
+
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div id="summarytableprint">
+                <table class="table table-bordered table-striped table-hover" id="summarytable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên</th>
+                            <th>Số lượng</th>
+                            <th>Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="summarytable_paging">
+
+                <ul class="pagination pull-right">
+                    <li>
+                        <span>
+                            <span id="fromrows"></span>- <span id="torows"></span>/<span id="totalrows"></span>
+                        </span>
+                    </li>
+                    <li><a href="javascript:;" onclick="paging.first()"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li><a href="javascript:;" onclick="paging.prev()"><i class="fa fa-angle-left"></i></a></li>
+
+                    <li>
+                        <span style="margin: 0px; padding: 1px;">
+                            <select onchange="paging.pagesizechange(this)" class="form-control input-sm no-border" id="pagesize">
+                                <option value="10">10 </option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </span>
+                    </li>
+                    <li><a href="javascript:;" onclick="paging.next()"><i class="fa fa-angle-right"></i></a></li>
+                    <li><a href="javascript:;" onclick="paging.last()"><i class="fa fa-angle-double-right"></i></a></li>
+                    <li><a href="@(Url.Action("ExportToExcel2", new { datefrom = datefrom.ToString("yyyy-MM-dd"), dateto = dateto.ToString("yyyy-MM-dd") }))" ><i class="fa fa-file-excel-o"></i></a></li>
+
+                    <li><a href="javascript:;" onclick="appcommon.printelem($('#summarytableprint'),1)"><i class="fa fa-print"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    var jsondata = [];
+    var jsondata2 = [];
+    var jsondata3 = [];
+    var jsondata4 = [];
+    var jsondata5 = [];
+
+
+    var jsonlabel = [];
+    var lineChartData = [];
+    var doughnutData = [];
+    var doughnutData2 = [];
+
+    var color = ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"];
+    var highlight = ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"];
+
+    var paging = {
+        id: "#summarytable_paging",
+        page: { PageSize: 10 },
+        fromrows: function () {
+            var _fromrows = parseFloat(parseFloat(this.page.PageCurrent) - 1) * parseFloat(this.page.PageSize) + 1;
+            this.page.fromrows = _fromrows;
+        },
+        torows: function () {
+            var _torows = this.page.fromrows + parseFloat(this.page.PageSize);
+            this.page.torows = _torows > this.page.TotalRows ? parseFloat(this.page.TotalRows) : _torows;
+        },
+        first: function () {
+            this.page.PageCurrent = 0;
+            this.load();
+        },
+        prev: function () {
+            this.page.PageCurrent--;
+            this.load();
+        },
+        next: function () {
+            this.page.PageCurrent++;
+            this.load();
+        },
+        last: function () {
+            this.page.PageCurrent = this.page.PageCount;
+            this.load();
+        },
+        pagesizechange: function (a) {
+            this.page.PageSize = $(a).val();
+            this.load();
+        },
+
+        load: function () { },
+        render: function (json) { }
+
+    }
+
+
+
+    $(function () {
+        var _datefrom = "@(datefrom.ToString("yyyy-MM-dd"))";
+        var _dateto = "@(dateto.ToString("yyyy-MM-dd"))";
+
+        var _datefrom2 = "@(datefrom.ToString("dd/MM/yyyy"))";
+        var _dateto2 = "@(dateto.ToString("dd/MM/yyyy"))";
+
+        var url = "@(@Url.Action("GetDataChart", "ResOrder"))";
+        //url = url + "/?datefrom=" + _datefrom + "&dateto=" + _dateto;
+        var userid = $("#userid").val();
+        url = url + "/?datefrom=" + _datefrom + "&dateto=" + _dateto + "&userid=" + userid;
+
+        $('#daterange-btn').daterangepicker(
+                  {
+                      ranges: {
+                          'Hôm nay': [moment(), moment()],
+                          'Hôm qua': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                          '7 ngày qua': [moment().subtract('days', 6), moment()],
+                          '30 ngày qua': [moment().subtract('days', 29), moment()],
+                          'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                          'Tháng trước': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                      },
+                      format: 'DD/MM/YYYY',//'YYYY-MM-DD',
+                      startDate: _datefrom2,// moment().subtract('days', 29),
+                      endDate: _dateto2,//moment(),
+                      separator: ' tới ',
+                      locale: {
+                          applyLabel: 'Áp dụng',
+                          cancelLabel: 'Trở lại',
+                          fromLabel: 'Từ',
+                          toLabel: 'Tới',
+                          customRangeLabel: 'Tùy chọn',
+                          daysOfWeek: ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'],
+                          monthNames: ['Tháng giêng', 'Tháng hai', 'Tháng ba', 'Tháng tư', 'Tháng năm', 'Tháng sáu', 'Tháng bảy', 'Tháng tám', 'Tháng chín', 'Tháng mười', 'Tháng mười một', 'Tháng mười hai'],
+                          firstDay: 1
+                      }
+                  },
+          function (start, end) {
+              // parse JSON formatted date to javascript date object
+              //alert(start);
+              var datestart = new Date(start);
+              var _start = datestart.getFullYear().toString() + "-" + (datestart.getMonth() + 1).toString() + "-" + datestart.getDate().toString();
+
+              var dateend = new Date(end);
+              var _end = dateend.getFullYear().toString() + "-" + (dateend.getMonth() + 1).toString() + "-" + dateend.getDate().toString();
+              chartrefresh(_start, _end);
+              //$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          }
+          );
+
+
+
+        //change the selected date range of that picker
+
+        $.getJSON(url, {}, function (data) {
+            var json = data.rows;
+            var json2 = data.rows2;
+            var json3 = data.rows3;
+
+
+            var sumrevenuetotal = 0;
+            var sumcosttotal = 0;
+            var sumexpensetotal = 0;
+            var sumincometotal = 0;
+
+            //alert("chuoi");
+
+            for (var i in json) {
+                jsonlabel.push(formatJSONDate(json[i].Date));
+
+
+                jsondata.push([json[i].RevenueTotal]);
+                jsondata2.push([json[i].CostTotal]);
+                jsondata3.push([json[i].IncomeTotal]);
+
+                jsondata4.push([json[i].ExpenseTotal]);
+                jsondata5.push([parseFloat(json[i].ExpenseTotal) + parseFloat(json[i].CostTotal)]);
+
+
+                sumrevenuetotal = sumrevenuetotal + parseFloat([json[i].RevenueTotal]);
+
+                sumincometotal = sumincometotal + parseFloat([json[i].IncomeTotal]);
+
+                sumcosttotal = sumcosttotal + parseFloat([json[i].CostTotal]);
+
+                sumexpensetotal = sumexpensetotal + parseFloat([json[i].ExpenseTotal]);
+            }
+
+
+            for (var i in json2) {
+
+                doughnutData.push({ label: json2[i].label, color: color[i], highlight: highlight[i], value: json2[i].value });
+            }
+
+            for (var i in json3) {
+
+                doughnutData2.push({ label: json3[i].label, color: color[i], highlight: highlight[i], value: json3[i].value });
+            }
+
+
+            //loadtabledata(json3);
+
+            lineChartData = {
+                labels: jsonlabel,
+                datasets: [{
+                    label: "Doanh thu",
+                    fillColor: "rgba(0, 0, 0,0)",
+                    strokeColor: "rgba(0, 153, 51,1)",
+                    pointColor: "rgba(0, 153, 51,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(0, 153, 51,1)",
+                    data: jsondata
+                },
+{
+    label: "Giá vốn hàng bán",
+    fillColor: "rgba(0, 0, 0,0)",
+    strokeColor: "rgba(0, 153, 204,1)",
+    pointColor: "rgba(0, 153, 204,1)",
+    pointStrokeColor: "#fff",
+    pointHighlightFill: "#fff",
+    pointHighlightStroke: "rgba(0, 153, 204,1)",
+    data: jsondata2
+},
+
+{
+    label: "Phí cố định",
+    fillColor: "rgba(0, 0, 0,0)",
+    strokeColor: "rgba(102, 204, 255,1)",
+    pointColor: "rgba(102, 204, 255,1)",
+    pointStrokeColor: "#fff",
+    pointHighlightFill: "#fff",
+    pointHighlightStroke: "rgba(102, 204, 255,1)",
+    data: jsondata4
+},
+{
+    label: "Tổng phí",
+    fillColor: "rgba(0, 0, 0,0)",
+    strokeColor: "rgba(255, 0, 0,1)",
+    pointColor: "rgba(255, 0, 0,1)",
+    pointStrokeColor: "#fff",
+    pointHighlightFill: "#fff",
+    pointHighlightStroke: "rgba(255, 0, 0,1)",
+    data: jsondata5
+},
+{
+    label: "Lợi nhuận",
+    fillColor: "rgba(0, 0, 0,0)",
+    strokeColor: "rgba(255, 153, 0,1)",
+    pointColor: "rgba(255, 153, 0,1)",
+    pointStrokeColor: "#fff",
+    pointHighlightFill: "#fff",
+    pointHighlightStroke: "rgba(255, 153, 0,1)",
+    data: jsondata3
+}
+                ]
+            }
+
+            $("#sumrevenuetotal").text(addCommas(sumrevenuetotal));
+
+            $("#sumcosttotal").text(addCommas(sumcosttotal));
+            $("#sumexpensetotal").text(addCommas(sumexpensetotal));
+
+            $("#sumincometotal").text(addCommas(sumincometotal));
+
+            if (sumincometotal < 0) {
+                $("#sumincometotal").removeClass("text-green").addClass("text-red");
+            }
+
+        })
+         .done(function () {
+             //alert("second success");
+         })
+        .fail(function () {
+            alert("error");
+        })
+        .always(function () {
+            ////alert("complete");
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myLine = new Chart(ctx).Line(lineChartData, {
+                responsive: true,
+                //tooltipTemplate: "<%= addCommas(value) %>",
+                tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= addCommas(value) %>",
+                multiTooltipTemplate: "<%= addCommas(value) %>",
+                scaleLabel: "<%=addCommas(value)%>",
+                scaleShowLabels: true
+
+            });
+            legend(document.getElementById("lineLegend"), lineChartData);
+
+
+            var ctx2 = document.getElementById("chart-area").getContext("2d");
+            window.myDoughnut = new Chart(ctx2).Doughnut(doughnutData, { responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= addCommas(value) %>" });
+
+            var ctx3 = document.getElementById("chart-area2").getContext("2d");
+            window.myDoughnut2 = new Chart(ctx3).Doughnut(doughnutData2, { responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= addCommas(value) %>" });
+
+
+
+        });
+
+    });
+
+    function chartrefresh(datefrom, dateto) {
+        var url = "@(Url.Action("GetChart", "ResOrder"))";
+        var userid = $("#userid").val();
+        url = url + "/?datefrom=" + datefrom + "&dateto=" + dateto + "&userid=" + userid;
+        // Load the content using AJAX
+        $.get(url, function (data) {
+            $("#chartid").replaceWith(data);
+        });
+        return false;
+    }
+
+    paging.render = function loadtabledata(json) {
+        var sumamount = 0;
+        var rowcount = parseFloat(parseFloat(paging.page.PageCurrent) - 1) * paging.page.PageSize + 1;
+        $("#summarytable > tbody").html('');
+        for (var i in json) {
+            var tr = "<tr>"
+            tr += "<td>" + rowcount + "</td>";
+            tr += "<td>" + json[i].ItemName + "</td>";
+            tr += "<td>" + addCommas(json[i].Quantity) + "</td>";
+            tr += "<td>" + addCommas(json[i].Amount) + "</td>";
+            tr += "</tr>";
+            //alert(tr);
+            $("#summarytable > tbody").append(tr);
+
+            sumamount += parseFloat(json[i].Amount);
+            rowcount++;
+            //doughnutData.push({ label: json2[i].label, color: color[i], highlight: highlight[i], value: json2[i].value });
+        }
+        var tr = "<tr>"
+        tr += "<td>" + "</td>";
+        tr += "<td>" + "</td>";
+        tr += "<td>" + "</td>";
+        tr += "<td><strong>" + addCommas(sumamount) + "</strong></td>";
+        tr += "</tr>";
+        $("#summarytable > tbody").append(tr);
+
+    }
+
+    paging.load = function tablerefresh() {
+        var datefrom = "@((DateTime)ViewBag.datefrom)";
+        var dateto = "@((DateTime)ViewBag.dateto)";
+        var userid = $("#userid").val();
+
+        var url = "@(Url.Action("GetReportResItem", "ResOrder"))";
+
+        // Load the content using AJAX
+
+        $.get(url, { datefrom: datefrom, dateto: dateto, userid: userid, "page.PageCurrent": paging.page.PageCurrent, "page.PageSize": paging.page.PageSize }).done(function (data) {
+            //$("#chartid").replaceWith(data);
+            var json3 = data.rows;
+
+            paging.page = data.page;
+            paging.fromrows();
+            paging.torows();
+
+            $(paging.id + ' #pagesize').val(paging.page.PageSize);
+            $(paging.id + ' #fromrows').text(paging.page.fromrows);
+            $(paging.id + ' #torows').text(paging.page.torows);
+            $(paging.id + ' #totalrows').text(paging.page.TotalRows);
+            paging.render(json3);
+
+
+        });
+        return false;
+    }
+
+    $(document).ready(function () {
+        paging.load();
+        $("#userid").selectize({
+            maxOptions: 10, selectOnTab: true, openOnFocus: false
+        });
+
+        $("#userid").change(function () {
+            var datefrom = "@((DateTime)ViewBag.datefrom)";
+            var dateto = "@((DateTime)ViewBag.dateto)";
+            chartrefresh(datefrom, dateto);
+        });
+    });
+
+</script>

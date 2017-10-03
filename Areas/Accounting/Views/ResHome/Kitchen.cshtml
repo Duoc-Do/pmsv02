@@ -1,0 +1,108 @@
+﻿<!-- Right side column. Contains the navbar and content of the page -->
+
+<section>
+    <div class="row">
+        <div id="kitchenview_container">
+            @Html.Partial("GetKitchen")
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+@*</aside>*@
+<!-- /.right-side -->
+
+
+
+
+@Scripts.Render("~/bundles/accapp")
+
+
+<script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("/signalr/hubs")"></script>
+
+
+<script type="text/javascript">
+
+    var appaccountingreshomeconnectionid = "";
+    if (typeof appaccountingreshome != "undefined") {
+        appaccountingreshomeconnectionid = appaccountingreshome.connectionid;
+    }
+
+    var appaccountingreshome = { connectionid: appaccountingreshomeconnectionid };
+
+    appaccountingreshome.appHub = $.connection.appHub; // appHub is the name of the Hub as declared in server side code
+    appaccountingreshome.appHub.state.companyid = "@(WebApp.Areas.Accounting.Services.GlobalVariant.GetCompanyId())"; // This is the round-trip state
+    // Client-side event handlers, as declared inside the  Hub
+
+
+    appaccountingreshome.appHub.client.onPosPrintKitchen = function (a, b, c) {
+
+        var url = "@(Url.Action("PrintKitchen", "ResOrder"))";
+        url = url + "/?Id=" + a + "&TableId=" + b;
+
+        $("#" + c).remove();
+        // Load the content using AJAX
+        $.get(url, function (data) {
+            $("#kitchenview_container").prepend(data);
+        });
+
+    };
+    appaccountingreshome.printkitchen = function (a, b, c) {
+        appaccountingreshome.appHub.server.posPrintKitchen(a, b, c);
+    };
+
+    appaccountingreshome.appHub.client.onPosTableRefreshKitchen = function (a) {
+
+        // Load the content using AJAX
+
+        $("#kitchenview_container > [data-orderid='" + a + "']").remove();
+
+
+    };
+
+    appaccountingreshome.tablerefreshkitchen = function (a) {
+        appaccountingreshome.appHub.server.posTableRefreshKitchen(a);
+    };
+    appaccountingreshome.appHub.client.onPosKitchenQuantityProcess = function (a) {
+
+        // Load the content using AJAX
+        $("#" + a + " > .box").removeClass('box-primary').addClass('box-success');
+    };
+    appaccountingreshome.quantityprocess = function (a) {
+        var url = "@(Url.Action("QuantityProcess", "ResOrder"))";
+        var orderid = $(a).attr("data-orderid");
+        var createdate = $(a).attr("data-createdate");
+        var idupdate = $(a).attr("data-idupdate");
+        if ($("#" + idupdate + " > .box").hasClass('box-success')) return;
+
+        if (orderid != "") {
+            //url = url + "/?Id=" + orderid + "&createdate=" + createdate;
+            var jqxhr = $.post(url, { Id: orderid, createdate: createdate }, function (data) {
+                //alert("success");
+                if (data.ketqua != 0) {
+                    appaccountingreshome.appHub.server.posKitchenQuantityProcess(idupdate);
+                }
+            })
+    .done(function () {
+        //alert("second success");
+    })
+    .fail(function () {
+        //alert("error");
+    })
+    .always(function () {
+        //alert("finished");
+    });
+        };
+    }
+
+    $.connection.hub.start()
+     .done(function () {
+         appaccountingreshome.appHub.server.joined(appaccountingreshome.appHub.state.companyid).done(function (id) {
+             if (appaccountingreshome.connectionid != "") {
+                 $.connection.appHub.server.leave(appaccountingreshome.connectionid);
+             }
+             appaccountingreshome.connectionid = id;
+         });
+     });
+
+</script>

@@ -1,0 +1,62 @@
+﻿@model WebApp.Areas.Accounting.Models.ResOrderView
+@{
+    string ajaxstring = string.Format("data-ajax-update=#{0} ", "resorderview_container");
+    ajaxstring += "data-ajax-mode=replace ";
+    ajaxstring += "data-ajax-method=GET ";
+    ajaxstring += string.Format("data-ajax-loading=#{0} ", "ajaxloadingelementid");
+    ajaxstring += "data-ajax=true ";
+
+    string color = "bg-light-blue";
+    // != 0 ? "bg-green" : "bg-light-blue";
+
+
+    bool isEdit = Model.OrderId != 0;
+
+    if (Model.OrderStatusId == 1 && isEdit) { color = "bg-green"; }
+    if (Model.OrderStatusId == 2 && isEdit) { color = "bg-yellow"; }
+
+    string orderlink = Url.Action("Create", "ResOrder", new { TableId = Model.TableId });
+
+    string changetablelink = Url.Action("ChangeTable", "ResOrder", new { TableId = Model.TableId });
+
+    if (isEdit)
+    {
+        orderlink = Url.Action("Edit", "ResOrder", new { Id = Model.OrderId });
+    }
+
+    string isorder = WebApp.Areas.Accounting.Services.GlobalVariant.GetAppUser().SysRole.Name.ToLower() == "posorder" ? " style=display:none;" : "";
+    
+}
+
+
+<div class="small-box @(color)" id="@(string.Format("dashboardtable_{0}", Model.TableId))" data-tableid="@(Model.TableId)" data-tablename="@(Model.TableName)">
+    <div class="inner">
+        <div class="btn-group">
+            <div class="btn-group">
+                <a data-toggle="dropdown" style="color:#fff;" href="javascript:;"><i class="fa fa-lg fa-fw fa-arrow-circle-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="@(changetablelink)" @(ajaxstring) onclick="appaccountingreshome.tabdashboard.orderactive()">Chuyển bàn</a></li>
+                    <li><a href="@(Url.Action("Index", "ResOrder", new { TableId = Model.TableId }))" @(ajaxstring) onclick="appaccountingreshome.tabdashboard.orderactive()">Xem order bàn</a></li>
+                </ul>
+            </div>
+
+            <a style="color:#fff;" href="@(orderlink)" @(ajaxstring) onclick="appaccountingreshome.tabdashboard.orderactive()">
+                <h3 style="font-size: 24px;">&nbsp;&nbsp;@Model.TableName</h3>
+            </a>
+        </div>
+        <div>
+            @*Giờ vào : @Model.VoucherDate.ToLongTimeString()
+            <br />*@
+            <strong>@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.OrderTotal, "Numeric", "c", "CICC")</strong>
+            @*<br />
+            Tổng món : @WebApp.Areas.Admin.Services.ExConvert.Data2String(Model.TotalQuantityProcess, "Numeric", "n", "")/@WebApp.Areas.Admin.Services.ExConvert.Data2String(Model.TotalQuantity, "Numeric", "n", "")*@
+        </div>
+    </div>
+
+    <div class="icon">
+        <i class="ion ion-fork"></i>
+    </div>
+    @*<a class="small-box-footer" href="@(orderlink)" @(ajaxstring) onclick="tabdashboard.orderactive()">Đặt món <i class="fa fa-arrow-circle-right"></i></a>*@
+    <a class="small-box-footer" onclick="appaccountingreshome.payorder('@(string.Format("dashboardtable_{0}", Model.TableId))','@(Model.OrderId)','2')" href="javascript:;">Tính tiền <i class="fa fa-arrow-circle-right"></i></a>
+    <a @isorder class="small-box-footer" onclick="appaccountingreshome.payorder('@(string.Format("dashboardtable_{0}", Model.TableId))','@(Model.OrderId)','0')" href="javascript:;">Thu tiền <i class="fa fa-arrow-circle-right"></i></a>
+</div>

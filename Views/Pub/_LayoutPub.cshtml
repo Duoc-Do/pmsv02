@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="~/Content/themes/accounting/AdminLTE2/plugins/jQueryUI/jquery-ui.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap 3.3.4 -->
+    <link href="~/Content/themes/Accounting/AdminLTE2/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- jvectormap -->
+    <link href="~/Content/themes/Accounting/AdminLTE2/plugins/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/themes/Accounting/AdminLTE2/dist/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link href="~/Content/themes/Accounting/AdminLTE2/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- Theme style -->
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/Accounting/css")
+
+
+
+   
+
+</head>
+<body class="sidebar-mini skin-blue-light">
+    <div class="wrapper">
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" style="margin-left: 0;">
+            <!-- Content Header (Page header) -->
+            @*<section class="content-header">
+                <h1>
+                    @ViewBag.Title
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                    <li class="active">Dashboard</li>
+                </ol>
+            </section>*@
+
+            <!-- Main content -->
+
+            <section class="content">
+                <div class="alert alert-success" id="sectioncontentmessage" style="display: none;">
+                </div>
+                <div class="row">
+                    <div id="ajaxloadingelementid">
+                        @*Đang xử lí...*@
+                    </div>
+                    <div class="col-xs-12">
+                        <section id="page-body-contain-id">
+                            @*@RenderSection("featured", required: false)*@
+                            @RenderBody()
+                        </section>
+                    </div>
+                </div>
+
+
+            </section>
+
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer text-center" style="margin-left: 0;">
+
+            <div><strong>Copyright &copy; @DateTime.Now.Year - Sen Việt Application. </strong></div>
+
+        </footer>
+
+        <!-- Control Sidebar -->
+        @*@Html.Partial("_Sidebar")*@
+        <!-- /.control-sidebar -->
+
+    </div>
+
+
+</body>
+</html>

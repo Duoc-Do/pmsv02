@@ -1,0 +1,10 @@
+﻿@model Dictionary<string, WebApp.Areas.Admin.Models.SysTableDetailView>
+
+@{
+    foreach (var item in Model)
+    {
+        if (!item.Value.GridViewShow == true) { continue; }
+        @Html.Partial("_bsTableFilterCell", item.Value)
+    }
+}
+

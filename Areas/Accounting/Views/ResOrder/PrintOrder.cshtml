@@ -1,0 +1,105 @@
+﻿@model WebApp.Areas.Accounting.Models.ResOrderView
+@using WebApp.Areas.Accounting.Services
+@{
+    ViewBag.Title = "PrintOrder";
+    Layout = "~/Areas/Accounting/Views/Shared/_Print.cshtml";
+
+    List<WebApp.Areas.Accounting.Models.ResOrderItemView> linesum = ViewBag.linesum;
+
+    var sysoption = GlobalVariant.GetSysOption();
+    var syscompany = GlobalVariant.GetSysCompany();
+}
+
+<div style="text-align: center;">
+    <div style="font-size: 20px; font-weight: bold;" id="CompanyName">@(syscompany["CompanyName"].ToString())</div>
+    <div style="font-size: 16px;" id="CompanyAddress">@(syscompany["CompanyAddress"].ToString())</div>
+    <div>@Model.TableName : #@Model.OrderId : @Model.OrderDate.ToString("d MMM yyyy HH:mm:ss") <span> | Thu ngân: @GlobalVariant.GetAppUser().FullName </span></div>
+
+
+</div>
+
+<div id="section-to-print">
+    <table>
+@*        <thead>
+            <tr>
+                <th class="numeric">SL</th>
+                <th class="numeric">Giá</th>
+                <th class="numeric">Tiền</th>
+            </tr>
+        </thead>*@
+        <tbody>
+            @foreach (var item in linesum)
+            {
+                <tr>
+                    <td><b>@WebApp.Areas.Accounting.Services.ExConvert.Data2String(item.Quantity.ToString("0.######"), "Numeric", "n", "")</b> x @item.ItemName</td>
+                    <td class="numeric">
+                        @WebApp.Areas.Accounting.Services.ExConvert.Data2String(item.Amount, "Numeric", "c", "")
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td><strong>Tổng tiền</strong></td>
+                <td class="numeric"><strong>@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.OrderSubtotal, "Numeric", "c", "")</strong></td>
+            </tr>
+            <tr>
+                <td ><strong>Giảm giá</strong></td>
+                <td class="numeric"><strong>@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.OrderDiscount, "Numeric", "c", "")</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Thanh toán</strong></td>
+                <td class="numeric"><strong>@WebApp.Areas.Accounting.Services.ExConvert.Data2String(Model.OrderTotal, "Numeric", "c", "")</strong></td>
+            </tr>
+            @if (!string.IsNullOrEmpty(Model.Note))
+            {
+                <tr>
+                    <td colspan="2">@Model.Note</td>
+                </tr>                
+            }
+
+        </tbody>
+    </table>
+
+</div>
+
+<div style="text-align: center; margin-top: 10px; font-weight: bold;">
+    <div id="CompanyHomePage">@(syscompany["CompanyHomePage"].ToString())</div>
+@*@{
+        var khuyenmai = System.Decimal.Floor(Model.OrderTotal / 100000);
+        if (khuyenmai > 0)
+        {
+        <div>Hãy gửi lại phiếu này khi bạn đến quán lần sau</div>
+        <div>bạn sẽ được khuyến mãi @khuyenmai xiên!</div>
+        }
+    }*@
+    <h4>Hẹn gặp lại!</h4>
+
+</div>
+<script>
+
+    (function () {
+        var afterPrint = function () {
+            // Here you would send an AJAX request to the server to track that a page
+            // has been printed.  You could additionally pass the URL if you wanted to
+            // track printing across an entire site or application.
+            window.close();
+        };
+
+        if (window.matchMedia) {
+            var mediaQueryList = window.matchMedia('print');
+            mediaQueryList.addListener(function (mql) {
+                if (!mql.matches) {
+                    afterPrint();
+                }
+            });
+        }
+
+        window.onafterprint = afterPrint;
+    }());
+
+
+    window.focus();
+
+    window.print();
+    //window.close();
+</script>
+

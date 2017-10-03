@@ -1,0 +1,17 @@
+﻿@model int
+@*@{
+    int OrderId = ViewBag.OrderId == null ? 0 : (int)ViewBag.OrderId;
+}*@
+
+<script>
+    $(document).ready(function () {
+        //alert('@(Model)');
+        appaccountingreshome.takeawayorder('dashboardtakeaway_@(Model)', '@(Model)');
+        appaccountingreshome.tabdashboard.tableactive();
+        appaccountingreshome.takeawayorderalls('@(Model)');
+
+        if (parseInt("@(Model)") > 0) {
+            appaccountingreshome.printkitchen(parseInt("@(Model)"), parseInt("@(Model)"));
+        }
+    });
+</script>

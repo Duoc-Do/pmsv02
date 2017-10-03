@@ -1,0 +1,19 @@
+﻿@model WebApp.Areas.Accounting.Models.AppItemView
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    switch (Request.UrlReferrer.LocalPath)
+    {
+        case "/Pos/AppHome":
+            ajaxoption["action-return"] = "Index2";
+
+            @Html.Partial("UpdatePos")
+            break;
+        case "/Gap/AppHome":
+            @Html.Partial("UpdateGap")
+            break;
+        default:
+            @Html.Partial("UpdateAcc")
+            break;
+    }
+
+}

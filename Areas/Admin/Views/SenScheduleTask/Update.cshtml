@@ -1,0 +1,33 @@
+﻿@model WebApp.Areas.Admin.Models.SenScheduleTask
+@using WebApp.Areas.Admin.Services
+@{
+    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+}
+
+@*@Html.Partial("_AddNew")*@
+
+<section id="@(ajaxoption["ajaxupdateid"])">
+    <div class="box box-primary">
+        @Html.Partial("_HeaderEdit")
+
+        @using (@Ajax.BeginForm(new AjaxOptions { LoadingElementId = ajaxoption["ajaxloadingid"], InsertionMode = InsertionMode.Replace, UpdateTargetId = ajaxoption["ajaxupdateid"] }))
+        {   
+            <div class="box-body">
+                @Html.AntiForgeryToken()
+                @Html.bsValidationSummary(false)
+@Html.svHiddenFor(model => model.ScheduleTaskId)
+                <div class="panel panel-default">
+                    <div class="panel-body">
+@Html.bsEditorFor(model => model.Type)@Html.bsEditorFor(model => model.StopOnError)@Html.bsEditorFor(model => model.Seconds)@Html.bsEditorFor(model => model.Name)@Html.bsEditorFor(model => model.LastSuccessUtc)@Html.bsEditorFor(model => model.LastStartUtc)@Html.bsEditorFor(model => model.LastEndUtc)@Html.bsEditorFor(model => model.Enabled)
+
+                    </div>
+                </div>
+
+                @Html.Partial("_ToolbarListUpdate", ajaxoption)
+            </div>
+        }
+        @Html.Partial("_FooterEdit")
+    </div>
+</section>
+
+@*@Scripts.Render("~/bundles/adminapp")*@
