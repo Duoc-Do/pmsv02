@@ -16,7 +16,6 @@ namespace WebApp.Areas.PMSContracts.Models
 
         public string ClauseContent { get; set; }
 
-
         public string OriginalLanguage { get; set; }
 
         public long? ParentId { get; set; }

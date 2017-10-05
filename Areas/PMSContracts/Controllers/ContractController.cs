@@ -26,9 +26,12 @@ namespace WebApp.Areas.PMSContracts.Controllers
                 tbContract = tbContract.Where(s => s.Description_VN.ToUpper().Contains(search.ToUpper())
                                        || s.ContractCode.ToUpper().Contains(search.ToUpper()) || s.ContractIDERP.ToUpper().Contains(search.ToUpper()) || s.proj_status.ToUpper().Contains(search.ToUpper()));
             }
-            return View(tbContract.Take(10).ToList());
+            return View(tbContract.Take(200).ToList());
         }
-
+        public ActionResult ClientList()
+        {
+            return View();
+        }
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -98,7 +101,7 @@ namespace WebApp.Areas.PMSContracts.Controllers
         }
 
         [HttpGet]
-        public ActionResult Contract(int page = 1, int pageSize = 10, int isjson = 0)
+        public ActionResult Contract(int page = 1, int pageSize = 200, int isjson = 0)
         {
 
             var skipRecords = page * pageSize;

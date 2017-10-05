@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.Areas.PMSContracts.Models;
 using excel = Microsoft.Office.Interop.Excel;
+
 namespace WebApp.Areas.PMSContracts.Controllers
 {
     public class GeneralController : Controller
@@ -14,7 +15,12 @@ namespace WebApp.Areas.PMSContracts.Controllers
         PMSDataContext objContext = new PMSDataContext();
         public ActionResult Index()
         {
-            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).Take(10).ToList();
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).ToList();
+            return View(tbGeneral);
+        }
+        public ActionResult ListOnTab(int id)
+        {
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).Where(s => s.ContractID == id).ToList();
             return View(tbGeneral);
         }
         public ActionResult Import(HttpPostedFileBase excelfile)
@@ -82,18 +88,19 @@ namespace WebApp.Areas.PMSContracts.Controllers
         // POST: /PMSContracts/General/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(GeneralModel model)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add insert logic here
-
+                objContext.CONTRACTS_CONDITIONS_GENERAL.Add(model);
+                objContext.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View(model);
+            //}
         }
 
         //
@@ -108,7 +115,7 @@ namespace WebApp.Areas.PMSContracts.Controllers
         // POST: /PMSContracts/General/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, GeneralModel collection)
         {
             try
             {
@@ -134,7 +141,7 @@ namespace WebApp.Areas.PMSContracts.Controllers
         // POST: /PMSContracts/General/Delete/5
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, GeneralModel collection)
         {
             try
             {

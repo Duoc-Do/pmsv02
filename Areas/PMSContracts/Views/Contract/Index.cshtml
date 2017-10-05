@@ -8,6 +8,7 @@
 @{
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
+
 @section HeaderPage{
     <section class="content-header">
         <h1>
@@ -17,7 +18,7 @@
 }
 <div class="box box-primary">
 
-
+    <button id="ddo" onclick="loadDoc()" type="button">Load Ajax</button>
     @*@if (ViewBag.ClientList!=null)
     {
         @Html.DropDownListFor(model => model, ViewBag.ClientList as SelectList, "---Select Country---", new { @class="form-control"})

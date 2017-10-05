@@ -2,23 +2,24 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+
 }
 
 
 <div class="box box-solid  box-primary">
     <div class="box-header with-border">
-
+   
         <h3 class="box-title">Contract Detail - @Model.ContractCode</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#ContractTab" aria-controls="ContractTab" role="tab" data-toggle="tab">Contract: @Html.DisplayFor(model => model.ContractIDERP)</a></li>
-            <li role="presentation"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab">General</a></li>
-            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab">Particular</a></li>
-            <li role="presentation"><a href="#TechTab" aria-controls="TechTab" role="tab" data-toggle="tab">Tech File</a></li>
-            <li role="presentation"><a href="#TechSpecsTab" aria-controls="TechSpecsTab" role="tab" data-toggle="tab">Tech Specs</a></li>
+        <ul class="nav nav-tabs" role="tablist" id="ContractDetailTab">
+            <li role="presentation" class="active"><a href="#ContractTab" aria-controls="ContractTab" role="tab" data-toggle="tab" data-url="/PMSContracts/Contract/Detail">Contract: @Html.DisplayFor(model => model.ContractIDERP)</a></li>
+            <li role="presentation"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab" data-url="/PMSContracts/General/ListOnTab?id=@Model.ContractID">General</a></li>
+            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab" data-url="/PMSContracts/Particular">Particular</a></li>
+            <li role="presentation"><a href="#TechTab" aria-controls="TechTab" role="tab" data-toggle="tab" data-url="/PMSContracts/TechFile">Tech File</a></li>
+            <li role="presentation"><a href="#TechSpecsTab" aria-controls="TechSpecsTab" role="tab" data-toggle="tab" data-url="/PMSContracts/TechSpecs">Tech Specs</a></li>
         </ul>
         <div class="tab-content contract-dt-tab">
             <div role="tabpanel" class="tab-pane active" id="ContractTab">
@@ -88,35 +89,22 @@
                 </p>
             </div>
             <div role="tabpanel" class="tab-pane" id="GeneralTab">
-                <dl class="dl-horizontal">
-                Code....General
-                </dl>
-                <p>
-                    @Html.ActionLink("Back to List", "Index", "Contract", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ContractID }, new { @class = "btn btn-info" })
+                @*<dl class="dl-horizontal">
+                    @Html.Partial("_GeneralPartial")
+                        </dl>*@
 
-                </p>
             </div>
             <div role="tabpanel" class="tab-pane" id="ParticularTab">
-            Code Particular
-                <p>
-                    @Html.ActionLink("Back to List", "Index", "Contract", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ContractID }, new { @class = "btn btn-info" })
+                Code Particular
 
-                </p>
             </div>
-            @*<ul>
-                @foreach (var item in Model)
-                {
-                    <li>@item.ResName</li>
-                }
-            </ul>*@
-            <div role="tabpanel" class="tab-pane" id="TechTab">...</div>
-            <div role="tabpanel" class="tab-pane" id="TechSpecsTab">...</div>
+
+            @*<div role="tabpanel" class="tab-pane" id="TechTab">...</div>
+            <div role="tabpanel" class="tab-pane" id="TechSpecsTab">...</div>*@
         </div>
     </div>
     <!-- end tab-content-->
 </div>
 
-</div>
+
 <!-- /.box -->
