@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -15,12 +16,12 @@ namespace WebApp.Areas.PMSContracts.Controllers
         PMSDataContext objContext = new PMSDataContext();
         public ActionResult Index()
         {
-            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).ToList();
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.Id).ToList();
             return View(tbGeneral);
         }
         public ActionResult ListOnTab(int id)
         {
-            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).Where(s => s.ContractID == id).ToList();
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.Id).Where(s => s.Id == id).ToList();
             return View(tbGeneral);
         }
         public ActionResult Import(HttpPostedFileBase excelfile)
@@ -108,25 +109,25 @@ namespace WebApp.Areas.PMSContracts.Controllers
 
         public ActionResult Edit(int id)
         {
-            return View();
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.Where(x => x.Id == id).SingleOrDefault();
+    
+            return View(tbGeneral);
         }
 
         //
         // POST: /PMSContracts/General/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, GeneralModel collection)
+        public ActionResult Edit(int id, GeneralModel model)
         {
-            try
+            GeneralModel tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.Where(x => x.Id == model.Id).SingleOrDefault();
+            if (tbGeneral != null)
             {
-                // TODO: Add update logic here
-
+                objContext.Entry(tbGeneral).CurrentValues.SetValues(model);
+                objContext.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(tbGeneral);
         }
 
         //
@@ -134,7 +135,9 @@ namespace WebApp.Areas.PMSContracts.Controllers
 
         public ActionResult Delete(int id)
         {
-            return View();
+            GeneralModel tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.Find(id);
+
+            return View(tbGeneral);
         }
 
         //
@@ -143,16 +146,25 @@ namespace WebApp.Areas.PMSContracts.Controllers
         [HttpPost]
         public ActionResult Delete(int id, GeneralModel collection)
         {
-            try
+            var tbGeneral =
+              objContext.CONTRACTS_CONDITIONS_GENERAL.Where(x => x.Id == id).SingleOrDefault();
+            if (tbGeneral != null)
             {
-                // TODO: Add delete logic here
+                objContext.CONTRACTS_CONDITIONS_GENERAL.Remove(tbGeneral);
+                objContext.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+        public ActionResult Search(string search)
+        {
+            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s;
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (!String.IsNullOrEmpty(search))
             {
-                return View();
+                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
+                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper()));
             }
+            return View(tbGeneral.ToList());
         }
     }
 }
