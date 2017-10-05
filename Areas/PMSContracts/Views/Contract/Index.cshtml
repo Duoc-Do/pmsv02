@@ -8,7 +8,6 @@
 @{
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
-
 @section HeaderPage{
     <section class="content-header">
         <h1>
@@ -18,7 +17,7 @@
 }
 <div class="box box-primary">
 
-    <button id="ddo" onclick="loadDoc()" type="button">Load Ajax</button>
+
     @*@if (ViewBag.ClientList!=null)
     {
         @Html.DropDownListFor(model => model, ViewBag.ClientList as SelectList, "---Select Country---", new { @class="form-control"})
@@ -143,34 +142,34 @@
 <div id="loading"></div>
 <script>
     var loadpg = document.getElementById('loadingmore');
-    var scwindow = document.querySelector('html');
-    var _inCallback = 1;
-    var pagenumber = 1;
+    var _inCallback = false;
+    var pagenumber = 0;
 
     loadpg.addEventListener('click', function () {
         loadContracts();
     }, false);
 
     function loadContracts() {
-        $('div#loading').empty();
-     
-        pagenumber++;
-        var _inCallback = 2;
-        $('div#loading').html('<p>Loading...</p>');
-        $.get("Contract/Contract?page=" + pagenumber + "&pagesize=pagenumber&isjson=2", function (data) {
-            //alert(data);
-            if (data != '') {
-                $("#contractList tbody").append(data);
-            }
-            else {
-                pagenumber = -1;
-            }
-            _inCallback = 1;
-            $('div#loading').empty();
-        });
+        if (pagenumber > -1 && !_inCallback)
+        {
+            _inCallback = true;
+            pagenumber++;
+            $('div#loading').html('<p>Loading...</p>');
+            $.get("Contract/Contract?page=" + pagenumber + "&pagesize=20&isjson=2", function (data) {
+                //alert(data)
+                if (data != '') {
+                    $("#contractList tbody").append(data);
+                }
+                else {
+                    pagenumber = -1;
+                }
+                _inCallback = false;
+                $('div#loading').empty();
+            });
+        }
     }
 
-    window.addEventListener('scroll', function (e) {
+    window.addEventListener("scroll",function () {
         if ($(window).scrollTop() == $(document).height() - $(window).height()) {
             loadContracts();
         }

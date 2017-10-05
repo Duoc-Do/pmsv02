@@ -13,7 +13,7 @@ namespace WebApp.Areas.PMSContracts.Controllers
 
         public ActionResult Index()
         {
-            var tbContract = objContext.CONTRACTS.OrderByDescending(s => s.ContractID).Take(10).ToList();
+            var tbContract = objContext.CONTRACTS.OrderByDescending(s => s.ContractID).Take(20).ToList();
             return View(tbContract);
         }
         [HttpGet]
@@ -26,12 +26,9 @@ namespace WebApp.Areas.PMSContracts.Controllers
                 tbContract = tbContract.Where(s => s.Description_VN.ToUpper().Contains(search.ToUpper())
                                        || s.ContractCode.ToUpper().Contains(search.ToUpper()) || s.ContractIDERP.ToUpper().Contains(search.ToUpper()) || s.proj_status.ToUpper().Contains(search.ToUpper()));
             }
-            return View(tbContract.Take(200).ToList());
+            return View(tbContract.Take(20).ToList());
         }
-        public ActionResult ClientList()
-        {
-            return View();
-        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -101,12 +98,10 @@ namespace WebApp.Areas.PMSContracts.Controllers
         }
 
         [HttpGet]
-        public ActionResult Contract(int page = 1, int pageSize = 200, int isjson = 0)
+        public ActionResult Contract(int page = 1, int pageSize = 10, int isjson = 0)
         {
-
             var skipRecords = page * pageSize;
-            var loaddb = objContext.CONTRACTS.Where(x => x.ContractCode != null)
-                .OrderBy(x => x.ContractID).Skip(skipRecords).Take(pageSize).ToList();
+            var loaddb = objContext.CONTRACTS.OrderBy(x => x.ContractID).Skip(skipRecords).Take(pageSize).ToList();
             if (isjson == 1)
             {
                 return Json(new { rows = loaddb, status = 1, message = "completed" }, JsonRequestBehavior.AllowGet);

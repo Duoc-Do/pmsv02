@@ -8,10 +8,14 @@
                 @Html.DisplayFor(modelItem => item.ContractID)
             </td>*@
         <td class="text-center">
-            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="@Html.DisplayFor(modelItem => item.ContractIDERP)">@Html.DisplayFor(modelItem => item.ContractIDERP)</a>
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' 
+               title="@Html.DisplayFor(modelItem => item.ContractIDERP)">
+            @Html.DisplayFor(modelItem => item.ContractIDERP)</a>
         </td>
         <td class="text-center">
-            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="@Html.DisplayFor(modelItem => item.ContractIDERP)">@Html.DisplayFor(modelItem => item.ContractCode)</a>
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' 
+               title="@Html.DisplayFor(modelItem => item.ContractIDERP)">
+            @Html.DisplayFor(modelItem => item.ContractCode)</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description_VN)
