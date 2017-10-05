@@ -1,0 +1,70 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.ParticularModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GeneralId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClauseCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClauseContent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OriginalLanguage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeneralId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClauseCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClauseContent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OriginalLanguage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ParticularId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ParticularId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ParticularId })
+        </td>
+    </tr>
+}
+
+</table>

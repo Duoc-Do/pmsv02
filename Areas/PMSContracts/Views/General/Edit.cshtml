@@ -1,0 +1,95 @@
+﻿@model WebApp.Areas.PMSContracts.Models.GeneralModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>GeneralModel</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractID)
+            @Html.ValidationMessageFor(model => model.ContractID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ClauseCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ClauseCode)
+            @Html.ValidationMessageFor(model => model.ClauseCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ClauseContent)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ClauseContent)
+            @Html.ValidationMessageFor(model => model.ClauseContent)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.OriginalLanguage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.OriginalLanguage)
+            @Html.ValidationMessageFor(model => model.OriginalLanguage)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ParentId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ParentId)
+            @Html.ValidationMessageFor(model => model.ParentId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BookType)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BookType)
+            @Html.ValidationMessageFor(model => model.BookType)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreationDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreationDate)
+            @Html.ValidationMessageFor(model => model.CreationDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Type)
+            @Html.ValidationMessageFor(model => model.Type)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
