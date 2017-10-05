@@ -19,10 +19,46 @@ namespace WebApp.Areas.PMSContracts.Controllers
             var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.Id).ToList();
             return View(tbGeneral);
         }
+        [HttpGet]
+        public ActionResult Index(string search)
+        {
+            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
+                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper()));
+            }
+            return View(tbGeneral.ToList());
+        }
         public ActionResult ListOnTab(int id)
         {
-            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.Id).Where(s => s.Id == id).ToList();
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(s => s.ContractID).Where(s => s.ContractID == id).ToList();
             return View(tbGeneral);
+        }
+        [HttpGet]
+        public ActionResult ListOnTab(string search)
+        {
+            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
+                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper()));
+            }
+            return View(tbGeneral.ToList());
+        }
+        [HttpGet]
+        public ActionResult SearchListOnTab(string search, long idcontract)
+        {
+            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL where s.ContractID==idcontract select s;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
+                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper());
+            }
+            return View(tbGeneral.ToList());
         }
         public ActionResult Import(HttpPostedFileBase excelfile)
         {
@@ -155,16 +191,6 @@ namespace WebApp.Areas.PMSContracts.Controllers
             }
             return RedirectToAction("Index");
         }
-        public ActionResult Search(string search)
-        {
-            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s;
 
-            if (!String.IsNullOrEmpty(search))
-            {
-                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
-                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper()));
-            }
-            return View(tbGeneral.ToList());
-        }
     }
 }

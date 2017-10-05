@@ -11,7 +11,7 @@
     <div class="box-header">
         <i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")
         <div class="box-tools">
-            @using (Html.BeginForm("Index", "Contract", FormMethod.Get))
+            @using (Html.BeginForm("Index", "General", FormMethod.Get))
             {
                 <div class="input-group input-group-sm" style="width: 250px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
@@ -86,10 +86,17 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Type)
                                 </td>
-                                <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                <td class="text-center">
+
+                                    <a href='@Url.Action("Edit", "General", new { id = item.Id})' title="Edit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </a>&nbsp;
+                                    <a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
+                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    </a>&nbsp;
+                                    <a href='@Url.Action("Delete", "General", new { id = item.Id})' title="Delete">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }
