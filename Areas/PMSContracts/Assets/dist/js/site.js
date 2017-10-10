@@ -27,3 +27,10 @@ function loadDoc() {
 //$('#ContractTab').load($('.active a').attr("data-url"), function (result) {
 //    $('.active a').tab('show');
 //});
+$("#txtSearch").autocomplete(function () {
+    alert("fhdslfdsjfsdflkj");
+  //  autocomplete();
+});
+function autocomplete() {
+    alert("fhdslfdsjfsdflkj");
+}

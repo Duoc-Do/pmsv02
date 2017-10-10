@@ -9,6 +9,7 @@ namespace WebApp.Areas.PMSContracts
 
         //public object CLIENTS { get; internal set; }
         public  DbSet<GeneralModel> CONTRACTS_CONDITIONS_GENERAL { get; set; }
+        public DbSet<TechSpecsModel> CONTRACTS_CONDITIONS_TECHSPECS { get; set; }
         public DbSet<ParticularModel> CONTRACTS_CONDITIONS_PARTICULAR { get; set; }
         public  DbSet<ClientModel> CONTRACTS_CLIENTS { get; set; }
         public  DbSet<ContractModel> CONTRACTS { get; set; }

@@ -5,97 +5,100 @@
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
 
-<h2>Create</h2>
+@section HeaderPage{
+    <section class="content-header">
+        <h1>
+            General page
+        </h1>
+    </section>
+}
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>GeneralModel</legend>
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Create</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form">
+            <div class="box-body">
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ContractID)
-        </div>
-        <div class="editor-field">
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractID)
 
-            @Html.TextBoxFor(model => model.ContractID, new { @Value = "333" })
-            
-            @Html.ValidationMessageFor(model => model.ContractID)
-        </div>
+                    @Html.TextBoxFor(model => model.ContractID, new { @Value = "336", @class = "form-control" })
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClauseCode)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.ClauseCode, new { @Value = "Tạm ứng vật tư, vật liệu" })
-            @Html.ValidationMessageFor(model => model.ClauseCode)
-        </div>
+                    @Html.ValidationMessageFor(model => model.ContractID)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClauseContent)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.ClauseContent, new { @Value = "Chủ đầu tư sẽ xem xét cho nhà thầu tạm ứng để mua trước một số loại vật tư, thiết bị, bán thành phẩm có giá trị lớn nhằm tránh việc tăng giá" })
-            @Html.ValidationMessageFor(model => model.ClauseContent)
-        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.OriginalLanguage)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.OriginalLanguage, new { @Value = "vi" })
-            @Html.ValidationMessageFor(model => model.OriginalLanguage)
-        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ParentId)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.ParentId, new { @Value = "12" })
-            @Html.ValidationMessageFor(model => model.ParentId)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.OriginalLanguage)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.BookType)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.BookType, new { @Value = "RED" })
-            @Html.ValidationMessageFor(model => model.BookType)
-        </div>
+                    @Html.TextBoxFor(model => model.OriginalLanguage, new { @Value = "vi", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OriginalLanguage)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CreationDate)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.CreationDate, new { @Value = @DateTime.Now.ToShortDateString() })
-            @Html.ValidationMessageFor(model => model.CreationDate)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ParentId)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Type)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.Type, new { @Value = "ORG" })
-            @Html.ValidationMessageFor(model => model.Type)
-        </div>
+                    @Html.TextBoxFor(model => model.ParentId, new { @Value = "12", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ParentId)
+                </div>
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.BookType)
+                    @Html.TextBoxFor(model => model.BookType, new { @Value = "YEL", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BookType)
+
+                 
+                </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CreationDate)
+                    @Html.TextBoxFor(model => model.CreationDate, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CreationDate)
+                   
+                </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.Type)
+                    @Html.TextBoxFor(model => model.Type, new { @Value = "ORG", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type)
+                </div>
+                <div class="form-group col-lg-12 col-md-6">
+                    @Html.LabelFor(model => model.ClauseCode)
+                    @Html.TextBoxFor(model => model.ClauseCode, new { @Value = "11.9. Đường và phương tiện", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClauseCode)
+                </div>
+
+                <div class="form-group col-lg-12 col-md-6">
+                    @Html.LabelFor(model => model.ClauseContent)
+                    @Html.TextBoxFor(model => model.ClauseContent, new { @Value = "Nhà thầu phải chịu toàn bộ chi phí và lệ phí cho các quyền về đường đi lại chuyên dùng hoặc tạm thời mà Nhà thầu cần có, bao gồm lối vào công trường. Nhà thầu cũng phải có thêm các phương tiện khác bên ngoài công trường cần cho công việc bằng sự chịu rủi ro và kinh phí của mình.", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClauseContent)
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-info">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
 }
 
-<div>
+@*<div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+</div>*@
 
 @*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}*@
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
 @*@using (Html.BeginForm("Import", "General", FormMethod.Post,new { enctype = "multipart/form-data" }))
-{
-    @Html.Raw(ViewBag.Error)
-    <span>Excel File </span><input type="file" name="excelfile" /><br />
-    <input type="submit" value="Import" />
-}*@
+    {
+        @Html.Raw(ViewBag.Error)
+        <span>Excel File </span><input type="file" name="excelfile" /><br />
+        <input type="submit" value="Import" />
+    }*@

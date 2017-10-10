@@ -22,14 +22,15 @@ namespace WebApp.Areas.PMSContracts.Controllers
         [HttpGet]
         public ActionResult Index(string search)
         {
-            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s;
+            //var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL select s; // way 1
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.OrderByDescending(x => x.Id).ToList();
 
             if (!String.IsNullOrEmpty(search))
             {
                 tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
-                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper()));
+                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper())).ToList();
             }
-            return View(tbGeneral.ToList());
+            return View(tbGeneral);
         }
         public ActionResult ListOnTab(int id)
         {
@@ -49,16 +50,17 @@ namespace WebApp.Areas.PMSContracts.Controllers
             return View(tbGeneral.ToList());
         }
         [HttpGet]
-        public ActionResult SearchListOnTab(string search, long idcontract)
+        public ActionResult SearchListOnTab(string search, int id)
         {
-            var tbGeneral = from s in objContext.CONTRACTS_CONDITIONS_GENERAL where s.ContractID==idcontract select s;
+            
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.Where(x=>x.ContractID==id).OrderByDescending(x => x.Id).ToList();
 
-            if (!string.IsNullOrEmpty(search))
+            if (!String.IsNullOrEmpty(search))
             {
-                tbGeneral = tbGeneral.Where(s => s.ClauseCode.ToUpper().Contains(search.ToUpper())
-                                       || s.ClauseContent.ToUpper().Contains(search.ToUpper());
+                tbGeneral = tbGeneral.Where(s=>s.ContractID == id && (s.ClauseCode.ToUpper().Contains(search.ToUpper()) || s.ClauseContent.ToUpper().Contains(search.ToUpper()))).ToList();
             }
-            return View(tbGeneral.ToList());
+            return View(tbGeneral);
+
         }
         public ActionResult Import(HttpPostedFileBase excelfile)
         {

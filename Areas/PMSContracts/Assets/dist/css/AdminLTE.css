@@ -4985,7 +4985,7 @@ table.text-center th {
     padding: 3px 15px 0px 0;
     border-bottom:1px solid #ededed;
 }
-.contract-dt-tab {
+.tab-content {
     padding: 20px 0;
 }
 @media(max-width:767px){

@@ -5,91 +5,88 @@
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
 
-<h2>Edit</h2>
-
-@using (Html.BeginForm()) {
+@section HeaderPage{
+    <section class="content-header">
+        <h1>
+            General page
+        </h1>
+    </section>
+}
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>GeneralModel</legend>
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Edit - @Model.ClauseCode</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form">
+            <div class="box-body">
 
-        @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Id)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ContractID)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ContractID)
-            @Html.ValidationMessageFor(model => model.ContractID)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractID)
+                    @Html.TextBoxFor(model => model.ContractID, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractID)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClauseCode)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ClauseCode)
-            @Html.ValidationMessageFor(model => model.ClauseCode)
-        </div>
+               
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.OriginalLanguage)
+                    @Html.TextBoxFor(model => model.OriginalLanguage, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OriginalLanguage)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClauseContent)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ClauseContent)
-            @Html.ValidationMessageFor(model => model.ClauseContent)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ParentId)
+                    @Html.TextBoxFor(model => model.ParentId, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ParentId)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.OriginalLanguage)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.OriginalLanguage)
-            @Html.ValidationMessageFor(model => model.OriginalLanguage)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.BookType)
+                    @Html.TextBoxFor(model => model.BookType, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BookType)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ParentId)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ParentId)
-            @Html.ValidationMessageFor(model => model.ParentId)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CreationDate)
+                    @Html.TextBoxFor(model => model.CreationDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CreationDate)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.BookType)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.BookType)
-            @Html.ValidationMessageFor(model => model.BookType)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.Type)
+                    @Html.TextBoxFor(model => model.Type, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type)
+                </div>
+                <div class="form-group col-lg-12 col-md-12">
+                    @Html.LabelFor(model => model.ClauseCode)
+                    @Html.TextAreaFor(model => model.ClauseCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClauseCode)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CreationDate)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.CreationDate)
-            @Html.ValidationMessageFor(model => model.CreationDate)
-        </div>
+                <div class="form-group col-lg-12 col-md-12">
+                    @Html.LabelFor(model => model.ClauseContent)
+                    @Html.TextAreaFor(model => model.ClauseContent, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClauseContent)
+                </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Type)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Type)
-            @Html.ValidationMessageFor(model => model.Type)
-        </div>
-
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-default">Back to List</button>
+                <button type="submit" class="btn btn-info">Save</button>
+            </div>
+        </form>
+    </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}*@
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

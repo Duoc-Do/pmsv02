@@ -5,68 +5,89 @@
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
 
-<h2>Details</h2>
+<div class="box box-solid  box-primary">
+    <div class="box-header with-border">
 
-<fieldset>
-    <legend>GeneralModel</legend>
+        <h3 class="box-title">General Detail - @Model.Id</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id="GeneralDetailTab">
+            <li role="presentation" class="active"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab" data-url="/PMSContracts/General/Detail">Contract: @Html.DisplayFor(model => model.Id)</a></li>
+            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab" data-url="/PMSContracts/Particular?id=@Model.ContractID">Particular</a></li>
+            @*<li role="presentation"><a href="#TechSpecsTab" aria-controls="TechSpecsTab" role="tab" data-toggle="tab" data-url="/PMSContracts/TechSpecs?id=@Model.ContractID">Tech Specs</a></li>*@
+        </ul>
+        <div class="tab-content general-dt-tab">
+            <div role="tabpanel" class="tab-pane active" id="GeneralTab">
+                <dl class="dl-horizontal">
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ContractID)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ContractID)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ContractID)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ContractID)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ClauseCode)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ClauseCode)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ClauseCode)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ClauseCode)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ClauseContent)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ClauseContent)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ClauseContent)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ClauseContent)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.OriginalLanguage)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.OriginalLanguage)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OriginalLanguage)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.OriginalLanguage)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ParentId)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ParentId)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ParentId)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ParentId)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.BookType)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.BookType)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BookType)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BookType)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreationDate)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreationDate)
-    </div>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreationDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CreationDate)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Type)
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Type)
+                    </dd>
+                    <p>
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                        @Html.ActionLink("Back to List", "Index")
+                    </p>
+
+                </dl>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="GeneralTab">
+                sdfsdfdsf
+            </div>
+        </div>
     </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Type)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
+
