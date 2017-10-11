@@ -4,37 +4,33 @@
     ViewBag.Title = "Edit";
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
     long contractid = Model.ContractID;
-    Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
+    //Dictionary<string, string> ajaxoption = (Dictionary<string, string>)ViewBag.ajaxoption;
     var db = new WebApp.Areas.PMSContracts.PMSDataContext();
-    IEnumerable<SelectListItem> lists =
-    from value in db.CONTRACTS_CLIENTS join value1 in db.CONTRACTS on value.ClientID equals value1.ClientID
-    where value1.ContractID == contractid
-    select new SelectListItem
-    {
-        Text = value.ClientID.ToString(),
-        Value = value.ResName
-    };
+    //IEnumerable<SelectListItem> lists =
+    //from value in db.CONTRACTS_CLIENTS join value1 in db.CONTRACTS on value.ClientID equals value1.ClientID
+    //where value1.ContractID == contractid
+    //select new SelectListItem
+    //{
+    //    Text = value.ClientID.ToString(),
+    //    Value = value.ResName
+    //};
     Dictionary<string, string> ajaxoption1 = (Dictionary<string, string>)ViewBag.ajaxoption;
     var db1 = new WebApp.Areas.PMSContracts.PMSDataContext();
     IEnumerable<SelectListItem> lists2 =
     from value in db.CONTRACTS_CLIENTS
     join value1 in db.CONTRACTS on value.ClientID equals value1.ClientID
+    where value1.ContractID == contractid
     select new SelectListItem
     {
-        Text = value.ResName,
+        Text = value.CompanyName,
         Value = value.ClientID.ToString()
     };
 }
-
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-
-
-
     @Html.HiddenFor(model => model.ContractID)
     <div class="box box-info">
         <div class="box-header with-border">
@@ -72,21 +68,19 @@
                     @Html.ValidationMessageFor(model => model.CommencementDate)
                 </div>
 
-              
-
                 <div class="form-group col-lg-4 col-md-6">
                     @Html.LabelFor(model => model.ContractFormat)
                     @Html.TextBoxFor(model => model.ContractFormat, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ContractFormat)
                 </div>
                 <div class="form-group col-lg-4 col-md-6">
-                    @Html.LabelFor(model => model.ClientID)
-                    @*@Html.TextBoxFor(model => model.ClientID, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ClientID)*@
-                    @*@Html.DropDownListFor(model => model.clientModels, new SelectList(new List<int>().Add(Convert.ToInt32(Model.clientModels))), "-- Select Status --")*@
-                    @Html.DropDownListFor(model => model.ClientID, lists) / Client name: &nbsp;
-                    @Html.DropDownListFor(model => model.ClientID, lists2)
-                    
+                    @Html.LabelFor(model => model.ClientModels.CompanyName)
+                    @*@Html.DropDownListFor(model => model.ClientModels.CompanyName,lists2, new { @class = "form-control", })*@
+                    @*@Html.TextBoxFor(model => model.ClientModels.CompanyName, new { @class = "form-control" })*@
+                    @Html.TextBoxFor(model => model.ClientModels.CompanyName, new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.ClientModels.CompanyName)
+
+
                 </div>
                 <div class="form-group col-lg-4 col-md-6">
                     @Html.LabelFor(model => model.FCAmount)
@@ -126,7 +120,7 @@
                     @Html.TextAreaFor(model => model.Description_VN, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Description_VN)
                 </div>
-    
+
 
                 <div class="form-group col-lg-4 col-md-6">
                     @Html.LabelFor(model => model.DurationInDays)
@@ -181,6 +175,9 @@
                     @Html.TextBoxFor(model => model.proj_status, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.proj_status)
                 </div>
+                <div>
+                    <input type="text" name="CityName" id="CityName" />
+                </div>
             </div>
             <!-- /.box-body -->
 
@@ -190,16 +187,7 @@
             </div>
             <!-- /.box-footer -->
         </form>
-    </div>
 
-     <script>
-    
-         document.getElementById("ClientID").addEventListener("change", function () {
-                 
-         }, true);
-     
-    </script>
-}      <!-- /.box -->
-@*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@
+    </div>
+}
+

@@ -19,12 +19,13 @@ namespace WebApp.Areas.PMSContracts.Controllers
         [HttpGet]
         public ActionResult Index(string search) // ten bien phai giong voi name="search" cua button
         {
-            var tbContract = from s in objContext.CONTRACTS select s;
-         
+            //var tbContract = from s in objContext.CONTRACTS select s;
+            var tbContract = objContext.CONTRACTS.OrderByDescending(x => x.ContractID);
+
             if (!String.IsNullOrEmpty(search))
             {
                 tbContract = tbContract.Where(s => s.Description_VN.ToUpper().Contains(search.ToUpper())
-                                       || s.ContractCode.ToUpper().Contains(search.ToUpper()) || s.ContractIDERP.ToUpper().Contains(search.ToUpper()) || s.proj_status.ToUpper().Contains(search.ToUpper()));
+                                       || s.ContractCode.ToUpper().Contains(search.ToUpper()) || s.ContractIDERP.ToUpper().Contains(search.ToUpper()) || s.proj_status.ToUpper().Contains(search.ToUpper())).OrderByDescending(x=>x.ContractID);
             }
             return View(tbContract.Take(20).ToList());
         }
@@ -79,7 +80,9 @@ namespace WebApp.Areas.PMSContracts.Controllers
         public ActionResult Edit(int id) // For view layer
         {
             var tbContract = objContext.CONTRACTS.Where(x => x.ContractID == id).SingleOrDefault();
-            ViewBag.ClientList = new SelectList(GetClientList(id),"ResName");
+            var tbcontract1 = objContext.CONTRACTS_CLIENTS.ToList();
+            SelectList list_contract = new SelectList(tbcontract1, "ClientID", "CompanyName"); 
+            ViewBag.lContract = tbContract;
             return View(tbContract);
         }
         [HttpPost]
@@ -96,12 +99,11 @@ namespace WebApp.Areas.PMSContracts.Controllers
                 return View(tbContract);
             }
         }
-
         [HttpGet]
         public ActionResult Contract(int page = 1, int pageSize = 10, int isjson = 0)
         {
             var skipRecords = page * pageSize;
-            var loaddb = objContext.CONTRACTS.OrderBy(x => x.ContractID).Skip(skipRecords).Take(pageSize).ToList();
+            var loaddb = objContext.CONTRACTS.OrderBy(x => x.ContractID).OrderByDescending(x=>x.ContractID).Skip(skipRecords).Take(pageSize).ToList();
             if (isjson == 1)
             {
                 return Json(new { rows = loaddb, status = 1, message = "completed" }, JsonRequestBehavior.AllowGet);
@@ -132,6 +134,17 @@ namespace WebApp.Areas.PMSContracts.Controllers
             return bn;
         }
 
+        public ActionResult GetSearchValue(string search)
+        {
+            List<ClientModel> allsearch = objContext.CONTRACTS_CLIENTS.Where(x => x.CompanyName.Contains(search)).Select(x => new ClientModel
+            {
+                ClientID = x.ClientID,
+                CompanyName = x.CompanyName
+            }).ToList();
+            //return new JsonResult { Data = allsearch, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return Json(allsearch, JsonRequestBehavior.AllowGet);
+        }
+
         //const int recordsPerPage = 8;
         //public ActionResult Contract(int? id)
         //{
@@ -151,5 +164,13 @@ namespace WebApp.Areas.PMSContracts.Controllers
         //        .Skip(skipRecords)
         //        .Take(recordsPerPage).ToList();
         //}
+        [HttpGet]
+        public JsonResult AutoCompleteCity(string Prefix)
+        { 
+            var CityName = (from N in objContext.CONTRACTS_CLIENTS
+                            where N.CompanyName.StartsWith(Prefix)
+                            select new { N.CompanyName });
+            return Json(CityName, JsonRequestBehavior.AllowGet);
+        }
     }
 }
