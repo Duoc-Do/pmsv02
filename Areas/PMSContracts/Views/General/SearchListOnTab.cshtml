@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "SearchListOnTab";
-    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+    Layout = null;
 }
 
 <h2>SearchListOnTab</h2>
@@ -10,6 +10,23 @@
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
+
+<div class="box-tools">
+    @using (Html.BeginForm("SearchListOnTab", "General", FormMethod.Get))
+    {
+
+        <div class="input-group input-group-sm" style="width: 250px;">
+
+            @*    @Html.DisplayNameFor(model => model.ContractID)*@
+            <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
+            <input type="hidden" name="id" class="form-control pull-right" placeholder="Search" value="333" id="setContractID">
+
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    }
+</div>
 
 <table class="table table-hover table-bordered" id="contractList">
     <tr>

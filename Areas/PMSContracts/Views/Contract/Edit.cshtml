@@ -34,7 +34,7 @@
     @Html.HiddenFor(model => model.ContractID)
     <div class="box box-info">
         <div class="box-header with-border">
-            <h3 class="box-title">Contract Edit</h3>
+            <h3 class="box-title">Contract - Edit</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -175,9 +175,9 @@
                     @Html.TextBoxFor(model => model.proj_status, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.proj_status)
                 </div>
-                <div>
+                @*<div>
                     <input type="text" name="CityName" id="CityName" />
-                </div>
+                </div>*@
             </div>
             <!-- /.box-body -->
 

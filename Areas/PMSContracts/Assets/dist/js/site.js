@@ -23,24 +23,28 @@ function loadDoc() {
     xhttp.open("POST",gaj, false);
     xhttp.send();
 }
-$(document).ready(function () {  
-    $("#CityName").click({  
-        source: function (request, response) {  
-            $.ajax({  
+$(document).ready(function () {
+    $("#CityName").click({
+        source: function (request, response) {
+            $.ajax({
                 url: "http://localhost:60587/PMSContracts/Contract/AutoCompleteCity?Prefix=c",
-                type: "GET",  
-                dataType: "json",  
-                data: { },  
-                success: function (data) {  
-                    response($.map(data, function (item) {  
-                        return { label: item.Name, value: item.Name };  
-                    }))  
-                }  
+                type: "GET",
+                dataType: "json",
+                data: {},
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name };
+                    }))
+                }
             })
             alert($.ajax);
         },
-        messages: {  
-            noResults: "", results: ""  
-        }  
-    });  
-})  
+        messages: {
+            noResults: "", results: ""
+        }
+    });
+});
+var getctr = $("#idctr").val();
+$("#txtSearch").click(function () {
+    document.getElementById('setContractID').innerHTML = getctr;
+});

@@ -5,165 +5,167 @@
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
 
-<h2>Create</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>ContractModel</legend>
 
-        @*<div class="editor-label">
-           
-        </div>*@
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ContractIDERP)
-            @Html.TextBoxFor(model => model.ContractIDERP, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ContractIDERP)
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Contract - Create</h3>
         </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form">
+            <div class="box-body">
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractIDERP)
+                    @Html.TextBoxFor(model => model.ContractIDERP, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractIDERP)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.CCE_ID)
-            @Html.TextBoxFor(model => model.CCE_ID, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CCE_ID)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CCE_ID)
+                    @Html.TextBoxFor(model => model.CCE_ID, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CCE_ID)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ContractCode)
-            @Html.TextBoxFor(model => model.ContractCode, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ContractCode)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractCode)
+                    @Html.TextBoxFor(model => model.ContractCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractCode)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ContractDate)
-            @Html.TextBoxFor(model => model.ContractDate, new { @class = "form-control", @Value=DateTime.Now.ToShortDateString()})
-            @Html.ValidationMessageFor(model => model.ContractDate)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractDate)
+                    @Html.TextBoxFor(model => model.ContractDate, new { @class = "form-control", @Value = DateTime.Now.ToShortDateString() })
+                    @Html.ValidationMessageFor(model => model.ContractDate)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.CommencementDate)
-            @Html.TextBoxFor(model => model.CommencementDate, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CommencementDate)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CommencementDate)
+                    @Html.TextBoxFor(model => model.CommencementDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CommencementDate)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ContractFormat)
-            @Html.TextBoxFor(model => model.ContractFormat, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ContractFormat)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractFormat)
+                    @Html.TextBoxFor(model => model.ContractFormat, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractFormat)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.FCAmount)
-            @Html.TextBoxFor(model => model.FCAmount, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.FCAmount)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.FCAmount)
+                    @Html.TextBoxFor(model => model.FCAmount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FCAmount)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.LCAmount)
-            @Html.TextBoxFor(model => model.LCAmount, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.LCAmount)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.LCAmount)
+                    @Html.TextBoxFor(model => model.LCAmount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LCAmount)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.FCAmountExtension)
-            @Html.TextBoxFor(model => model.FCAmountExtension, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.FCAmountExtension)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.FCAmountExtension)
+                    @Html.TextBoxFor(model => model.FCAmountExtension, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FCAmountExtension)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.LCAmountExtension)
-            @Html.TextBoxFor(model => model.LCAmountExtension, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.LCAmountExtension)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.LCAmountExtension)
+                    @Html.TextBoxFor(model => model.LCAmountExtension, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LCAmountExtension)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ClientID)
-            @Html.TextBoxFor(model => model.ClientID, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ClientID)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ClientID)
+                    @Html.TextBoxFor(model => model.ClientID, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClientID)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ContractorID)
-            @Html.TextBoxFor(model => model.ContractorID, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ContractorID)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractorID)
+                    @Html.TextBoxFor(model => model.ContractorID, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractorID)
+                </div>
 
-        <div class="form-group col-lg-12 col-md-6">
-            @Html.LabelFor(model => model.Description)
-            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>
+                <div class="form-group col-lg-12 col-md-6">
+                    @Html.LabelFor(model => model.Description)
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
 
-        <div class="form-group col-lg-12 col-md-6">
-            @Html.LabelFor(model => model.Description_VN)
-            @Html.TextAreaFor(model => model.Description_VN, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Description_VN)
-        </div>
+                <div class="form-group col-lg-12 col-md-6">
+                    @Html.LabelFor(model => model.Description_VN)
+                    @Html.TextAreaFor(model => model.Description_VN, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description_VN)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.DurationInDays)
-            @Html.TextBoxFor(model => model.DurationInDays, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.DurationInDays)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.DurationInDays)
+                    @Html.TextBoxFor(model => model.DurationInDays, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DurationInDays)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ExtensionInDays)
-            @Html.TextBoxFor(model => model.ExtensionInDays, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ExtensionInDays)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ExtensionInDays)
+                    @Html.TextBoxFor(model => model.ExtensionInDays, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ExtensionInDays)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ModifyDate)
-            @Html.TextBoxFor(model => model.ModifyDate, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ModifyDate)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ModifyDate)
+                    @Html.TextBoxFor(model => model.ModifyDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ModifyDate)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.CurrencyCode)
-            @Html.TextBoxFor(model => model.CurrencyCode, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CurrencyCode)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CurrencyCode)
+                    @Html.TextBoxFor(model => model.CurrencyCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CurrencyCode)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.Status)
-            @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Status)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.Status)
+                    @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Status)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.ForOrdering)
-            @Html.TextBoxFor(model => model.ForOrdering, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ForOrdering)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ForOrdering)
+                    @Html.TextBoxFor(model => model.ForOrdering, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ForOrdering)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.Type)
-            @Html.TextBoxFor(model => model.Type, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Type)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.Type)
+                    @Html.TextBoxFor(model => model.Type, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.proj_id)
-            @Html.TextBoxFor(model => model.proj_id, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.proj_id)
-        </div>
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.proj_id)
+                    @Html.TextBoxFor(model => model.proj_id, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.proj_id)
+                </div>
 
-        <div class="form-group col-lg-4 col-md-6">
-            @Html.LabelFor(model => model.proj_status)
-            @Html.TextBoxFor(model => model.proj_status, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.proj_status)
-        </div>
-        <div class="box-footer">
-            <button type="submit" class="btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-info">Create</button>
-        </div>
-         
-        </fieldset>
-    }
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.proj_status)
+                    @Html.TextBoxFor(model => model.proj_status, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.proj_status)
+                </div>
+          
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+            </div>
+            <div class="box-footer">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                <button type="submit" class="btn btn-info">Create</button>
+            </div>
+        </form>
     </div>
+}
 
 
-   
+
