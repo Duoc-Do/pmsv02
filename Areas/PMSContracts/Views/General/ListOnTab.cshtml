@@ -12,8 +12,8 @@
         {
 
             <div class="input-group input-group-sm" style="width: 250px;">
-               
-            @*    @Html.DisplayNameFor(model => model.ContractID)*@
+
+                @*    @Html.DisplayNameFor(model => model.ContractID)*@
                 <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
                 <input type="text" name="id" class="form-control pull-right" placeholder="Search" value="333">
 
@@ -62,7 +62,7 @@
             </td>
             <td>
                 <a href='@Url.Action("Details", "General", new { id = item.Id})' title="View"> @Html.DisplayFor(modelItem => item.ClauseCode)</a>
-</td>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClauseContent)
             </td>
@@ -81,23 +81,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
-         
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+
+            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
             <td class="text-center">
-
+                <a href="/PMSContracts/Particular/SearchListOnList?id=@item.Id"><i class="glyphicon glyphicon-search"></i></a>&nbsp;
                 <a href='@Url.Action("Edit", "General", new { id = item.Id})' title="Edit">
                     <i class="glyphicon glyphicon-pencil"></i>
                 </a>&nbsp;
-                <a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a>&nbsp;
+                @*<a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>*@
+
                 <a href='@Url.Action("Delete", "General", new { id = item.Id})' title="Delete">
                     <i class="glyphicon glyphicon-trash"></i>
                 </a>
+
             </td>
-          
+
         </tr>
     }
 

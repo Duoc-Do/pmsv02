@@ -4,12 +4,21 @@
     ViewBag.Title = "Index";
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
 }
+@section HeaderPage{
+    <section class="content-header">
+        <h1>
+            General page
+        </h1>
+    </section>
+}
 <div class="box box-primary">
-
-    <div class="box-header">
+    <div class="box-header" id="createbox">
+        <i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")
+    </div>
+    @*<div class="box-header">
         <i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")
         <div class="box-tools">
-            @using (Html.BeginForm("SearchListOnTab", "General", FormMethod.Get))
+            @using (Html.BeginForm("Index", "General", FormMethod.Get))
             {
                 <div class="input-group input-group-sm" style="width: 250px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
@@ -20,7 +29,7 @@
                 </div>
             }
         </div>
-    </div>
+    </div>*@
     <div class="box-body table-responsive">
 
         <div class="fr-list">
@@ -85,16 +94,18 @@
                                     @Html.DisplayFor(modelItem => item.Type)
                                 </td>
                                 <td class="text-center">
-
+                                    <a href="/PMSContracts/Particular/SearchListOnList?id=@item.Id"><i class="glyphicon glyphicon-search"></i></a>&nbsp;
                                     <a href='@Url.Action("Edit", "General", new { id = item.Id})' title="Edit">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                     </a>&nbsp;
-                                    <a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
+                                    @*<a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
                                         <i class="glyphicon glyphicon-eye-open"></i>
-                                    </a>&nbsp;
+                                    </a>*@
+                                  
                                     <a href='@Url.Action("Delete", "General", new { id = item.Id})' title="Delete">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
+
                                 </td>
                             </tr>
                         }

@@ -8,14 +8,16 @@
                 @Html.DisplayFor(modelItem => item.ContractID)
             </td>*@
         <td class="text-center">
-            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' 
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})'
                title="@Html.DisplayFor(modelItem => item.ContractIDERP)">
-            @Html.DisplayFor(modelItem => item.ContractIDERP)</a>
+                @Html.DisplayFor(modelItem => item.ContractIDERP)
+            </a>
         </td>
         <td class="text-center">
-            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' 
+            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})'
                title="@Html.DisplayFor(modelItem => item.ContractIDERP)">
-            @Html.DisplayFor(modelItem => item.ContractCode)</a>
+                @Html.DisplayFor(modelItem => item.ContractCode)
+            </a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description_VN)
@@ -84,17 +86,18 @@
                 @Html.DisplayFor(modelItem => item.proj_id)
             </td>*@
         <td class="text-center">
-
+            <a href="/PMSContracts/General/SearchListOnList?id=@item.ContractID"><i class="glyphicon glyphicon-search"></i></a>&nbsp;&nbsp;
+            <a href="/PMSContracts/TechSpecs/SearchListOnList?id=@item.ContractID"><i class="glyphicon glyphicon-screenshot"></i></a>&nbsp;&nbsp;
             <a href='@Url.Action("Edit", "Contract", new { id = item.ContractID})' title="Edit">
                 <i class="glyphicon glyphicon-pencil"></i>
             </a>&nbsp;
-            <a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="View">
-                <i class="glyphicon glyphicon-search"></i>
-            </a>&nbsp;
+            @*<a href='@Url.Action("Details", "Contract", new { id = item.ContractID})' title="View">
+                    <i class="glyphicon glyphicon-search"></i>
+                </a>&nbsp;*@
             <a href='@Url.Action("Delete", "Contract", new { id = item.ContractID})' title="Delete">
                 <i class="glyphicon glyphicon-trash"></i>
             </a>
-            <a href="/PMSContracts/General/SearchListOnTab?id=@item.ContractID">General + @item.ContractID</a>
+
         </td>
 
     </tr>

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.TechSpecsModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header" id="createbox">
+        <i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")
+    </div>
+    @*<div class="box-header">
+            <i class="fa fa-fw fa-plus"></i>@Html.ActionLink("Create New", "Create")
+            <div class="box-tools">
+                @using (Html.BeginForm("Index", "General", FormMethod.Get))
+                {
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
+
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>*@
+    <br />
+    <div class="box-body table-responsive">
+
+        <div class="fr-list">
+            <div id="listdata">
+                <table class="table table-hover table-bordered" id="contractList">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TechSpecCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreationBy)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ModifiedBy)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OriginalLanguage)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateOfModifier)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FileId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateOfCreation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ContractID)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href='@Url.Action("Details", "TechSpecs", new { id = item.TechSpecID})' title="View"> @Html.DisplayFor(modelItem => item.TechSpecCode)</a>
+                                </td>
+                                <td>
+<td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreationBy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ModifiedBy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OriginalLanguage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateOfModifier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FileId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateOfCreation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ContractID)
+                                </td>
+                                <td class="text-center">
+                                    @*<a href="/PMSContracts/TechSpecs/SearchListOnList?id=@item.TechSpecID"><i class="glyphicon glyphicon-search"></i></a>&nbsp;*@
+                                    <a href='@Url.Action("Edit", "TechSpecs", new { id = item.TechSpecID})' title="Edit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </a>&nbsp;
+                                    @*<a href='@Url.Action("Details", "General", new { id = item.Id})' title="View">
+                <i class="glyphicon glyphicon-eye-open"></i>
+            </a>*@
+
+                                    <a href='@Url.Action("Delete", "TechSpecs", new { id = item.TechSpecID})' title="Delete">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

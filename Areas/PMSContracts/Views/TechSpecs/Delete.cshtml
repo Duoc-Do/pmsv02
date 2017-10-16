@@ -1,0 +1,87 @@
+﻿@model WebApp.Areas.PMSContracts.Models.TechSpecsModel
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3>Are you sure you want to delete this?</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+
+    <div class="box-body">
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.TechSpecCode)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TechSpecCode)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.CreationBy)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreationBy)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ModifiedBy)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.OriginalLanguage)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OriginalLanguage)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfModifier)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateOfModifier)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.FileId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FileId)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfCreation)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateOfCreation)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ContractID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ContractID)
+            </dd>
+        </dl>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="box-footer">
+
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+            <input type="submit" value="Delete" class="btn btn-info" />
+        </div>
+    }
+    </form>
+
+
+</div>

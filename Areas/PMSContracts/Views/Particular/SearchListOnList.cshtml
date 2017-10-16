@@ -1,0 +1,102 @@
+﻿@model IEnumerable<WebApp.Areas.PMSContracts.Models.ParticularModel>
+
+@{
+    ViewBag.Title = "SearchListOnList";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<div class="box box-solid  box-primary">
+    <div class="box-header with-border">
+
+        <h3 class="box-title">Result - Particular Condition List</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <input type="button" value="Back" onclick="goBack()" class="btn btn-default">
+
+        <div class="box-tools">
+            @using (Html.BeginForm("SearchListOnTab", "General", FormMethod.Get))
+            {
+
+                <div class="input-group input-group-sm" style="width: 250px;">
+
+                    @*    @Html.DisplayNameFor(model => model.ContractID)*@
+                    @*<input type="text" name="search" class="form-control pull-right" placeholder="Search" id="txtSearch">
+                        <input type="hidden" name="id" class="form-control pull-right" placeholder="Search" value="333" id="setContractID">
+
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>*@
+                </div>
+            }
+        </div>
+        <br />
+        <table class="table table-hover table-bordered" id="contractList">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GeneralId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ParentId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClauseCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClauseContent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OriginalLanguage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GeneralId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParentId)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.ClauseCode)*@
+                        <a href='@Url.Action("Details", "Particular", new { id = item.ParticularId})' title="View"> @Html.DisplayFor(modelItem => item.ClauseCode)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClauseContent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OriginalLanguage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td class="text-center">
+
+                        <a href='@Url.Action("Edit", "Particular", new { id = item.ParticularId})' title="Edit">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>&nbsp;
+                        @*<a href='@Url.Action("Details", "Particular", new { id = item.ParticularId})' title="View">
+                <i class="glyphicon glyphicon-eye-open"></i>
+            </a>&nbsp;*@
+                        <a href='@Url.Action("Delete", "Particular", new { id = item.ParticularId})' title="Delete">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

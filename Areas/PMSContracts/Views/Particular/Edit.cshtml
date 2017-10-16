@@ -1,10 +1,11 @@
 ﻿@model WebApp.Areas.PMSContracts.Models.ParticularModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
-    
 }
+
+
 
 @using (Html.BeginForm())
 {
@@ -13,21 +14,27 @@
 
     <div class="box box-info">
         <div class="box-header with-border">
-            <h3 class="box-title">Particular - Create</h3>
+            <h3 class="box-title">Particular - Edit</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
         <form class="form">
             <div class="box-body">
+
+
+                @Html.HiddenFor(model => model.ParticularId)
+
                 <div class="form-group col-lg-2 col-md-6">
                     @Html.LabelFor(model => model.GeneralId)
-                    @Html.TextBoxFor(model => model.GeneralId, new { @Value = "81", @class = "form-control" })
+
+                    @Html.TextBoxFor(model => model.GeneralId, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GeneralId)
                 </div>
 
                 <div class="form-group col-lg-2 col-md-6">
                     @Html.LabelFor(model => model.ParentId)
-                    @Html.TextBoxFor(model => model.ParentId, new { @Value = "870", @class = "form-control" })
+
+                    @Html.TextBoxFor(model => model.ParentId, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ParentId)
                 </div>
 
@@ -35,37 +42,41 @@
 
                 <div class="form-group col-lg-2 col-md-6">
                     @Html.LabelFor(model => model.OriginalLanguage)
-                    @Html.TextBoxFor(model => model.OriginalLanguage, new { @Value = "vi", @class = "form-control" })
+
+                    @Html.TextBoxFor(model => model.OriginalLanguage, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.OriginalLanguage)
                 </div>
 
                 <div class="form-group col-lg-2 col-md-6">
                     @Html.LabelFor(model => model.CreationDate)
-                    @Html.TextBoxFor(model => model.CreationDate, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+
+                    @Html.TextBoxFor(model => model.CreationDate, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CreationDate)
                 </div>
 
                 <div class="form-group col-lg-2 col-md-6">
                     @Html.LabelFor(model => model.Type)
-                    @Html.TextBoxFor(model => model.Type, new { @Value = "ORG", @class = "form-control" })
+
+                    @Html.TextBoxFor(model => model.Type, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Type)
                 </div>
                 <div class="form-group col-lg-12 col-md-6">
                     @Html.LabelFor(model => model.ClauseCode)
-                    @Html.TextAreaFor(model => model.ClauseCode, new { @Value = "11.9.	Đường và phương tiện", @class = "form-control" })
+
+                    @Html.TextAreaFor(model => model.ClauseCode, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ClauseCode)
                 </div>
 
                 <div class="form-group col-lg-12 col-md-6">
                     @Html.LabelFor(model => model.ClauseContent)
+
                     @Html.TextAreaFor(model => model.ClauseContent, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ClauseContent)
                 </div>
-
             </div>
             <div class="box-footer">
-                @Html.ActionLink("Back to List", "Index", null, new { @Value = "81", @class = "btn btn-default" })
-                <button type="submit" class="btn btn-info">Create</button>
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                <input type="submit" value="Save" class="btn btn-info" />
             </div>
         </form>
     </div>

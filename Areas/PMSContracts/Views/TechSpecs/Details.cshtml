@@ -1,0 +1,76 @@
+﻿@model WebApp.Areas.PMSContracts.Models.TechSpecsModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<div class="box box-solid  box-primary">
+    <div class="box-header with-border">
+
+        <h3 class="box-title">TechSpecs Detail - @Model.TechSpecID</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.TechSpecCode)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TechSpecCode)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.CreationBy)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreationBy)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ModifiedBy)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.OriginalLanguage)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OriginalLanguage)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfModifier)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateOfModifier)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.FileId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FileId)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfCreation)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateOfCreation)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ContractID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ContractID)
+            </dd>
+        </dl>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.TechSpecID }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+</div>

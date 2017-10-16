@@ -14,8 +14,8 @@
     <div class="box-body">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist" id="GeneralDetailTab">
-            <li role="presentation" class="active"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab" data-url="/PMSContracts/General/Detail">Contract: @Html.DisplayFor(model => model.Id)</a></li>
-            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab" data-url="/PMSContracts/Particular?id=@Model.ContractID">Particular</a></li>
+            <li role="presentation" class="active"><a href="#GeneralTab" aria-controls="GeneralTab" role="tab" data-toggle="tab" data-url="/PMSContracts/General/Detail">GeneralID: @Html.DisplayFor(model => model.Id)</a></li>
+            <li role="presentation"><a href="#ParticularTab" aria-controls="ParticularTab" role="tab" data-toggle="tab" data-url="/PMSContracts/Particular/SearchListOnTab?id=@Model.Id">Particular</a></li>
             @*<li role="presentation"><a href="#TechSpecsTab" aria-controls="TechSpecsTab" role="tab" data-toggle="tab" data-url="/PMSContracts/TechSpecs?id=@Model.ContractID">Tech Specs</a></li>*@
         </ul>
         <div class="tab-content general-dt-tab">
@@ -77,15 +77,16 @@
                     <dd>
                         @Html.DisplayFor(model => model.Type)
                     </dd>
-                    <p>
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                        @Html.ActionLink("Back to List", "Index")
-                    </p>
+                  
 
                 </dl>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
             </div>
-            <div role="tabpanel" class="tab-pane" id="GeneralTab">
-                sdfsdfdsf
+            <div role="tabpanel" class="tab-pane" id="ParticularTab">
+                
             </div>
         </div>
     </div>

@@ -48,3 +48,15 @@ var getctr = $("#idctr").val();
 $("#txtSearch").click(function () {
     document.getElementById('setContractID').innerHTML = getctr;
 });
+
+$('#contractList').DataTable({
+    'paging': false,
+    'lengthChange': false,
+    'searching': true,
+    'ordering': true,
+    'info': true,
+    'autoWidth': false
+})
+function goBack() {
+    window.history.back()
+}

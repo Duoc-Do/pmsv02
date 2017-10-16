@@ -1,0 +1,88 @@
+﻿@model WebApp.Areas.PMSContracts.Models.TechSpecsModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">TechSpecs - Create</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form">
+            <div class="box-body">
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.TechSpecCode)
+                    @Html.TextBoxFor(model => model.TechSpecCode, new { @Value = "051200-010203", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TechSpecCode)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.Description)
+                    @Html.TextBoxFor(model => model.Description, new { @Value = "TESTING AND MATERIALS ", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.CreationBy)
+
+                    @Html.TextBoxFor(model => model.CreationBy, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CreationBy)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ModifiedBy)
+                    @Html.TextBoxFor(model => model.ModifiedBy, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ModifiedBy)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.OriginalLanguage)
+
+                    @Html.TextBoxFor(model => model.OriginalLanguage, new { @Value = "vi", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OriginalLanguage)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.DateOfModifier)
+
+                    @Html.TextBoxFor(model => model.DateOfModifier, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DateOfModifier)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.FileId)
+                    @Html.TextBoxFor(model => model.FileId, new { @Value = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FileId)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.DateOfCreation)
+                    @Html.TextBoxFor(model => model.DateOfCreation, new { @Value = @DateTime.Now.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DateOfCreation)
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6">
+                    @Html.LabelFor(model => model.ContractID)
+                    @Html.TextBoxFor(model => model.ContractID, new { @Value = "870", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractID)
+                </div>
+            </div>
+            <div class="box-footer">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                <input type="submit" value="Save" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+}
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

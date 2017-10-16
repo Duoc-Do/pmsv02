@@ -11,19 +11,18 @@ namespace WebApp.Areas.PMSContracts.Models
         [Key]
         public long TechSpecID { get; set; }
 
-        [StringLength(100)]
         public string TechSpecCode { get; set; }
 
-        [StringLength(255)]
+       
         public string Description { get; set; }
 
-        [StringLength(30)]
+       
         public string CreationBy { get; set; }
 
-        [StringLength(30)]
+        
         public string ModifiedBy { get; set; }
 
-        [StringLength(2)]
+       
         public string OriginalLanguage { get; set; }
 
         public DateTime? DateOfModifier { get; set; }
@@ -32,6 +31,6 @@ namespace WebApp.Areas.PMSContracts.Models
 
         public DateTime? DateOfCreation { get; set; }
 
-        public int? ContractID { get; set; }
+        public long? ContractID { get; set; }
     }
 }

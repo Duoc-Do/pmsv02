@@ -62,6 +62,18 @@ namespace WebApp.Areas.PMSContracts.Controllers
             return View(tbGeneral);
 
         }
+        public ActionResult SearchListOnList(string search, int id)
+        {
+
+            var tbGeneral = objContext.CONTRACTS_CONDITIONS_GENERAL.Where(x => x.ContractID == id).OrderByDescending(x => x.Id).ToList();
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                tbGeneral = tbGeneral.Where(s => s.ContractID == id && (s.ClauseCode.ToUpper().Contains(search.ToUpper()) || s.ClauseContent.ToUpper().Contains(search.ToUpper()))).ToList();
+            }
+            return View(tbGeneral);
+
+        }
         public ActionResult Import(HttpPostedFileBase excelfile)
         {
             if (excelfile==null||excelfile.ContentLength == 0)

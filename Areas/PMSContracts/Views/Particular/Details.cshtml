@@ -1,0 +1,73 @@
+﻿@model WebApp.Areas.PMSContracts.Models.ParticularModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/PMSContracts/Views/Shared/_LayoutPMSContract.cshtml";
+}
+
+<div class="box box-solid  box-primary">
+    <div class="box-header with-border">
+
+        <h3 class="box-title">Particular Detail - @Model.ParticularId</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.GeneralId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.GeneralId)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ParentId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ParentId)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ClauseCode)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ClauseCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ClauseContent)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ClauseContent)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.OriginalLanguage)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OriginalLanguage)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreationDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Type)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Type)
+            </dd>
+
+
+        </dl>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ParticularId }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+</div>
+
